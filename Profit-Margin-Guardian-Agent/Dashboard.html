@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit Margin Guardian Agent | Dashboard</title>
+  <style>
+    :root {
+      --midnight-blue: #193E6B;
+      --midnight-blue-dark: #143356;
+      --green-gold: #B3A125;
+      --green-gold-dark: #96851f;
+      --white: #FFFFFF;
+      --neutral-gray: #F5F5F5;
+      --border-gray: #E6ECF3;
+      --raspberry: #891A4F;
+      --text-main: #1f2937;
+      --text-muted: #5b6678;
+      --surface-soft: #f8fbff;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(179, 161, 37, 0.14), rgba(179, 161, 37, 0) 40%),
+        radial-gradient(circle at 92% 88%, rgba(25, 62, 107, 0.18), rgba(25, 62, 107, 0) 44%),
+        linear-gradient(170deg, #f3f7fd 0%, #ffffff 52%, #edf3fb 100%);
+    }
+
+    .top-bar {
+      background: var(--midnight-blue);
+      border-bottom: 4px solid var(--green-gold);
+      color: var(--white);
+      padding: 12px 20px;
+    }
+
+    .top-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      min-height: 42px;
+      padding: 7px 12px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .brand-logo .accent {
+      color: var(--green-gold);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(22px, 1.8vw, 30px);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      color: var(--white);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .main-nav a[aria-current="page"] {
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: var(--focus-ring);
+    }
+
+    .session-strip {
+      max-width: 1300px;
+      margin: 16px auto 0;
+      border: 1px solid #d7e2f1;
+      border-left: 5px solid var(--green-gold);
+      border-radius: 10px;
+      background: #f4f8ff;
+      padding: 11px 14px;
+      color: #21496f;
+      font-size: 14px;
+    }
+
+    .session-strip strong { color: var(--midnight-blue); }
+
+    main {
+      max-width: 1300px;
+      margin: 16px auto 24px;
+      padding: 0 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .kpi {
+      padding: 14px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .kpi-label {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      color: var(--midnight-blue);
+      font-size: 29px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .kpi-meta {
+      font-size: 13px;
+      color: #334155;
+      min-height: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .pill-ok {
+      color: #166534;
+      background: #ecfdf3;
+      border-color: #b7efcf;
+    }
+
+    .pill-alert {
+      color: #8a5308;
+      background: #fff8e6;
+      border-color: #f3daa1;
+    }
+
+    .pill-risk {
+      color: #7f1d1d;
+      background: #feeeee;
+      border-color: #f6b8b8;
+    }
+
+    .panel-head {
+      border-bottom: 1px solid var(--border-gray);
+      background: var(--surface-soft);
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .panel-title {
+      margin: 0;
+      color: var(--midnight-blue);
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .panel-note {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 14px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 380px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th {
+      background: var(--midnight-blue);
+      color: var(--white);
+      font-size: 13px;
+      padding: 9px 10px;
+      text-align: left;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      white-space: nowrap;
+    }
+
+    th:last-child { border-right: none; }
+
+    td {
+      font-size: 13px;
+      padding: 8px 10px;
+      border-top: 1px solid #e1e8f2;
+      border-right: 1px solid #e1e8f2;
+      vertical-align: top;
+    }
+
+    td:last-child { border-right: none; }
+    tbody tr:nth-child(even) { background: var(--neutral-gray); }
+
+    .quick-grid {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .quick-link {
+      display: grid;
+      gap: 4px;
+      background: #f9fbff;
+      border: 1px solid #dbe5f2;
+      border-left: 4px solid var(--green-gold);
+      border-radius: 10px;
+      padding: 10px 11px;
+      text-decoration: none;
+      color: var(--text-main);
+      min-height: 94px;
+    }
+
+    .quick-link:hover,
+    .quick-link:focus-visible {
+      outline: none;
+      border-color: #c3d2e5;
+      box-shadow: var(--focus-ring);
+      transform: translateY(-1px);
+    }
+
+    .quick-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--midnight-blue);
+      margin: 0;
+    }
+
+    .quick-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.35;
+    }
+
+    .analytics-wrap {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      gap: 4px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .bar-track {
+      border: 1px solid #d8e2f0;
+      border-radius: 999px;
+      background: #edf3fb;
+      height: 12px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--midnight-blue), #2f6aa8);
+      width: 0;
+      transition: width 0.5s ease;
+    }
+
+    .alert-list {
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .alert-item {
+      border: 1px solid #e3e9f2;
+      border-left: 4px solid transparent;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .alert-item.warning {
+      border-left-color: var(--green-gold);
+      background: #fffdf5;
+    }
+
+    .alert-item.blocked {
+      border-left-color: #b42318;
+      background: #fff6f6;
+    }
+
+    .alert-item strong {
+      color: var(--midnight-blue);
+      font-size: 14px;
+    }
+
+    .alert-item p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    footer {
+      background: var(--midnight-blue);
+      border-top: 3px solid var(--green-gold);
+      color: var(--white);
+      text-align: center;
+      padding: 11px;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 1160px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .top-bar {
+        padding: 12px;
+      }
+
+      main {
+        padding: 0 12px;
+      }
+
+      .session-strip {
+        margin: 12px;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <h1>Profit Margin Guardian Agent</h1>
+      </div>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="./Dashboard.html" aria-current="page">Dashboard</a>
+        <a href="./Rule-Configuration.html">Rule Configuration</a>
+        <a href="./PO-Approval.html">PO Validation</a>
+        <a href="./Analytics.html">Category Risk Analytics</a>
+        <a href="./Audit-Trail.html">Audit Trail</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
+
+  <main>
+    <section class="kpi-grid" aria-label="Dashboard KPI summary">
+      <article class="card kpi">
+        <div class="kpi-label">Active Rule Sets</div>
+        <div id="kpiActiveRules" class="kpi-value">0</div>
+        <div class="kpi-meta"><span class="pill pill-ok">Governance Enabled</span></div>
+      </article>
+      <article class="card kpi">
+        <div class="kpi-label">Alerts (24 Hours)</div>
+        <div id="kpiAlerts" class="kpi-value">0</div>
+        <div class="kpi-meta"><span class="pill pill-alert">Requires Monitoring</span></div>
+      </article>
+      <article class="card kpi">
+        <div class="kpi-label">Blocked POs</div>
+        <div id="kpiBlocked" class="kpi-value">0</div>
+        <div class="kpi-meta"><span class="pill pill-risk">Below Threshold</span></div>
+      </article>
+      <article class="card kpi">
+        <div class="kpi-label">Avg Margin (Monitored)</div>
+        <div id="kpiAvgMargin" class="kpi-value">0%</div>
+        <div class="kpi-meta">Across active monitored categories</div>
+      </article>
+    </section>
+
+    <section class="two-col">
+      <article class="card">
+        <div class="panel-head">
+          <h2 class="panel-title">Overview: Active Rules</h2>
+          <p class="panel-note">Live summary of current governance profiles</p>
+        </div>
+        <div class="table-wrap">
+          <table aria-label="Active rules list">
+            <thead>
+              <tr>
+                <th>Config Set</th>
+                <th>Scope</th>
+                <th>Target</th>
+                <th>Threshold</th>
+                <th>Behavior</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="rulesTableBody"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="panel-head">
+          <h2 class="panel-title">Quick Navigation</h2>
+          <p class="panel-note">Jump to core operating areas</p>
+        </div>
+        <div class="quick-grid">
+          <a class="quick-link" href="./Rule-Configuration.html">
+            <h3 class="quick-title">Configuration</h3>
+            <p class="quick-text">Manage rule sets, thresholds, and policy behavior.</p>
+          </a>
+          <a class="quick-link" href="./PO-Approval.html">
+            <h3 class="quick-title">PO Approvals</h3>
+            <p class="quick-text">Review margin checks and execute approve/block/override.</p>
+          </a>
+          <a class="quick-link" href="./Analytics.html">
+            <h3 class="quick-title">Analytics</h3>
+            <p class="quick-text">Track category trends, erosion risk, and margin hotspots.</p>
+          </a>
+          <a class="quick-link" href="./Audit-Trail.html">
+            <h3 class="quick-title">Audit Trail</h3>
+            <p class="quick-text">Search governance decisions for traceability and compliance.</p>
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <section class="two-col">
+      <article class="card">
+        <div class="panel-head">
+          <h2 class="panel-title">Recent Margin Alerts</h2>
+          <p class="panel-note">Latest warning and block events from monitored POs</p>
+        </div>
+        <div id="alertsContainer" class="alert-list"></div>
+      </article>
+
+      <article class="card">
+        <div class="panel-head">
+          <h2 class="panel-title">Analytics Summary</h2>
+          <p class="panel-note">Category margin snapshot versus target baseline</p>
+        </div>
+        <div id="analyticsContainer" class="analytics-wrap"></div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    Copyright &copy; 2026 Profit Margin Guardian Agent
+  </footer>
+
+  <script>
+    const sessionKey = "pmg_session";
+    const sessionRaw = localStorage.getItem(sessionKey);
+    if (!sessionRaw) {
+      window.location.replace("./Login.html");
+    }
+
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const roleLabelMap = {
+      admin: "Administrator",
+      procurement_manager: "Procurement Manager",
+      category_manager: "Category Manager"
+    };
+
+    const rules = [
+      {
+        configSetName: "FY2026 Core Industrial Policy",
+        scope: "Item Group: Industrial Fasteners",
+        target: "Customer Group: Large Enterprise",
+        threshold: 20,
+        behavior: "Block Approval",
+        status: "Active"
+      },
+      {
+        configSetName: "FY2026 Core Industrial Policy",
+        scope: "Item: ITM-440071 PLC I/O Module",
+        target: "Customer: Orion Marine Engineering",
+        threshold: 17.5,
+        behavior: "Warn Only",
+        status: "Active"
+      },
+      {
+        configSetName: "Q3 Spot Buy Safeguards",
+        scope: "Item Group: MRO Consumables",
+        target: "Customer Group: SME Distributor",
+        threshold: 14,
+        behavior: "Warn Only",
+        status: "Saved"
+      }
+    ];
+
+    const recentAlerts = [
+      {
+        type: "blocked",
+        po: "PO-026184",
+        message: "Calculated margin 14.2% is below threshold 20%. Approval blocked.",
+        when: "Today, 14:08"
+      },
+      {
+        type: "warning",
+        po: "PO-026175",
+        message: "Margin 18.1% under watch threshold. Override required with justification.",
+        when: "Today, 11:42"
+      },
+      {
+        type: "warning",
+        po: "PO-026151",
+        message: "Supplier cost variance reduced expected margin by 2.7 points.",
+        when: "Today, 09:26"
+      }
+    ];
+
+    const categorySummary = [
+      { category: "Industrial Fasteners", margin: 22.4, target: 20 },
+      { category: "Hydraulic Components", margin: 18.9, target: 19 },
+      { category: "Electrical Control Parts", margin: 16.8, target: 18 },
+      { category: "MRO Consumables", margin: 14.2, target: 15.5 }
+    ];
+
+    function setSessionStrip() {
+      const strip = document.getElementById("sessionStrip");
+      const roleText = roleLabelMap[session.role] || session.roleLabel || "User";
+      const now = new Date();
+      strip.innerHTML =
+        "<strong>Signed In:</strong> " + (session.userName || "User") +
+        " (" + roleText + ") | " +
+        "<strong>Email:</strong> " + (session.email || "-") + " | " +
+        "<strong>Company:</strong> " + (session.company || "Lithan Academy Pte Ltd") + " | " +
+        "<strong>Last Refresh:</strong> " + now.toLocaleString();
+    }
+
+    function setKPIs() {
+      const activeRules = rules.filter((r) => r.status === "Active").length;
+      const alerts = recentAlerts.length;
+      const blocked = recentAlerts.filter((a) => a.type === "blocked").length;
+      const avg = categorySummary.reduce((acc, item) => acc + item.margin, 0) / categorySummary.length;
+
+      document.getElementById("kpiActiveRules").textContent = activeRules;
+      document.getElementById("kpiAlerts").textContent = alerts;
+      document.getElementById("kpiBlocked").textContent = blocked;
+      document.getElementById("kpiAvgMargin").textContent = avg.toFixed(1) + "%";
+    }
+
+    function renderRules() {
+      const tbody = document.getElementById("rulesTableBody");
+      tbody.innerHTML = "";
+      rules.forEach((rule) => {
+        const row = document.createElement("tr");
+        row.innerHTML =
+          "<td>" + rule.configSetName + "</td>" +
+          "<td>" + rule.scope + "</td>" +
+          "<td>" + rule.target + "</td>" +
+          "<td>" + rule.threshold + "%</td>" +
+          "<td>" + rule.behavior + "</td>" +
+          "<td><span class='pill " + (rule.status === "Active" ? "pill-ok" : "pill-alert") + "'>" + rule.status + "</span></td>";
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderAlerts() {
+      const container = document.getElementById("alertsContainer");
+      container.innerHTML = "";
+      recentAlerts.forEach((alert) => {
+        const node = document.createElement("article");
+        node.className = "alert-item " + alert.type;
+        node.innerHTML =
+          "<strong>" + alert.po + "</strong>" +
+          "<p>" + alert.message + "</p>" +
+          "<p><strong>Time:</strong> " + alert.when + "</p>";
+        container.appendChild(node);
+      });
+    }
+
+    function renderAnalytics() {
+      const container = document.getElementById("analyticsContainer");
+      container.innerHTML = "";
+      categorySummary.forEach((item) => {
+        const width = Math.max(0, Math.min(100, item.margin));
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        row.innerHTML =
+          "<div class='bar-label'><span>" + item.category + "</span><span>" + item.margin.toFixed(1) + "% (Target " + item.target + "%)</span></div>" +
+          "<div class='bar-track'><div class='bar-fill' style='width: " + width + "%'></div></div>";
+        container.appendChild(row);
+      });
+    }
+
+    setSessionStrip();
+    setKPIs();
+    renderRules();
+    renderAlerts();
+    renderAnalytics();
+  </script>
+</body>
+</html>

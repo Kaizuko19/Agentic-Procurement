@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit Margin Guardian Agent | Rule Configuration</title>
+  <style>
+    :root {
+      --midnight-blue: #193E6B;
+      --midnight-blue-dark: #143356;
+      --green-gold: #B3A125;
+      --green-gold-dark: #9A8A20;
+      --white: #FFFFFF;
+      --neutral-gray: #F5F5F5;
+      --border-gray: #D8DEE8;
+      --text-main: #1F2937;
+      --text-muted: #526075;
+      --surface-soft: #F8FAFD;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-soft: 0 4px 14px rgba(16, 24, 40, 0.06);
+      --row-hover: rgba(179, 161, 37, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text-main);
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+
+    .top-bar {
+      background: var(--midnight-blue);
+      border-bottom: 4px solid var(--green-gold);
+      color: var(--white);
+      padding: 12px 20px;
+    }
+
+    .top-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 6px 12px;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: 0.35px;
+      white-space: nowrap;
+    }
+
+    .brand-logo-accent {
+      color: var(--green-gold) !important;
+      font-weight: 800;
+    }
+
+    .brand-title {
+      margin: 0;
+      color: var(--white);
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: clamp(24px, 1.9vw, 34px);
+      line-height: 1.1;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.96);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: var(--focus-ring);
+    }
+
+    .main-nav a[aria-current="page"] {
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .session-bar {
+      width: min(1300px, calc(100% - 40px));
+      margin: 16px auto 0;
+      border: 1px solid #d7e2f1;
+      border-left: 6px solid var(--green-gold);
+      border-radius: 10px;
+      background: #f5f9ff;
+      color: #204568;
+      padding: 11px 14px;
+      font-size: 14px;
+    }
+
+    .session-bar strong {
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+    }
+
+    .access-note {
+      width: min(1300px, calc(100% - 40px));
+      margin: 10px auto 0;
+      border: 1px solid #fecaca;
+      border-left: 6px solid #b91c1c;
+      border-radius: 10px;
+      background: #fff5f5;
+      color: #7f1d1d;
+      padding: 10px 12px;
+      font-size: 13px;
+      display: none;
+    }
+
+    main {
+      width: min(1300px, 100%);
+      margin: 16px auto 22px;
+      padding: 0 20px 20px;
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(400px, 500px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      background: var(--surface-soft);
+      border-bottom: 1px solid var(--border-gray);
+      padding: 12px 16px;
+    }
+
+    .panel-title {
+      margin: 0;
+      color: var(--midnight-blue);
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.25;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-subtitle {
+      margin: 6px 0 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .icon-24 {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .panel-body {
+      padding: 14px 16px 16px;
+    }
+
+    .config-form {
+      display: grid;
+      gap: 11px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field-row {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    label {
+      font-family: "Segoe UI", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--midnight-blue);
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid #c5cedd;
+      border-radius: 9px;
+      background: var(--white);
+      color: var(--text-main);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      font-size: 14px;
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    button:focus-visible {
+      outline: none;
+      border-color: var(--green-gold);
+      box-shadow: var(--focus-ring);
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .error {
+      min-height: 16px;
+      color: #b42318;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .preview {
+      border: 1px solid #d8e1ef;
+      background: #f7fbff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .preview-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #28527d;
+    }
+
+    .preview-track {
+      width: 100%;
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid #d1d9e7;
+      background: #e8edf4;
+      overflow: hidden;
+    }
+
+    .preview-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-gold), #cfbc3a);
+      transition: width 0.2s ease;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    button {
+      border: none;
+      border-radius: 9px;
+      min-height: 40px;
+      padding: 8px 10px;
+      color: var(--white);
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .btn-primary { background: var(--midnight-blue); }
+    .btn-primary:hover { background: var(--midnight-blue-dark); }
+    .btn-secondary { background: var(--green-gold); }
+    .btn-secondary:hover { background: var(--green-gold-dark); }
+    .btn-danger { background: #8d1f1f; }
+    .btn-danger:hover { background: #741919; }
+    .btn-ghost {
+      background: #e9eff8;
+      color: var(--midnight-blue);
+    }
+    .btn-ghost:hover { background: #dde7f5; }
+
+    .status-strip {
+      border: 1px solid #d7e2f0;
+      background: #f4f9ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #264f79;
+    }
+
+    .status-strip strong {
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+      color: var(--midnight-blue);
+    }
+
+    .table-note {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .table-wrap {
+      border: 1px solid var(--border-gray);
+      border-radius: 10px;
+      overflow: auto;
+      background: var(--white);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    thead th {
+      background: var(--midnight-blue);
+      color: var(--white);
+      padding: 9px 10px;
+      text-align: left;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      white-space: nowrap;
+    }
+
+    thead th:last-child { border-right: none; }
+
+    tbody td {
+      padding: 8px 10px;
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    tbody td:last-child { border-right: none; }
+    tbody tr:nth-child(even) { background: var(--neutral-gray); }
+    tbody tr:hover { background: var(--row-hover); }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 9px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .status-active {
+      background: #fff8e5;
+      color: #885f05;
+      border-color: #f4d58a;
+    }
+
+    .status-saved {
+      background: #edf4ff;
+      color: #1e4ca9;
+      border-color: #bed7ff;
+    }
+
+    .status-inactive {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+
+    footer {
+      background: var(--midnight-blue);
+      border-top: 3px solid var(--green-gold);
+      color: var(--white);
+      text-align: center;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal[aria-hidden="false"] { display: flex; }
+
+    .modal-card {
+      width: min(460px, 100%);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      background: var(--white);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
+      padding: 18px;
+    }
+
+    .modal-title {
+      margin: 0 0 8px;
+      color: var(--midnight-blue);
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+    }
+
+    .modal-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    @media (max-width: 1180px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .top-bar { padding: 12px; }
+      .session-bar,
+      .access-note { width: calc(100% - 24px); }
+      main { padding: 0 12px 16px; }
+      .field-grid { grid-template-columns: 1fr; }
+      .button-row { grid-template-columns: 1fr; }
+      .panel-title { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="brand-logo" aria-label="CLaaS2SaaS logo">CLaaS<span class="brand-logo-accent">2</span>SaaS</div>
+        <h1 class="brand-title">Profit Margin Guardian Agent</h1>
+      </div>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="./Dashboard.html">Dashboard</a>
+        <a href="./Rule-Configuration.html" aria-current="page">Rule Configuration</a>
+        <a href="./PO-Approval.html">PO Validation</a>
+        <a href="./Analytics.html">Category Risk Analytics</a>
+        <a href="./Audit-Trail.html">Audit Trail</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="sessionBar" class="session-bar"></div>
+  <div id="accessNote" class="access-note">This page is admin-only. You have read-only access in this mockup session.</div>
+
+  <main>
+    <section class="panel" aria-labelledby="configTitle">
+      <div class="panel-head">
+        <h2 id="configTitle" class="panel-title">
+          <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16"></path>
+            <path d="M7 12h10"></path>
+            <path d="M10 18h4"></path>
+          </svg>
+          Rule Configuration
+        </h2>
+        <p class="panel-subtitle">Define governed scope, target dimensions, thresholds, and approval behavior for PO margin checks.</p>
+      </div>
+
+      <div class="panel-body">
+        <form id="ruleForm" class="config-form" novalidate>
+          <div class="field-row">
+            <label for="configSetName">Configuration Set Name</label>
+            <input id="configSetName" type="text" placeholder="e.g., FY2026 Core Industrial Policy" required>
+            <div class="hint">Use named sets to save, activate, and deactivate policy packs.</div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-row">
+              <label for="scopeType">Governed Scope Type</label>
+              <select id="scopeType" required>
+                <option value="">Choose scope type</option>
+                <option value="Item">Item</option>
+                <option value="Item Group">Item Group</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="scopeValue">Governed Scope Value</label>
+              <select id="scopeValue" required>
+                <option value="">Choose scope value</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-row">
+              <label for="targetType">Margin Target Applies To</label>
+              <select id="targetType" required>
+                <option value="">Choose target type</option>
+                <option value="Item">Item</option>
+                <option value="Item Group">Item Group</option>
+                <option value="Customer">Customer</option>
+                <option value="Customer Group">Customer Group</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="targetValue">Target Value</label>
+              <select id="targetValue" required>
+                <option value="">Choose target value</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label for="threshold">Margin Threshold (%)</label>
+            <input id="threshold" type="range" min="1" max="100" step="0.1" value="20" required>
+            <input id="thresholdInput" type="number" min="1" max="100" step="0.1" placeholder="e.g., 18.5" value="20" required>
+            <div class="hint">Allowed range is greater than 0 and up to 100.</div>
+            <div id="thresholdError" class="error" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div class="preview" aria-live="polite">
+            <div class="preview-label">Threshold Preview: <span id="previewValue">0%</span></div>
+            <div class="preview-track" aria-hidden="true">
+              <div id="previewFill" class="preview-fill"></div>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-row">
+              <label for="alertBehavior">Alert Behavior</label>
+              <select id="alertBehavior" required>
+                <option value="">Choose behavior</option>
+                <option>Block Approval</option>
+                <option>Warn Only</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="recipients">Notification Recipients</label>
+              <input id="recipients" type="text" placeholder="procurement.manager@northwind.com; finance.controller@northwind.com" required>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button type="button" id="saveBtn" class="btn-primary">
+              <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 5h11l3 3v11H5z"></path>
+                <path d="M8 5v6h8V5"></path>
+                <path d="M8 18h8"></path>
+              </svg>
+              Save Configuration
+            </button>
+            <button type="button" id="activateBtn" class="btn-secondary">
+              <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M9 12l2 2 4-4"></path>
+              </svg>
+              Activate Set
+            </button>
+            <button type="button" id="deactivateBtn" class="btn-danger">
+              <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l12 12"></path>
+                <path d="M18 6L6 18"></path>
+              </svg>
+              Deactivate Set
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="dashboardTitle">
+      <div class="panel-head">
+        <h2 id="dashboardTitle" class="panel-title">
+          <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="4" width="6" height="6"></rect>
+            <rect x="14" y="4" width="6" height="6"></rect>
+            <rect x="4" y="14" width="6" height="6"></rect>
+            <rect x="14" y="14" width="6" height="6"></rect>
+          </svg>
+          Active Rules Dashboard
+        </h2>
+        <p class="panel-subtitle">Saved governance rules and runtime status for PO approval margin checks.</p>
+      </div>
+
+      <div class="panel-body">
+        <div id="poEngineStatus" class="status-strip">
+          <strong>PO Approval Auto-Check:</strong> Not enabled. Activate at least one configuration set.
+        </div>
+        <p class="table-note">When a set is active, these rules are automatically applied during PO approval workflow events.</p>
+        <div class="table-wrap">
+          <table aria-label="Margin governance rules table">
+            <thead>
+              <tr>
+                <th>Config Set</th>
+                <th>Version</th>
+                <th>Scope</th>
+                <th>Margin Target</th>
+                <th>Threshold</th>
+                <th>Alert Behavior</th>
+                <th>Recipients</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="rulesTableBody"></tbody>
+          </table>
+        </div>
+        <p class="table-note" style="margin-top: 12px;">Version history reflects each saved revision for a configuration set.</p>
+        <div class="table-wrap">
+          <table aria-label="Rule version history table">
+            <thead>
+              <tr>
+                <th>Config Set</th>
+                <th>Version</th>
+                <th>Action</th>
+                <th>Updated By</th>
+                <th>Updated At</th>
+              </tr>
+            </thead>
+            <tbody id="versionHistoryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Copyright &copy; 2026 Procurement Governance System
+  </footer>
+
+  <div id="confirmModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <h3 id="modalTitle" class="modal-title">Confirm Action</h3>
+      <p id="modalMessage">Proceed?</p>
+      <div class="modal-actions">
+        <button type="button" id="cancelAction" class="btn-ghost">Cancel</button>
+        <button type="button" id="confirmAction" class="btn-secondary">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sessionKey = "pmg_session";
+    const rulesStorageKey = "pmg_rules";
+    const sessionRaw = localStorage.getItem(sessionKey);
+    if (!sessionRaw) {
+      window.location.replace("./Login.html");
+    }
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const sessionBar = document.getElementById("sessionBar");
+    const accessNote = document.getElementById("accessNote");
+    const roleLabels = {
+      admin: "Administrator",
+      procurement_manager: "Procurement Manager",
+      category_manager: "Category Manager"
+    };
+    const isAdmin = session && session.role === "admin";
+
+    const now = new Date();
+    sessionBar.innerHTML =
+      "<strong>Signed In:</strong> " + (session.userName || "User") +
+      " (" + (roleLabels[session.role] || session.roleLabel || "User") + ") | " +
+      "<strong>Email:</strong> " + (session.email || "unknown@claas2saas.com") + " | " +
+      "<strong>Company:</strong> " + (session.company || "Lithan Academy Pte Ltd") + " | " +
+      "<strong>Last Refresh:</strong> " + now.toLocaleString();
+
+    const DATA = {
+      scopeValues: {
+        "Item": [
+          "ITM-110245 | Stainless Hex Bolt M12",
+          "ITM-320118 | Hydraulic Seal Kit HS-90",
+          "ITM-440071 | PLC I/O Module 16DI"
+        ],
+        "Item Group": [
+          "Industrial Fasteners",
+          "Hydraulic Components",
+          "Electrical Control Parts",
+          "MRO Consumables"
+        ]
+      },
+      targetValues: {
+        "Item": [
+          "ITM-110245 | Stainless Hex Bolt M12",
+          "ITM-320118 | Hydraulic Seal Kit HS-90",
+          "ITM-440071 | PLC I/O Module 16DI"
+        ],
+        "Item Group": [
+          "Industrial Fasteners",
+          "Hydraulic Components",
+          "Electrical Control Parts",
+          "MRO Consumables"
+        ],
+        "Customer": [
+          "CUST-1008 | Golden Bridge Construction",
+          "CUST-1042 | Delta Food Processing",
+          "CUST-1120 | Orion Marine Engineering"
+        ],
+        "Customer Group": [
+          "Government Projects",
+          "Large Enterprise",
+          "SME Distributor",
+          "Export Account"
+        ]
+      }
+    };
+
+    const form = document.getElementById("ruleForm");
+    const configSetNameEl = document.getElementById("configSetName");
+    const scopeTypeEl = document.getElementById("scopeType");
+    const scopeValueEl = document.getElementById("scopeValue");
+    const targetTypeEl = document.getElementById("targetType");
+    const targetValueEl = document.getElementById("targetValue");
+    const thresholdEl = document.getElementById("threshold");
+    const thresholdInputEl = document.getElementById("thresholdInput");
+    const alertBehaviorEl = document.getElementById("alertBehavior");
+    const recipientsEl = document.getElementById("recipients");
+    const saveBtn = document.getElementById("saveBtn");
+    const activateBtn = document.getElementById("activateBtn");
+    const deactivateBtn = document.getElementById("deactivateBtn");
+    const tableBody = document.getElementById("rulesTableBody");
+    const versionHistoryBody = document.getElementById("versionHistoryBody");
+    const thresholdError = document.getElementById("thresholdError");
+    const previewFill = document.getElementById("previewFill");
+    const previewValue = document.getElementById("previewValue");
+    const poEngineStatus = document.getElementById("poEngineStatus");
+    const modal = document.getElementById("confirmModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalMessage = document.getElementById("modalMessage");
+    const cancelAction = document.getElementById("cancelAction");
+    const confirmAction = document.getElementById("confirmAction");
+
+    let pendingAction = null;
+
+    if (!isAdmin) {
+      accessNote.style.display = "block";
+      form.querySelectorAll("input, select, button").forEach((element) => {
+        if (element.id !== "cancelAction" && element.id !== "confirmAction") {
+          element.disabled = true;
+        }
+      });
+    }
+
+    const seedRules = [
+      {
+        configSetName: "FY2026 Core Industrial Policy",
+        version: "v3",
+        scopeType: "Item Group",
+        scopeValue: "Industrial Fasteners",
+        targetType: "Customer Group",
+        targetValue: "Large Enterprise",
+        threshold: 20,
+        alertBehavior: "Block Approval",
+        recipients: "procurement.manager@northwind.com; finance.controller@northwind.com",
+        status: "Active",
+        updatedBy: "System Administrator",
+        updatedAt: "2026-04-09 10:20"
+      },
+      {
+        configSetName: "FY2026 Core Industrial Policy",
+        version: "v2",
+        scopeType: "Item",
+        scopeValue: "ITM-440071 | PLC I/O Module 16DI",
+        targetType: "Customer",
+        targetValue: "CUST-1120 | Orion Marine Engineering",
+        threshold: 17.5,
+        alertBehavior: "Warn Only",
+        recipients: "category.lead@northwind.com; cfo.office@northwind.com",
+        status: "Active",
+        updatedBy: "System Administrator",
+        updatedAt: "2026-04-07 16:40"
+      },
+      {
+        configSetName: "Q3 Spot Buy Safeguards",
+        version: "v1",
+        scopeType: "Item Group",
+        scopeValue: "MRO Consumables",
+        targetType: "Customer Group",
+        targetValue: "SME Distributor",
+        threshold: 14,
+        alertBehavior: "Warn Only",
+        recipients: "mro.buyer@northwind.com; finance.ops@northwind.com",
+        status: "Saved",
+        updatedBy: "System Administrator",
+        updatedAt: "2026-04-05 11:10"
+      }
+    ];
+
+    function loadRules() {
+      const raw = localStorage.getItem(rulesStorageKey);
+      if (!raw) {
+        return [...seedRules];
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [...seedRules];
+      } catch (error) {
+        return [...seedRules];
+      }
+    }
+
+    function persistRules() {
+      localStorage.setItem(rulesStorageKey, JSON.stringify(rules));
+    }
+
+    let rules = loadRules();
+
+    function logAction(message, payload) {
+      console.log("[PMG Activity 1]", message, payload || "");
+    }
+
+    function populateSelect(selectEl, values, placeholder) {
+      selectEl.innerHTML = "";
+      const initial = document.createElement("option");
+      initial.value = "";
+      initial.textContent = placeholder;
+      selectEl.appendChild(initial);
+      values.forEach((value) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        selectEl.appendChild(option);
+      });
+    }
+
+    function updateScopeValues() {
+      const key = scopeTypeEl.value;
+      const values = DATA.scopeValues[key] || [];
+      populateSelect(scopeValueEl, values, "Choose scope value");
+      logAction("Scope values refreshed", { type: key, count: values.length });
+    }
+
+    function updateTargetValues() {
+      const key = targetTypeEl.value;
+      const values = DATA.targetValues[key] || [];
+      populateSelect(targetValueEl, values, "Choose target value");
+      logAction("Target values refreshed", { type: key, count: values.length });
+    }
+
+    function updateThresholdPreview() {
+      const value = Number(thresholdInputEl.value);
+      if (Number.isFinite(value) && value >= 0) {
+        const bounded = Math.max(0, Math.min(100, value));
+        previewFill.style.width = bounded + "%";
+        previewValue.textContent = bounded + "%";
+      } else {
+        previewFill.style.width = "0%";
+        previewValue.textContent = "0%";
+      }
+      logAction("Threshold preview updated", thresholdEl.value);
+    }
+
+    function isThresholdValid() {
+      const value = Number(thresholdInputEl.value);
+      const isValid = Number.isFinite(value) && value > 0 && value <= 100;
+      thresholdError.textContent = isValid ? "" : "Margin threshold must be greater than 0 and up to 100.";
+      return isValid;
+    }
+
+    function syncRangeToInput() {
+      thresholdInputEl.value = thresholdEl.value;
+      updateThresholdPreview();
+      isThresholdValid();
+    }
+
+    function syncInputToRange() {
+      const value = Number(thresholdInputEl.value);
+      if (Number.isFinite(value)) {
+        thresholdEl.value = Math.max(1, Math.min(100, value));
+      }
+      updateThresholdPreview();
+      isThresholdValid();
+    }
+
+    function nextVersion(setName) {
+      const versions = rules
+        .filter((rule) => rule.configSetName.toLowerCase() === setName.toLowerCase())
+        .map((rule) => Number((rule.version || "v1").replace("v", "")))
+        .filter((version) => Number.isFinite(version));
+      const next = versions.length ? Math.max(...versions) + 1 : 1;
+      return "v" + next;
+    }
+
+    function validateForm() {
+      const requiredValues = [
+        configSetNameEl.value.trim(),
+        scopeTypeEl.value.trim(),
+        scopeValueEl.value.trim(),
+        targetTypeEl.value.trim(),
+        targetValueEl.value.trim(),
+        alertBehaviorEl.value.trim(),
+        recipientsEl.value.trim()
+      ];
+      const valid = requiredValues.every(Boolean) && isThresholdValid();
+      logAction("Validation result", { valid });
+      return valid;
+    }
+
+    function statusClass(status) {
+      if (status === "Active") return "status-active";
+      if (status === "Inactive") return "status-inactive";
+      return "status-saved";
+    }
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+      rules.forEach((rule) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${rule.configSetName}</td>
+          <td>${rule.version || "v1"}</td>
+          <td>${rule.scopeType}: ${rule.scopeValue}</td>
+          <td>${rule.targetType}: ${rule.targetValue}</td>
+          <td>${rule.threshold}%</td>
+          <td>${rule.alertBehavior}</td>
+          <td>${rule.recipients}</td>
+          <td><span class="status-pill ${statusClass(rule.status)}">${rule.status}</span></td>
+        `;
+        tableBody.appendChild(row);
+      });
+      updatePOEngineStatus();
+      renderVersionHistory();
+      logAction("Dashboard table rendered", { totalRules: rules.length });
+    }
+
+    function renderVersionHistory() {
+      const latest = [...rules].sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1)).slice(0, 8);
+      versionHistoryBody.innerHTML = "";
+      latest.forEach((rule) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${rule.configSetName}</td>
+          <td>${rule.version || "v1"}</td>
+          <td>${rule.status}</td>
+          <td>${rule.updatedBy || "System Administrator"}</td>
+          <td>${rule.updatedAt || "-"}</td>
+        `;
+        versionHistoryBody.appendChild(row);
+      });
+    }
+
+    function updatePOEngineStatus() {
+      const activeSets = [...new Set(rules.filter((r) => r.status === "Active").map((r) => r.configSetName))];
+      if (activeSets.length === 0) {
+        poEngineStatus.innerHTML = "<strong>PO Approval Auto-Check:</strong> Not enabled. Activate at least one configuration set.";
+      } else {
+        poEngineStatus.innerHTML = "<strong>PO Approval Auto-Check:</strong> Enabled. Active set(s): " + activeSets.join(", ") + ". Rules auto-apply at PO approval stage.";
+      }
+      logAction("PO auto-check status updated", { activeSets });
+    }
+
+    function saveConfiguration() {
+      if (!validateForm()) {
+        logAction("Save blocked because form is invalid");
+        return;
+      }
+
+      const record = {
+        configSetName: configSetNameEl.value.trim(),
+        version: nextVersion(configSetNameEl.value.trim()),
+        scopeType: scopeTypeEl.value,
+        scopeValue: scopeValueEl.value,
+        targetType: targetTypeEl.value,
+        targetValue: targetValueEl.value,
+        threshold: Number(thresholdInputEl.value),
+        alertBehavior: alertBehaviorEl.value,
+        recipients: recipientsEl.value.trim(),
+        status: "Saved",
+        updatedBy: session.userName || "System Administrator",
+        updatedAt: new Date().toLocaleString()
+      };
+
+      rules.push(record);
+      persistRules();
+      renderTable();
+      logAction("Configuration saved (mock API call)", record);
+    }
+
+    function openModal(title, message, action) {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      pendingAction = action;
+      modal.setAttribute("aria-hidden", "false");
+      confirmAction.focus();
+      logAction("Confirmation opened", { action });
+    }
+
+    function closeModal() {
+      modal.setAttribute("aria-hidden", "true");
+      pendingAction = null;
+      logAction("Confirmation closed");
+    }
+
+    function activateSet() {
+      const setName = configSetNameEl.value.trim();
+      if (!setName) {
+        alert("Enter Configuration Set Name first.");
+        return;
+      }
+      const hasPending = rules.some((r) => r.configSetName === setName && (r.status === "Saved" || r.status === "Inactive"));
+      if (!hasPending) {
+        alert("No saved or inactive rules found for this configuration set.");
+        return;
+      }
+      openModal("Confirm Set Activation", "Activate '" + setName + "' for automatic PO approval margin checks?", "activate");
+    }
+
+    function deactivateSet() {
+      const setName = configSetNameEl.value.trim();
+      if (!setName) {
+        alert("Enter Configuration Set Name first.");
+        return;
+      }
+      const hasActive = rules.some((r) => r.configSetName === setName && r.status === "Active");
+      if (!hasActive) {
+        alert("No active rules found for this configuration set.");
+        return;
+      }
+      openModal("Confirm Set Deactivation", "Deactivate '" + setName + "' from automatic PO approval margin checks?", "deactivate");
+    }
+
+    function confirmPendingAction() {
+      const setName = configSetNameEl.value.trim();
+      if (pendingAction === "activate") {
+        rules.forEach((rule) => {
+          if (rule.configSetName === setName && (rule.status === "Saved" || rule.status === "Inactive")) {
+            rule.status = "Active";
+          }
+        });
+        logAction("Set activated", { setName });
+      } else if (pendingAction === "deactivate") {
+        rules.forEach((rule) => {
+          if (rule.configSetName === setName && rule.status === "Active") {
+            rule.status = "Inactive";
+          }
+        });
+        logAction("Set deactivated", { setName });
+      }
+      persistRules();
+      renderTable();
+      closeModal();
+    }
+
+    scopeTypeEl.addEventListener("change", updateScopeValues);
+    targetTypeEl.addEventListener("change", updateTargetValues);
+    thresholdEl.addEventListener("input", syncRangeToInput);
+    thresholdInputEl.addEventListener("input", syncInputToRange);
+
+    saveBtn.addEventListener("click", saveConfiguration);
+    activateBtn.addEventListener("click", activateSet);
+    deactivateBtn.addEventListener("click", deactivateSet);
+    cancelAction.addEventListener("click", closeModal);
+    confirmAction.addEventListener("click", confirmPendingAction);
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      saveConfiguration();
+    });
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    updateScopeValues();
+    updateTargetValues();
+    syncRangeToInput();
+    updateThresholdPreview();
+    persistRules();
+    renderTable();
+  </script>
+</body>
+</html>

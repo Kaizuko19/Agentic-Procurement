@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit Margin Guardian Agent | Analytics</title>
+  <style>
+    :root {
+      --midnight-blue: #193E6B;
+      --midnight-blue-dark: #143356;
+      --green-gold: #B3A125;
+      --green-gold-dark: #96851f;
+      --white: #FFFFFF;
+      --neutral-gray: #F5F5F5;
+      --border-gray: #E6ECF3;
+      --text-main: #1f2937;
+      --text-muted: #5b6678;
+      --surface-soft: #f8fbff;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.08);
+      --risk-high: #B42318;
+      --risk-medium: #B54708;
+      --risk-low: #027A48;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(179, 161, 37, 0.14), rgba(179, 161, 37, 0) 40%),
+        radial-gradient(circle at 92% 88%, rgba(25, 62, 107, 0.18), rgba(25, 62, 107, 0) 44%),
+        linear-gradient(170deg, #f3f7fd 0%, #ffffff 52%, #edf3fb 100%);
+    }
+
+    .top-bar {
+      background: var(--midnight-blue);
+      border-bottom: 4px solid var(--green-gold);
+      color: var(--white);
+      padding: 12px 20px;
+    }
+
+    .top-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      min-height: 42px;
+      padding: 7px 12px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .brand-logo .accent {
+      color: var(--green-gold);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(22px, 1.8vw, 30px);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      color: var(--white);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .main-nav a[aria-current="page"] {
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: var(--focus-ring);
+    }
+
+    .session-strip {
+      max-width: 1300px;
+      margin: 16px auto 0;
+      border: 1px solid #d7e2f1;
+      border-left: 5px solid var(--green-gold);
+      border-radius: 10px;
+      background: #f4f8ff;
+      padding: 11px 14px;
+      color: #21496f;
+      font-size: 14px;
+    }
+
+    .session-strip strong { color: var(--midnight-blue); }
+
+    main {
+      max-width: 1300px;
+      margin: 16px auto 24px;
+      padding: 0 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .card-head {
+      border-bottom: 1px solid var(--border-gray);
+      background: var(--surface-soft);
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      margin: 0;
+      color: var(--midnight-blue);
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .card-note {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .card-body {
+      padding: 14px;
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--midnight-blue);
+    }
+
+    select,
+    button {
+      min-height: 38px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    select {
+      border: 1px solid #c8d3e2;
+      padding: 7px 10px;
+      color: var(--text-main);
+      background: #fff;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 8px 12px;
+    }
+
+    select:focus-visible,
+    button:focus-visible {
+      outline: none;
+      border-color: var(--green-gold);
+      box-shadow: var(--focus-ring);
+    }
+
+    .btn-primary {
+      background: var(--midnight-blue);
+      color: var(--white);
+    }
+
+    .btn-primary:hover { background: var(--midnight-blue-dark); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .kpi {
+      border: 1px solid #dbe4f2;
+      border-radius: 10px;
+      background: #f9fbff;
+      padding: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      color: var(--midnight-blue);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .kpi-meta {
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 14px;
+    }
+
+    .chart-wrap {
+      border: 1px solid #dce5f1;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 280px;
+      display: block;
+    }
+
+    .legend {
+      margin-top: 8px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .risk-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .risk-item {
+      border: 1px solid #e3e9f2;
+      border-left: 4px solid transparent;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .risk-item.high { border-left-color: var(--risk-high); background: #fff6f6; }
+    .risk-item.medium { border-left-color: var(--risk-medium); background: #fff9f1; }
+    .risk-item.low { border-left-color: var(--risk-low); background: #f3fff8; }
+
+    .risk-item strong {
+      color: var(--midnight-blue);
+      font-size: 14px;
+    }
+
+    .risk-item p {
+      margin: 0;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .table-wrap {
+      border: 1px solid var(--border-gray);
+      border-radius: 10px;
+      overflow: auto;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    th {
+      background: var(--midnight-blue);
+      color: var(--white);
+      font-size: 13px;
+      padding: 9px 10px;
+      text-align: left;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      white-space: nowrap;
+    }
+
+    th:last-child, td:last-child { border-right: none; }
+
+    td {
+      font-size: 13px;
+      padding: 8px 10px;
+      border-top: 1px solid #e1e8f2;
+      border-right: 1px solid #e1e8f2;
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) { background: var(--neutral-gray); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .pill-high { background: #feeeee; color: var(--risk-high); border-color: #f6b8b8; }
+    .pill-medium { background: #fff8e6; color: var(--risk-medium); border-color: #f3daa1; }
+    .pill-low { background: #ecfdf3; color: var(--risk-low); border-color: #b7efcf; }
+    .pill-routed { background: #edf4ff; color: #1e4ca9; border-color: #bed7ff; }
+    .pill-approved { background: #ecfdf3; color: #166534; border-color: #b7efcf; }
+    .pill-rejected { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+    .pill-draft { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
+
+    .btn-mini {
+      min-height: 30px;
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 7px;
+      border: 1px solid #d2deee;
+      background: #ecf2fb;
+      color: var(--midnight-blue);
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+
+    .btn-mini:hover { background: #e4edf9; }
+
+    .trace-list {
+      display: grid;
+      gap: 8px;
+      max-height: 280px;
+      overflow: auto;
+    }
+
+    .trace {
+      border: 1px solid #e2e8f2;
+      border-radius: 10px;
+      background: #fff;
+      padding: 9px;
+      display: grid;
+      gap: 3px;
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .trace strong {
+      color: var(--midnight-blue);
+      font-size: 13px;
+    }
+
+    .empty {
+      border: 1px dashed #cfd9e9;
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 14px;
+      color: #64748b;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    footer {
+      background: var(--midnight-blue);
+      border-top: 3px solid var(--green-gold);
+      color: var(--white);
+      text-align: center;
+      padding: 11px;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 1160px) {
+      .control-grid, .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .top-bar { padding: 12px; }
+      main { padding: 0 12px; }
+      .session-strip { margin: 12px; }
+      .control-grid, .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <h1>Profit Margin Guardian Agent</h1>
+      </div>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="./Dashboard.html">Dashboard</a>
+        <a href="./Rule-Configuration.html">Rule Configuration</a>
+        <a href="./PO-Approval.html">PO Validation</a>
+        <a href="./Analytics.html" aria-current="page">Category Risk Analytics</a>
+        <a href="./Audit-Trail.html">Audit Trail</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
+
+  <main>
+    <section class="card">
+      <div class="card-head">
+        <h2 class="card-title">Cross-Category Margin Risk Analytics</h2>
+        <p class="card-note">Scheduled/event scans, risk detection, proposal routing, and traceability.</p>
+      </div>
+      <div class="card-body">
+        <div class="control-grid">
+          <div class="field">
+            <label for="scanFrequency">Scan Frequency</label>
+            <select id="scanFrequency">
+              <option value="hourly">Hourly</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="scanTrigger">Scan Trigger</label>
+            <select id="scanTrigger">
+              <option value="event">Event-Based (PO/Quote Create-Change-Approve)</option>
+              <option value="schedule">Scheduled Batch</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="categoryFocus">Category Focus</label>
+            <select id="categoryFocus"></select>
+          </div>
+          <div class="field">
+            <button id="runScanBtn" class="btn-primary" type="button">Run Margin Risk Scan</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpi-grid">
+      <article class="kpi">
+        <div class="kpi-label">Flagged Categories</div>
+        <div id="kpiFlaggedCategories" class="kpi-value">0</div>
+        <div class="kpi-meta">Below configured target margin</div>
+      </article>
+      <article class="kpi">
+        <div class="kpi-label">High-Risk Suppliers</div>
+        <div id="kpiHighRiskSuppliers" class="kpi-value">0</div>
+        <div class="kpi-meta">Require immediate sourcing action</div>
+      </article>
+      <article class="kpi">
+        <div class="kpi-label">Open Proposals</div>
+        <div id="kpiOpenProposals" class="kpi-value">0</div>
+        <div class="kpi-meta">Pending route/approval workflow</div>
+      </article>
+      <article class="kpi">
+        <div class="kpi-label">Last Scan</div>
+        <div id="kpiLastScan" class="kpi-value" style="font-size: 18px;">-</div>
+        <div class="kpi-meta">Analytics dataset refresh timestamp</div>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="card">
+        <div class="card-head">
+          <h3 class="card-title">Margin Trend by Category</h3>
+          <p class="card-note">Actual vs target vs projected margin over time window.</p>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrap">
+            <canvas id="lineChart" width="700" height="300"></canvas>
+            <div class="legend">
+              <span><span class="dot" style="background:#193E6B;"></span>Actual Margin %</span>
+              <span><span class="dot" style="background:#B3A125;"></span>Target Margin %</span>
+              <span><span class="dot" style="background:#0EA5E9;"></span>Projected Margin %</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3 class="card-title">Supplier Risk Exposure</h3>
+          <p class="card-note">Variance of projected margin versus target by supplier.</p>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrap">
+            <canvas id="barChart" width="700" height="300"></canvas>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="card">
+        <div class="card-head">
+          <h3 class="card-title">Risk Alerts</h3>
+          <p class="card-note">Hotspots detected from open/closed PO and quotation analysis.</p>
+        </div>
+        <div class="card-body">
+          <div id="riskList" class="risk-list"></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3 class="card-title">Traceability Log</h3>
+          <p class="card-note">Routing decisions, BC update actions, and scan history.</p>
+        </div>
+        <div class="card-body">
+          <div id="traceList" class="trace-list"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h3 class="card-title">Working Dataset: POs & Quotations by Category/Supplier</h3>
+        <p class="card-note">Open/closed documents, projected margin, and target variance.</p>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table aria-label="working analytics dataset">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th>Open POs</th>
+                <th>Closed POs</th>
+                <th>Open Quotes</th>
+                <th>Actual Margin</th>
+                <th>Projected Margin</th>
+                <th>Target Margin</th>
+                <th>Variance</th>
+                <th>Severity</th>
+              </tr>
+            </thead>
+            <tbody id="datasetBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h3 class="card-title">Sourcing Adjustment Proposals & Approval Routing</h3>
+        <p class="card-note">Route recommendations through governed workflow and apply BC updates on approval.</p>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table aria-label="proposal routing table">
+            <thead>
+              <tr>
+                <th>Proposal ID</th>
+                <th>Category / Supplier</th>
+                <th>Risk</th>
+                <th>Recommendation</th>
+                <th>Current Route</th>
+                <th>Status</th>
+                <th>BC Dimension Update</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="proposalBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Copyright &copy; 2026 Profit Margin Guardian Agent
+  </footer>
+
+  <script>
+    const sessionRaw = localStorage.getItem("pmg_session");
+    if (!sessionRaw) window.location.replace("./Login.html");
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const roleLabelMap = { admin: "Administrator", procurement_manager: "Procurement Manager", category_manager: "Category Manager" };
+    const analyticsStorageKey = "pmg_analytics_state";
+    const auditStorageKey = "pmg_audit_logs";
+
+    const seedState = {
+      settings: {
+        scanFrequency: "hourly",
+        scanTrigger: "event",
+        categoryFocus: "Industrial Fasteners",
+        lastScanAt: null
+      },
+      categories: [
+        {
+          name: "Industrial Fasteners",
+          targetMargin: 20,
+          trendLabels: ["W1", "W2", "W3", "W4", "W5", "W6"],
+          actualTrend: [21.6, 20.8, 19.9, 19.2, 18.8, 18.4],
+          projectedTrend: [21.1, 20.3, 19.5, 18.8, 18.1, 17.6]
+        },
+        {
+          name: "Hydraulic Components",
+          targetMargin: 19,
+          trendLabels: ["W1", "W2", "W3", "W4", "W5", "W6"],
+          actualTrend: [20.1, 19.7, 19.2, 18.9, 18.4, 18.0],
+          projectedTrend: [19.8, 19.3, 18.9, 18.5, 18.1, 17.7]
+        },
+        {
+          name: "Electrical Control Parts",
+          targetMargin: 18,
+          trendLabels: ["W1", "W2", "W3", "W4", "W5", "W6"],
+          actualTrend: [18.5, 18.2, 17.9, 17.3, 16.9, 16.4],
+          projectedTrend: [18.2, 17.8, 17.4, 16.9, 16.4, 16.0]
+        },
+        {
+          name: "MRO Consumables",
+          targetMargin: 15.5,
+          trendLabels: ["W1", "W2", "W3", "W4", "W5", "W6"],
+          actualTrend: [16.4, 16.1, 15.8, 15.2, 14.8, 14.5],
+          projectedTrend: [16.2, 15.9, 15.4, 14.9, 14.5, 14.1]
+        }
+      ],
+      suppliers: [
+        { name: "Prime Industrial Supply", category: "Industrial Fasteners", openPO: 8, closedPO: 24, openQuotes: 5, projectedMargin: 17.8 },
+        { name: "HydroSeal Dynamics", category: "Hydraulic Components", openPO: 5, closedPO: 18, openQuotes: 3, projectedMargin: 17.6 },
+        { name: "ElectraCore Components", category: "Electrical Control Parts", openPO: 9, closedPO: 21, openQuotes: 7, projectedMargin: 15.9 },
+        { name: "MRO Nexus Traders", category: "MRO Consumables", openPO: 6, closedPO: 28, openQuotes: 4, projectedMargin: 14.0 }
+      ],
+      proposals: [
+        {
+          id: "PRP-2104",
+          category: "Electrical Control Parts",
+          supplier: "ElectraCore Components",
+          risk: "High",
+          recommendation: "Split volume 60/40 and onboard alternate supplier with capped variance.",
+          route: "Category Manager -> Procurement Manager -> Finance Controller",
+          status: "Draft",
+          bcUpdate: "Pending"
+        },
+        {
+          id: "PRP-2105",
+          category: "Industrial Fasteners",
+          supplier: "Prime Industrial Supply",
+          risk: "Medium",
+          recommendation: "Renegotiate unit price by 4% and lock quarterly contract terms.",
+          route: "Category Manager -> Procurement Manager",
+          status: "Routed",
+          bcUpdate: "Pending"
+        },
+        {
+          id: "PRP-2106",
+          category: "MRO Consumables",
+          supplier: "MRO Nexus Traders",
+          risk: "High",
+          recommendation: "Introduce approved substitute SKU list to lift margin by 1.8 points.",
+          route: "Category Manager -> Procurement Manager -> CFO",
+          status: "Routed",
+          bcUpdate: "Pending"
+        }
+      ],
+      trace: []
+    };
+
+    function cloneSeed() {
+      return JSON.parse(JSON.stringify(seedState));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(analyticsStorageKey);
+      if (!raw) return cloneSeed();
+      try {
+        const parsed = JSON.parse(raw);
+        return parsed && parsed.settings ? parsed : cloneSeed();
+      } catch (error) {
+        return cloneSeed();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(analyticsStorageKey, JSON.stringify(state));
+    }
+
+    function formatPercent(value) {
+      return Number(value).toFixed(1) + "%";
+    }
+
+    function severityFromVariance(variance) {
+      if (variance <= -2) return "High";
+      if (variance <= -0.8) return "Medium";
+      return "Low";
+    }
+
+    function severityClass(value) {
+      if (value === "High") return "high";
+      if (value === "Medium") return "medium";
+      return "low";
+    }
+
+    function severityPillClass(value) {
+      if (value === "High") return "pill-high";
+      if (value === "Medium") return "pill-medium";
+      return "pill-low";
+    }
+
+    function statusPillClass(value) {
+      if (value === "Routed") return "pill-routed";
+      if (value === "Approved") return "pill-approved";
+      if (value === "Rejected") return "pill-rejected";
+      return "pill-draft";
+    }
+
+    function categoryByName(name) {
+      return state.categories.find((category) => category.name === name);
+    }
+
+    function writeTrace(action, details) {
+      state.trace.unshift({
+        action,
+        details,
+        user: session.userName || session.email || "User",
+        timestamp: new Date().toISOString()
+      });
+      state.trace = state.trace.slice(0, 60);
+      saveState();
+      renderTrace();
+    }
+
+    function writeAudit(action, reason) {
+      let logs = [];
+      try {
+        logs = JSON.parse(localStorage.getItem(auditStorageKey) || "[]");
+      } catch (error) {
+        logs = [];
+      }
+      logs.unshift({
+        timestamp: new Date().toISOString(),
+        poNo: "ANALYTICS-PROPOSAL",
+        user: session.userName || session.email || "User",
+        action,
+        state: "ANALYTICS",
+        margin: 0,
+        reason
+      });
+      localStorage.setItem(auditStorageKey, JSON.stringify(logs.slice(0, 100)));
+    }
+
+    let state = loadState();
+
+    const sessionStrip = document.getElementById("sessionStrip");
+    const scanFrequency = document.getElementById("scanFrequency");
+    const scanTrigger = document.getElementById("scanTrigger");
+    const categoryFocus = document.getElementById("categoryFocus");
+    const runScanBtn = document.getElementById("runScanBtn");
+    const riskList = document.getElementById("riskList");
+    const traceList = document.getElementById("traceList");
+    const datasetBody = document.getElementById("datasetBody");
+    const proposalBody = document.getElementById("proposalBody");
+    const lineChart = document.getElementById("lineChart");
+    const barChart = document.getElementById("barChart");
+
+    function renderSessionStrip() {
+      const roleText = roleLabelMap[session.role] || session.roleLabel || "User";
+      const now = new Date();
+      sessionStrip.innerHTML =
+        "<strong>Signed In:</strong> " + (session.userName || "User") +
+        " (" + roleText + ") | " +
+        "<strong>Email:</strong> " + (session.email || "-") + " | " +
+        "<strong>Company:</strong> " + (session.company || "Lithan Academy Pte Ltd") + " | " +
+        "<strong>Last Refresh:</strong> " + now.toLocaleString();
+    }
+
+    function bindControls() {
+      scanFrequency.value = state.settings.scanFrequency;
+      scanTrigger.value = state.settings.scanTrigger;
+      categoryFocus.innerHTML = "";
+      state.categories.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category.name;
+        option.textContent = category.name;
+        categoryFocus.appendChild(option);
+      });
+      categoryFocus.value = state.settings.categoryFocus;
+    }
+
+    function supplierDataset() {
+      return state.suppliers.map((supplier) => {
+        const category = categoryByName(supplier.category);
+        const target = category ? category.targetMargin : 18;
+        const actual = category ? category.actualTrend[category.actualTrend.length - 1] : supplier.projectedMargin;
+        const variance = supplier.projectedMargin - target;
+        const severity = severityFromVariance(variance);
+        return {
+          name: supplier.name,
+          category: supplier.category,
+          openPO: supplier.openPO,
+          closedPO: supplier.closedPO,
+          openQuotes: supplier.openQuotes,
+          projectedMargin: supplier.projectedMargin,
+          targetMargin: target,
+          actualMargin: actual,
+          variance,
+          severity
+        };
+      });
+    }
+    function renderKPIs() {
+      const dataset = supplierDataset();
+      const flagged = dataset.filter((row) => row.variance < 0).length;
+      const highRiskSuppliers = dataset.filter((row) => row.severity === "High").length;
+      const openProposals = state.proposals.filter((proposal) => proposal.status !== "Approved" && proposal.status !== "Rejected").length;
+      const scan = state.settings.lastScanAt ? new Date(state.settings.lastScanAt).toLocaleString() : "-";
+
+      document.getElementById("kpiFlaggedCategories").textContent = flagged;
+      document.getElementById("kpiHighRiskSuppliers").textContent = highRiskSuppliers;
+      document.getElementById("kpiOpenProposals").textContent = openProposals;
+      document.getElementById("kpiLastScan").textContent = scan;
+    }
+
+    function drawLineChart() {
+      const category = categoryByName(state.settings.categoryFocus) || state.categories[0];
+      const ctx = lineChart.getContext("2d");
+      const width = lineChart.width;
+      const height = lineChart.height;
+      const padding = 36;
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, width, height);
+      ctx.strokeStyle = "#E6ECF3";
+      ctx.lineWidth = 1;
+
+      const allValues = category.actualTrend.concat(category.projectedTrend).concat(category.trendLabels.map(() => category.targetMargin));
+      const minY = Math.floor(Math.min.apply(null, allValues) - 1);
+      const maxY = Math.ceil(Math.max.apply(null, allValues) + 1);
+      const yRange = maxY - minY || 1;
+
+      for (let i = 0; i <= 5; i += 1) {
+        const y = padding + ((height - padding * 2) / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(width - padding, y);
+        ctx.stroke();
+        const value = (maxY - (y - padding) / (height - padding * 2) * yRange).toFixed(1);
+        ctx.fillStyle = "#526075";
+        ctx.font = "12px Segoe UI";
+        ctx.fillText(value + "%", 4, y + 4);
+      }
+
+      function drawSeries(values, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        values.forEach((value, index) => {
+          const x = padding + (index / (values.length - 1)) * (width - padding * 2);
+          const y = padding + ((maxY - value) / yRange) * (height - padding * 2);
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
+
+      drawSeries(category.actualTrend, "#193E6B");
+      drawSeries(category.trendLabels.map(() => category.targetMargin), "#B3A125");
+      drawSeries(category.projectedTrend, "#0EA5E9");
+
+      ctx.fillStyle = "#334155";
+      ctx.font = "12px Segoe UI";
+      category.trendLabels.forEach((label, index) => {
+        const x = padding + (index / (category.trendLabels.length - 1)) * (width - padding * 2);
+        ctx.fillText(label, x - 10, height - 10);
+      });
+    }
+
+    function drawBarChart() {
+      const dataset = supplierDataset();
+      const ctx = barChart.getContext("2d");
+      const width = barChart.width;
+      const height = barChart.height;
+      const padding = 34;
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, width, height);
+
+      const minVariance = Math.min.apply(null, dataset.map((row) => row.variance).concat([-0.5]));
+      const maxVariance = Math.max.apply(null, dataset.map((row) => row.variance).concat([0.5]));
+      const range = maxVariance - minVariance || 1;
+
+      dataset.forEach((row, index) => {
+        const band = (width - padding * 2) / dataset.length;
+        const barWidth = Math.max(26, band * 0.55);
+        const x = padding + band * index + (band - barWidth) / 2;
+        const normalized = (row.variance - minVariance) / range;
+        const y = padding + (1 - normalized) * (height - padding * 2);
+        const baseY = padding + (1 - ((0 - minVariance) / range)) * (height - padding * 2);
+        const h = baseY - y;
+
+        ctx.fillStyle = row.severity === "High" ? "#B42318" : row.severity === "Medium" ? "#B54708" : "#027A48";
+        ctx.fillRect(x, h >= 0 ? y : baseY, barWidth, Math.abs(h));
+        ctx.fillStyle = "#334155";
+        ctx.font = "11px Segoe UI";
+        ctx.fillText(row.name.split(" ")[0], x - 4, height - 10);
+      });
+
+      ctx.strokeStyle = "#94A3B8";
+      const zeroY = padding + (1 - ((0 - minVariance) / range)) * (height - padding * 2);
+      ctx.beginPath();
+      ctx.moveTo(padding, zeroY);
+      ctx.lineTo(width - padding, zeroY);
+      ctx.stroke();
+    }
+
+    function renderRiskAlerts() {
+      const dataset = supplierDataset().sort((a, b) => a.variance - b.variance);
+      riskList.innerHTML = "";
+      dataset.forEach((row) => {
+        if (row.variance >= 0.1) return;
+        const item = document.createElement("article");
+        item.className = "risk-item " + severityClass(row.severity);
+        item.innerHTML =
+          "<strong>" + row.category + " | " + row.name + "</strong>" +
+          "<p>Projected margin " + formatPercent(row.projectedMargin) + " vs target " + formatPercent(row.targetMargin) + ".</p>" +
+          "<p><span class='pill " + severityPillClass(row.severity) + "'>" + row.severity + " Risk</span></p>";
+        riskList.appendChild(item);
+      });
+      if (!riskList.children.length) {
+        riskList.innerHTML = "<div class='empty'>No margin erosion risk detected for current dataset.</div>";
+      }
+    }
+
+    function renderDatasetTable() {
+      const dataset = supplierDataset();
+      datasetBody.innerHTML = "";
+      dataset.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + row.category + "</td>" +
+          "<td>" + row.name + "</td>" +
+          "<td>" + row.openPO + "</td>" +
+          "<td>" + row.closedPO + "</td>" +
+          "<td>" + row.openQuotes + "</td>" +
+          "<td>" + formatPercent(row.actualMargin) + "</td>" +
+          "<td>" + formatPercent(row.projectedMargin) + "</td>" +
+          "<td>" + formatPercent(row.targetMargin) + "</td>" +
+          "<td>" + formatPercent(row.variance) + "</td>" +
+          "<td><span class='pill " + severityPillClass(row.severity) + "'>" + row.severity + "</span></td>";
+        datasetBody.appendChild(tr);
+      });
+    }
+
+    function renderProposals() {
+      proposalBody.innerHTML = "";
+      state.proposals.forEach((proposal) => {
+        const row = document.createElement("tr");
+        row.innerHTML =
+          "<td>" + proposal.id + "</td>" +
+          "<td>" + proposal.category + " / " + proposal.supplier + "</td>" +
+          "<td><span class='pill " + severityPillClass(proposal.risk) + "'>" + proposal.risk + "</span></td>" +
+          "<td>" + proposal.recommendation + "</td>" +
+          "<td>" + proposal.route + "</td>" +
+          "<td><span class='pill " + statusPillClass(proposal.status) + "'>" + proposal.status + "</span></td>" +
+          "<td>" + proposal.bcUpdate + "</td>" +
+          "<td>" +
+          "<button class='btn-mini' data-action='route' data-id='" + proposal.id + "'>Route</button>" +
+          "<button class='btn-mini' data-action='approve' data-id='" + proposal.id + "'>Approve</button>" +
+          "<button class='btn-mini' data-action='reject' data-id='" + proposal.id + "'>Reject</button>" +
+          "</td>";
+        proposalBody.appendChild(row);
+      });
+
+      proposalBody.querySelectorAll("button[data-action]").forEach((button) => {
+        button.addEventListener("click", () => handleProposalAction(button.dataset.id, button.dataset.action));
+      });
+    }
+    function handleProposalAction(id, action) {
+      const proposal = state.proposals.find((item) => item.id === id);
+      if (!proposal) return;
+
+      if (action === "route") {
+        proposal.status = "Routed";
+        writeTrace("Proposal Routed", proposal.id + " routed through " + proposal.route + ".");
+        writeAudit("Proposal Routed", proposal.id + " routed through analytics approval workflow.");
+      }
+      if (action === "approve") {
+        proposal.status = "Approved";
+        proposal.bcUpdate = "Updated (Dimensions + Master Data)";
+        writeTrace("Proposal Approved", proposal.id + " approved and BC dimensions updated.");
+        writeAudit("Proposal Approved", proposal.id + " approved; BC updates applied.");
+      }
+      if (action === "reject") {
+        proposal.status = "Rejected";
+        proposal.bcUpdate = "Not Applied";
+        writeTrace("Proposal Rejected", proposal.id + " rejected by approver.");
+        writeAudit("Proposal Rejected", proposal.id + " rejected in routing workflow.");
+      }
+
+      saveState();
+      renderAll();
+    }
+
+    function renderTrace() {
+      traceList.innerHTML = "";
+      const logs = state.trace.slice(0, 10);
+      if (!logs.length) {
+        traceList.innerHTML = "<div class='empty'>No trace entries yet. Scan and proposal actions will appear here.</div>";
+        return;
+      }
+      logs.forEach((entry) => {
+        const item = document.createElement("article");
+        item.className = "trace";
+        item.innerHTML =
+          "<strong>" + entry.action + "</strong>" +
+          "<span>" + entry.details + "</span>" +
+          "<span><strong>User:</strong> " + entry.user + " | <strong>Timestamp:</strong> " + new Date(entry.timestamp).toLocaleString() + "</span>";
+        traceList.appendChild(item);
+      });
+    }
+
+    function runScan() {
+      state.settings.scanFrequency = scanFrequency.value;
+      state.settings.scanTrigger = scanTrigger.value;
+      state.settings.categoryFocus = categoryFocus.value;
+      state.settings.lastScanAt = new Date().toISOString();
+
+      state.categories.forEach((category) => {
+        category.projectedTrend = category.projectedTrend.map((value) => {
+          const drift = (Math.random() - 0.55) * 0.5;
+          return Number((value + drift).toFixed(1));
+        });
+      });
+      state.suppliers.forEach((supplier) => {
+        const drift = (Math.random() - 0.55) * 0.5;
+        supplier.projectedMargin = Number((supplier.projectedMargin + drift).toFixed(1));
+      });
+
+      writeTrace("Margin Risk Scan Completed", "Frequency: " + state.settings.scanFrequency + ", Trigger: " + state.settings.scanTrigger + ".");
+      writeAudit("Analytics Scan", "Cross-category scan executed with " + state.settings.scanTrigger + " mode.");
+
+      saveState();
+      renderAll();
+    }
+
+    function renderAll() {
+      renderSessionStrip();
+      bindControls();
+      renderKPIs();
+      drawLineChart();
+      drawBarChart();
+      renderRiskAlerts();
+      renderDatasetTable();
+      renderProposals();
+      renderTrace();
+    }
+
+    runScanBtn.addEventListener("click", runScan);
+    categoryFocus.addEventListener("change", () => {
+      state.settings.categoryFocus = categoryFocus.value;
+      saveState();
+      drawLineChart();
+    });
+    scanFrequency.addEventListener("change", () => {
+      state.settings.scanFrequency = scanFrequency.value;
+      saveState();
+      renderKPIs();
+    });
+    scanTrigger.addEventListener("change", () => {
+      state.settings.scanTrigger = scanTrigger.value;
+      saveState();
+      renderKPIs();
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>

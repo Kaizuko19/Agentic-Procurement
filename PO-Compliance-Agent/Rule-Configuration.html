@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PO Compliance Agent | Compliance Rules</title>
+  <style>
+    :root {
+      --midnight-blue: #193e6b;
+      --gold: #b3a125;
+      --gold-dark: #96851f;
+      --white: #ffffff;
+      --neutral-gray: #f5f5f5;
+      --border-gray: #d8dee8;
+      --text-main: #1f2937;
+      --text-muted: #526075;
+      --surface-soft: #f8faff;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-soft: 0 6px 18px rgba(16, 24, 40, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+
+    .top-bar {
+      background: var(--midnight-blue);
+      border-bottom: 4px solid var(--gold);
+      color: var(--white);
+      padding: 14px 20px;
+    }
+
+    .top-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      min-height: 42px;
+      padding: 7px 12px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .brand-logo .accent { color: var(--gold); font-weight: 800; }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(22px, 1.8vw, 30px);
+      font-weight: 700;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      color: var(--white);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .main-nav a[aria-current="page"] {
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: var(--focus-ring);
+    }
+
+    .session-strip {
+      max-width: 1300px;
+      margin: 16px auto 0;
+      border: 1px solid #d7e2f1;
+      border-left: 5px solid var(--gold);
+      border-radius: 10px;
+      background: #f4f8ff;
+      padding: 12px 14px;
+      color: #21496f;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 1300px;
+      margin: 16px auto 24px;
+      padding: 0 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 16px;
+      background: var(--surface-soft);
+      border-bottom: 1px solid var(--border-gray);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .panel-title {
+      margin: 0;
+      color: var(--midnight-blue);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .panel-note {
+      margin: 6px 0 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .panel-body {
+      padding: 16px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-top: 1px solid #e1e8f2;
+      font-size: 13px;
+    }
+
+    th {
+      background: var(--midnight-blue);
+      color: var(--white);
+      border-top: none;
+    }
+
+    tbody tr:nth-child(even) { background: var(--neutral-gray); }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-active { background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; }
+    .status-paused { background: #fff7ed; color: #92400e; border: 1px solid #fed7aa; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature-item {
+      border: 1px solid #dbe5f2;
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 14px;
+      background: #ffffff;
+    }
+
+    .feature-item strong { display: block; margin-bottom: 6px; color: var(--midnight-blue); }
+
+    footer {
+      background: var(--midnight-blue);
+      border-top: 3px solid var(--gold);
+      color: var(--white);
+      text-align: center;
+      padding: 12px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 920px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      table { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <h1>PO Compliance Agent</h1>
+      </div>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="./Dashboard.html">Dashboard</a>
+        <a href="./Rule-Configuration.html" aria-current="page">Compliance Rules</a>
+        <a href="./PO-Validation.html">PO Review</a>
+        <a href="./Audit-Trail.html">Audit Trail</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="session-strip">Active compliance rule management for PO validation workflows.</section>
+
+  <main>
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Compliance Rule Sets</h2>
+          <p class="panel-note">Manage the PO features and controls that enforce supplier and approval policies.</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="table-wrap">
+          <table aria-label="Compliance rule configuration">
+            <thead>
+              <tr>
+                <th>Rule Set</th>
+                <th>Feature</th>
+                <th>Type</th>
+                <th>Scope</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Supplier Approval Controls</td>
+                <td>PO Compliance</td>
+                <td>Supplier List Match</td>
+                <td>Tier 1 / New Suppliers</td>
+                <td><span class="status-pill status-active">Active</span></td>
+              </tr>
+              <tr>
+                <td>PO Header Validation</td>
+                <td>PO Compliance</td>
+                <td>Field Completeness</td>
+                <td>Mandatory Terms</td>
+                <td><span class="status-pill status-active">Active</span></td>
+              </tr>
+              <tr>
+                <td>Contract & Threshold Checks</td>
+                <td>PO Compliance</td>
+                <td>Contract Match</td>
+                <td>Agreed Material Lists</td>
+                <td><span class="status-pill status-paused">Saved</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <article class="feature-list">
+        <div class="feature-item">
+          <strong>PO Header Completeness</strong>
+          Ensure purchase orders include approvals, account codes, delivery location, and supplier terms before validation.
+        </div>
+        <div class="feature-item">
+          <strong>Supplier Compliance</strong>
+          Block or flag POs with suppliers outside approved lists or missing required onboarding status.
+        </div>
+        <div class="feature-item">
+          <strong>Contract Assurance</strong>
+          Verify PO line items and values against contract terms during compliance evaluation.
+        </div>
+      </article>
+
+      <article class="feature-list">
+        <div class="feature-item">
+          <strong>Approval Workflow</strong>
+          Route non-compliant POs for review and capture justification for overrides.
+        </div>
+        <div class="feature-item">
+          <strong>Audit Visibility</strong>
+          Maintain traceability for every compliance decision and PO action.
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>Copyright &copy; 2026 PO Compliance Agent</footer>
+
+  <script>
+    const sessionKey = "poc_session";
+    const sessionRaw = localStorage.getItem(sessionKey);
+    if (!sessionRaw) {
+      window.location.replace("./Login.html");
+    }
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+  </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PO Compliance Agent | Audit Trail</title>
+  <style>
+    :root {
+      --midnight-blue: #193e6b;
+      --gold: #b3a125;
+      --white: #ffffff;
+      --neutral-gray: #f5f5f5;
+      --border-gray: #d8dee8;
+      --text-main: #1f2937;
+      --text-muted: #526075;
+      --surface-soft: #f8fbff;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-soft: 0 6px 18px rgba(16, 24, 40, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      color: var(--text-main);
+    }
+
+    .top-bar {
+      background: var(--midnight-blue);
+      border-bottom: 4px solid var(--gold);
+      color: var(--white);
+      padding: 14px 20px;
+    }
+
+    .top-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { min-height: 42px; padding: 7px 12px; border: 2px solid rgba(255,255,255,0.72); border-radius: 10px; font-weight: 700; }
+    .brand-logo .accent { color: var(--gold); }
+    .brand h1 { margin: 0; font-size: clamp(22px, 1.8vw, 30px); font-weight: 700; }
+
+    .main-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .main-nav a { text-decoration: none; color: var(--white); border: 1px solid transparent; border-radius: 8px; padding: 8px 12px; font-weight: 600; }
+    .main-nav a[aria-current="page"] { border-color: rgba(255,255,255,0.32); background: rgba(255,255,255,0.16); }
+    .main-nav a:hover, .main-nav a:focus-visible { outline: none; border-color: rgba(255,255,255,0.32); background: rgba(255,255,255,0.12); box-shadow: var(--focus-ring); }
+
+    .session-strip { max-width: 1300px; margin: 16px auto 0; border: 1px solid #d7e2f1; border-left: 5px solid var(--gold); border-radius: 10px; background: #f4f8ff; padding: 12px 14px; color: #21496f; font-size: 14px; }
+
+    main { max-width: 1300px; margin: 16px auto 24px; padding: 0 20px; display: grid; gap: 16px; }
+
+    .panel { background: var(--white); border: 1px solid var(--border-gray); border-radius: 12px; box-shadow: var(--shadow-soft); overflow: hidden; }
+    .panel-head { padding: 16px; background: var(--surface-soft); border-bottom: 1px solid var(--border-gray); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .panel-title { margin: 0; font-size: 20px; font-weight: 700; color: var(--midnight-blue); }
+    .panel-note { margin: 6px 0 0; color: var(--text-muted); font-size: 13px; }
+    .panel-body { padding: 16px; }
+
+    .search-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .search-row input { flex: 1; min-width: 220px; border: 1px solid #c5cedd; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+    .search-row button { border: none; border-radius: 10px; background: var(--midnight-blue); color: #fff; padding: 10px 16px; font-weight: 700; cursor: pointer; }
+
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { padding: 12px 14px; text-align: left; border-top: 1px solid #e1e8f2; font-size: 13px; }
+    th { background: var(--midnight-blue); color: #fff; border-top: none; }
+    tbody tr:nth-child(even) { background: var(--neutral-gray); }
+
+    .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .status-logged { background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; }
+    .status-approved { background: #eff6ff; color: #1d4ed8; border: 1px solid #93c5fd; }
+    .status-overridden { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+
+    footer { background: var(--midnight-blue); border-top: 3px solid var(--gold); color: #fff; text-align: center; padding: 12px; margin-top: 16px; }
+
+    @media (max-width: 920px) { .search-row { flex-direction: column; } table { min-width: 100%; } }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <h1>PO Compliance Agent</h1>
+      </div>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="./Dashboard.html">Dashboard</a>
+        <a href="./Rule-Configuration.html">Compliance Rules</a>
+        <a href="./PO-Validation.html" aria-current="page">PO Review</a>
+        <a href="./Audit-Trail.html">Audit Trail</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="session-strip">Audit-ready PO review workflow for compliance exceptions.</section>
+
+  <main>
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">PO Compliance Review</h2>
+          <p class="panel-note">Monitor the current PO queue and resolve compliance issues.</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="search-row">
+          <input type="search" placeholder="Search by PO number, supplier, or issue" />
+          <button type="button">Filter Results</button>
+        </div>
+        <div class="table-wrap">
+          <table aria-label="Compliance review table">
+            <thead>
+              <tr>
+                <th>PO Number</th>
+                <th>Supplier</th>
+                <th>Value</th>
+                <th>Feature</th>
+                <th>Violation</th>
+                <th>Review Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PO-084512</td>
+                <td>Apex Industrial</td>
+                <td>$78,400</td>
+                <td>Supplier Compliance</td>
+                <td>Unapproved supplier</td>
+                <td><span class="status-pill status-overridden">Awaiting Override</span></td>
+              </tr>
+              <tr>
+                <td>PO-084498</td>
+                <td>Delta Packaging</td>
+                <td>$14,200</td>
+                <td>Header Validation</td>
+                <td>Missing approval code</td>
+                <td><span class="status-pill status-logged">Pending</span></td>
+              </tr>
+              <tr>
+                <td>PO-084481</td>
+                <td>Northgate Logistics</td>
+                <td>$32,900</td>
+                <td>Contract Match</td>
+                <td>Line item mismatch</td>
+                <td><span class="status-pill status-approved">Escalated</span></td>
+              </tr>
+              <tr>
+                <td>PO-084475</td>
+                <td>OneWorld Supplies</td>
+                <td>$59,200</td>
+                <td>Budget Check</td>
+                <td>Exceeded threshold</td>
+                <td><span class="status-pill status-logged">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Copyright &copy; 2026 PO Compliance Agent</footer>
+
+  <script>
+    const sessionKey = "poc_session";
+    const sessionRaw = localStorage.getItem(sessionKey);
+    if (!sessionRaw) {
+      window.location.replace("./Login.html");
+    }
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+  </script>
+</body>
+</html>

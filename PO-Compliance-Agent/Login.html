@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PO Compliance Agent | Login</title>
+  <style>
+    :root {
+      --midnight-blue: #193E6B;
+      --midnight-blue-dark: #143356;
+      --gold: #B3A125;
+      --gold-dark: #96851f;
+      --white: #FFFFFF;
+      --neutral-gray: #F5F5F5;
+      --border-gray: #E6ECF3;
+      --text-main: #1f2937;
+      --text-muted: #5b6678;
+      --surface-soft: #f7faff;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-card: 0 14px 35px rgba(17, 24, 39, 0.14);
+      --shadow-soft: 0 6px 20px rgba(25, 62, 107, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 8% 10%, rgba(179, 161, 37, 0.16) 0, rgba(179, 161, 37, 0) 35%),
+        radial-gradient(circle at 90% 90%, rgba(25, 62, 107, 0.18) 0, rgba(25, 62, 107, 0) 40%),
+        linear-gradient(160deg, #f2f6fc 0%, #ffffff 55%, #eef4fb 100%);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1120px, 100%);
+      min-height: min(760px, calc(100vh - 48px));
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 18px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 0.96fr 1.04fr;
+      gap: 1px;
+    }
+
+    .showcase {
+      background: linear-gradient(155deg, #193E6B 0%, #1f4e86 58%, #10263f 100%);
+      color: var(--white);
+      padding: clamp(24px, 3vw, 42px);
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      align-content: space-between;
+      gap: 24px;
+      overflow: hidden;
+    }
+
+    .showcase::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
+        radial-gradient(circle at 20% 20%, rgba(179, 161, 37, 0.32), rgba(179, 161, 37, 0) 45%);
+      z-index: -1;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.94);
+      width: fit-content;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-pill {
+      padding: 9px 14px;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .logo-pill .accent { color: var(--gold); font-weight: 800; }
+
+    .title {
+      margin: 0;
+      font-size: clamp(24px, 2.1vw, 34px);
+      line-height: 1.2;
+      max-width: 20ch;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      max-width: 46ch;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .feature-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature {
+      position: relative;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      padding: 14px 14px 14px 24px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .feature::before {
+      content: "✔";
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .feature strong { color: #fff2b2; }
+
+    .login-zone {
+      background: linear-gradient(180deg, #fbfdff 0%, #f2f7ff 100%);
+      padding: clamp(24px, 3vw, 46px);
+      display: grid;
+      align-content: center;
+      border-right: 6px solid rgba(179, 161, 37, 0.18);
+    }
+
+    .login-card {
+      border: 1px solid rgba(179, 161, 37, 0.15);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
+      box-shadow: 0 20px 45px rgba(25, 62, 107, 0.08);
+      padding: clamp(24px, 3vw, 36px);
+    }
+
+    .banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(179, 161, 37, 0.14);
+      color: var(--midnight-blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--gold), #d1bd5d);
+      color: var(--midnight-blue);
+      box-shadow: 0 10px 20px rgba(179, 161, 37, 0.18);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #c5ad2d, #af9822);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--midnight-blue);
+      border: 1.5px solid var(--midnight-blue);
+    }
+
+    .btn-secondary:hover { background: rgba(25, 62, 107, 0.05); }
+
+    .card-title {
+      margin: 0;
+      color: var(--midnight-blue);
+      font-size: clamp(24px, 1.8vw, 30px);
+      line-height: 1.2;
+    }
+
+    .card-caption {
+      margin: 8px 0 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 14px;
+      color: var(--midnight-blue);
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #c7d2e1;
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-size: 14px;
+      color: var(--text-main);
+      background: #fff;
+    }
+
+    input::placeholder { color: #8a95a6; }
+
+    input:focus-visible, select:focus-visible, button:focus-visible {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: var(--focus-ring);
+    }
+
+    .helper {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .inline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .remember {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .remember input {
+      width: 16px;
+      height: 16px;
+      min-height: 16px;
+      margin: 0;
+      accent-color: var(--gold);
+    }
+
+    .forgot {
+      color: var(--midnight-blue);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .forgot:hover { color: var(--gold-dark); }
+
+    .btn-row {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .demo-row {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .demo-chip {
+      border: 1px solid #d3dbe8;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--midnight-blue);
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .demo-chip:hover {
+      border-color: var(--gold);
+      color: var(--gold-dark);
+    }
+
+    .feedback {
+      margin-top: 10px;
+      min-height: 22px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .feedback.error { color: #b42318; }
+    .feedback.success { color: #166534; }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+      .showcase { min-height: 260px; }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 12px; }
+      .logo-pill { font-size: 14px; }
+      .title { font-size: 23px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" aria-label="PO Compliance Agent Login">
+    <section class="login-zone">
+      <div class="login-card">
+        <div class="banner">Compliance Workspace</div>
+        <h2 class="card-title">Secure Sign-In</h2>
+        <p class="card-caption">Use your role credentials to access PO compliance evaluation tools.</p>
+
+        <form id="loginForm" class="form-grid" novalidate>
+          <div class="field">
+            <label for="role">Role</label>
+            <select id="role" required>
+              <option value="">Select your role</option>
+              <option value="admin">Administrator</option>
+              <option value="procurement_analyst">Procurement Analyst</option>
+              <option value="compliance_officer">Compliance Officer</option>
+            </select>
+            <div class="helper">Role determines page-level access and approval authority.</div>
+          </div>
+
+          <div class="field">
+            <label for="email">Business Email</label>
+            <input id="email" type="email" placeholder="name@claas2saas.com" autocomplete="username" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Enter password" autocomplete="current-password" required>
+          </div>
+
+          <div class="inline">
+            <label class="remember" for="remember">
+              <input id="remember" type="checkbox">
+              Keep me signed in on this device
+            </label>
+            <a class="forgot" href="#" aria-label="Reset password (mock)">Forgot password?</a>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" type="submit">Sign In</button>
+            <button class="btn btn-secondary" type="button" id="clearBtn">Clear Form</button>
+          </div>
+
+          <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+        </form>
+
+        <div class="demo-row" aria-label="Demo role shortcuts">
+          <button type="button" class="demo-chip" data-demo="admin">Use Admin Demo</button>
+          <button type="button" class="demo-chip" data-demo="procurement_analyst">Use Analyst Demo</button>
+          <button type="button" class="demo-chip" data-demo="compliance_officer">Use Officer Demo</button>
+        </div>
+
+        <p class="footer-note">
+          Mockup mode: credentials are validated against prototype users in-browser and session data is stored in localStorage.
+        </p>
+      </div>
+    </section>
+
+    <section class="showcase" aria-label="Product context">
+      <div>
+        <div class="brand-row">
+          <div class="logo-pill">CLaaS<span class="accent">2</span>SaaS</div>
+        </div>
+        <div class="hero-tag">Policy & audit first</div>
+        <h1 class="title">PO Compliance Agent</h1>
+        <p class="subtitle">
+          Automated supplier approval and procurement policy enforcement with real-time exception handling and audit traceability.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature"><strong>Role-Based Access:</strong> Admin, Procurement Analyst, and Compliance Officer role-specific views.</div>
+        <div class="feature"><strong>PO Compliance:</strong> Enforce supplier, header, contract, and budget compliance controls.</div>
+        <div class="feature"><strong>Audit Traceability:</strong> Every review decision and oversight action is recorded for compliance.</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const ROLE_LABELS = {
+      admin: "Administrator",
+      procurement_analyst: "Procurement Analyst",
+      compliance_officer: "Compliance Officer"
+    };
+
+    const ROUTES = {
+      admin: "./Dashboard.html?role=admin",
+      procurement_analyst: "./Dashboard.html?role=procurement_analyst",
+      compliance_officer: "./Dashboard.html?role=compliance_officer"
+    };
+
+    const MOCK_USERS = {
+      admin: {
+        email: "admin@claas2saas.com",
+        password: "Admin@123",
+        displayName: "System Administrator"
+      },
+      procurement_analyst: {
+        email: "analyst@claas2saas.com",
+        password: "Analyst@123",
+        displayName: "Procurement Analyst"
+      },
+      compliance_officer: {
+        email: "compliance.officer@claas2saas.com",
+        password: "Compliance@123",
+        displayName: "Compliance Officer"
+      }
+    };
+
+    const form = document.getElementById("loginForm");
+    const roleEl = document.getElementById("role");
+    const emailEl = document.getElementById("email");
+    const passwordEl = document.getElementById("password");
+    const rememberEl = document.getElementById("remember");
+    const clearBtn = document.getElementById("clearBtn");
+    const feedback = document.getElementById("feedback");
+    const demoButtons = document.querySelectorAll("[data-demo]");
+
+    function setFeedback(message, type) {
+      feedback.textContent = message;
+      feedback.className = "feedback " + (type || "");
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function writeSession(role, email) {
+      const profile = MOCK_USERS[role];
+      const session = {
+        role: role,
+        roleLabel: ROLE_LABELS[role],
+        email: email,
+        userName: profile.displayName,
+        company: "ProcureCo",
+        signedInAt: new Date().toISOString(),
+        remember: rememberEl.checked
+      };
+      localStorage.setItem("poc_session", JSON.stringify(session));
+    }
+
+    function validateAndLogin(event) {
+      event.preventDefault();
+      setFeedback("", "");
+
+      const role = roleEl.value.trim();
+      const email = emailEl.value.trim().toLowerCase();
+      const password = passwordEl.value;
+
+      if (!role || !email || !password) {
+        setFeedback("Please complete role, email, and password to sign in.", "error");
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        setFeedback("Please enter a valid business email address.", "error");
+        return;
+      }
+
+      const expected = MOCK_USERS[role];
+      if (!expected || expected.email !== email || expected.password !== password) {
+        setFeedback("Invalid credentials for the selected role. Use demo chips for mock access.", "error");
+        return;
+      }
+
+      writeSession(role, email);
+      setFeedback("Login successful. Redirecting to " + ROLE_LABELS[role] + " workspace...", "success");
+
+      const target = ROUTES[role] || "./Dashboard.html";
+      window.setTimeout(() => {
+        window.location.href = target;
+      }, 800);
+    }
+
+    function clearForm() {
+      form.reset();
+      setFeedback("", "");
+      roleEl.focus();
+    }
+
+    function applyDemo(role) {
+      const demo = MOCK_USERS[role];
+      roleEl.value = role;
+      emailEl.value = demo.email;
+      passwordEl.value = demo.password;
+      setFeedback("Demo credentials loaded for " + ROLE_LABELS[role] + ".", "success");
+    }
+
+    form.addEventListener("submit", validateAndLogin);
+    clearBtn.addEventListener("click", clearForm);
+    demoButtons.forEach((button) => {
+      button.addEventListener("click", () => applyDemo(button.dataset.demo));
+    });
+  </script>
+</body>
+</html>

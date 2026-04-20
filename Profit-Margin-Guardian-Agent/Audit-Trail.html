@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit Margin Guardian Agent | Audit Trail</title>
+  <style>
+    :root {
+      --midnight-blue: #193E6B;
+      --midnight-blue-dark: #143356;
+      --green-gold: #B3A125;
+      --green-gold-dark: #96851f;
+      --white: #FFFFFF;
+      --neutral-gray: #F5F5F5;
+      --border-gray: #E6ECF3;
+      --text-main: #1f2937;
+      --text-muted: #5b6678;
+      --surface-soft: #f8fbff;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(179, 161, 37, 0.14), rgba(179, 161, 37, 0) 40%),
+        radial-gradient(circle at 92% 88%, rgba(25, 62, 107, 0.18), rgba(25, 62, 107, 0) 44%),
+        linear-gradient(170deg, #f3f7fd 0%, #ffffff 52%, #edf3fb 100%);
+    }
+
+    .top-bar {
+      background: var(--midnight-blue);
+      border-bottom: 4px solid var(--green-gold);
+      color: var(--white);
+      padding: 12px 20px;
+    }
+
+    .top-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      min-height: 42px;
+      padding: 7px 12px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .brand-logo .accent { color: var(--green-gold); font-weight: 800; }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(22px, 1.8vw, 30px);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      text-decoration: none;
+      color: var(--white);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .main-nav a[aria-current="page"] {
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: var(--focus-ring);
+    }
+
+    .session-strip {
+      max-width: 1300px;
+      margin: 16px auto 0;
+      border: 1px solid #d7e2f1;
+      border-left: 5px solid var(--green-gold);
+      border-radius: 10px;
+      background: #f4f8ff;
+      padding: 11px 14px;
+      color: #21496f;
+      font-size: 14px;
+    }
+
+    .session-strip strong { color: var(--midnight-blue); }
+
+    main {
+      max-width: 1300px;
+      margin: 16px auto 24px;
+      padding: 0 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .card-head {
+      border-bottom: 1px solid var(--border-gray);
+      background: var(--surface-soft);
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      margin: 0;
+      color: var(--midnight-blue);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .card-note {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .card-body { padding: 14px; }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      align-items: end;
+    }
+
+    .field { display: grid; gap: 6px; }
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--midnight-blue);
+    }
+
+    input,
+    select,
+    button {
+      min-height: 38px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    input,
+    select {
+      border: 1px solid #c8d3e2;
+      padding: 7px 10px;
+      color: var(--text-main);
+      background: #fff;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 8px 12px;
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    button:focus-visible {
+      outline: none;
+      border-color: var(--green-gold);
+      box-shadow: var(--focus-ring);
+    }
+
+    .btn-primary { background: var(--midnight-blue); color: var(--white); }
+    .btn-primary:hover { background: var(--midnight-blue-dark); }
+    .btn-secondary { background: var(--green-gold); color: var(--white); }
+    .btn-secondary:hover { background: var(--green-gold-dark); }
+
+    .kpi-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .kpi {
+      border: 1px solid #dbe4f2;
+      border-radius: 10px;
+      background: #f9fbff;
+      padding: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      color: var(--midnight-blue);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .kpi-meta {
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .table-wrap {
+      border: 1px solid var(--border-gray);
+      border-radius: 10px;
+      overflow: auto;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1180px;
+    }
+
+    th {
+      background: var(--midnight-blue);
+      color: var(--white);
+      font-size: 13px;
+      padding: 9px 10px;
+      text-align: left;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      white-space: nowrap;
+    }
+
+    th:last-child, td:last-child { border-right: none; }
+
+    td {
+      font-size: 13px;
+      padding: 8px 10px;
+      border-top: 1px solid #e1e8f2;
+      border-right: 1px solid #e1e8f2;
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) { background: var(--neutral-gray); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .pill-approve { background: #ecfdf3; color: #166534; border-color: #b7efcf; }
+    .pill-block { background: #feeeee; color: #b42318; border-color: #f6b8b8; }
+    .pill-override { background: #fff8e6; color: #b54708; border-color: #f3daa1; }
+    .pill-other { background: #edf4ff; color: #1e4ca9; border-color: #bed7ff; }
+    .pill-immutable { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
+
+    .empty {
+      border: 1px dashed #cfd9e9;
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 14px;
+      color: #64748b;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    footer {
+      background: var(--midnight-blue);
+      border-top: 3px solid var(--green-gold);
+      color: var(--white);
+      text-align: center;
+      padding: 11px;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 1160px) {
+      .filter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .top-bar { padding: 12px; }
+      main { padding: 0 12px; }
+      .session-strip { margin: 12px; }
+      .filter-grid, .kpi-grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      .top-bar, .session-strip, .filter-grid, .export-actions, footer { display: none !important; }
+      body { background: #fff; }
+      main { margin: 0; padding: 0; max-width: 100%; }
+      .card { border: none; box-shadow: none; }
+      .card-head { border: none; }
+      table { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <h1>Profit Margin Guardian Agent</h1>
+      </div>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="./Dashboard.html">Dashboard</a>
+        <a href="./Rule-Configuration.html">Rule Configuration</a>
+        <a href="./PO-Approval.html">PO Validation</a>
+        <a href="./Analytics.html">Category Risk Analytics</a>
+        <a href="./Audit-Trail.html" aria-current="page">Audit Trail</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
+
+  <main>
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2 class="card-title">Audit Trail Viewer</h2>
+          <p class="card-note">Immutable log of margin decisions and workflow actions across approvals and analytics routing.</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <form id="filterForm" class="filter-grid" novalidate>
+          <div class="field">
+            <label for="dateFrom">Date From</label>
+            <input id="dateFrom" type="date">
+          </div>
+          <div class="field">
+            <label for="dateTo">Date To</label>
+            <input id="dateTo" type="date">
+          </div>
+          <div class="field">
+            <label for="poFilter">PO / Reference</label>
+            <input id="poFilter" type="text" placeholder="e.g., PO-026184 or ANALYTICS-PROPOSAL">
+          </div>
+          <div class="field">
+            <label for="userFilter">User</label>
+            <input id="userFilter" type="text" placeholder="e.g., Procurement Manager">
+          </div>
+          <div class="field">
+            <label for="decisionFilter">Decision / Action</label>
+            <select id="decisionFilter">
+              <option value="">All</option>
+              <option value="approve">Approve</option>
+              <option value="block">Block</option>
+              <option value="override">Override</option>
+            </select>
+          </div>
+          <div class="field export-actions">
+            <label>Export</label>
+            <div style="display:flex; gap:8px;">
+              <button id="exportCSV" class="btn-primary" type="button">CSV</button>
+              <button id="exportPDF" class="btn-secondary" type="button">PDF</button>
+            </div>
+          </div>
+        </form>
+
+        <section class="kpi-grid" aria-label="Audit metrics">
+          <article class="kpi">
+            <div class="kpi-label">Filtered Records</div>
+            <div id="kpiRecords" class="kpi-value">0</div>
+            <div class="kpi-meta">Current view after filters</div>
+          </article>
+          <article class="kpi">
+            <div class="kpi-label">Approvals</div>
+            <div id="kpiApprove" class="kpi-value">0</div>
+            <div class="kpi-meta">Approve/approved actions</div>
+          </article>
+          <article class="kpi">
+            <div class="kpi-label">Blocks</div>
+            <div id="kpiBlock" class="kpi-value">0</div>
+            <div class="kpi-meta">Block and blocked actions</div>
+          </article>
+          <article class="kpi">
+            <div class="kpi-label">Overrides</div>
+            <div id="kpiOverride" class="kpi-value">0</div>
+            <div class="kpi-meta">Override and overridden actions</div>
+          </article>
+        </section>
+
+        <div class="table-wrap" style="margin-top:12px;">
+          <table aria-label="Audit trail table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Reference</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>State</th>
+                <th>Margin</th>
+                <th>Reason / Details</th>
+                <th>Entry ID</th>
+                <th>Integrity</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Copyright &copy; 2026 Profit Margin Guardian Agent
+  </footer>
+
+  <script>
+    const sessionRaw = localStorage.getItem("pmg_session");
+    if (!sessionRaw) window.location.replace("./Login.html");
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const roleLabelMap = { admin: "Administrator", procurement_manager: "Procurement Manager", category_manager: "Category Manager" };
+    const auditStorageKey = "pmg_audit_logs";
+
+    const sessionStrip = document.getElementById("sessionStrip");
+    const dateFrom = document.getElementById("dateFrom");
+    const dateTo = document.getElementById("dateTo");
+    const poFilter = document.getElementById("poFilter");
+    const userFilter = document.getElementById("userFilter");
+    const decisionFilter = document.getElementById("decisionFilter");
+    const exportCSV = document.getElementById("exportCSV");
+    const exportPDF = document.getElementById("exportPDF");
+    const auditTableBody = document.getElementById("auditTableBody");
+
+    const kpiRecords = document.getElementById("kpiRecords");
+    const kpiApprove = document.getElementById("kpiApprove");
+    const kpiBlock = document.getElementById("kpiBlock");
+    const kpiOverride = document.getElementById("kpiOverride");
+
+    function renderSessionStrip() {
+      const roleText = roleLabelMap[session.role] || session.roleLabel || "User";
+      const now = new Date();
+      sessionStrip.innerHTML =
+        "<strong>Signed In:</strong> " + (session.userName || "User") +
+        " (" + roleText + ") | " +
+        "<strong>Email:</strong> " + (session.email || "-") + " | " +
+        "<strong>Company:</strong> " + (session.company || "Lithan Academy Pte Ltd") + " | " +
+        "<strong>Last Refresh:</strong> " + now.toLocaleString();
+    }
+
+    function seedIfEmpty() {
+      const raw = localStorage.getItem(auditStorageKey);
+      if (raw) return;
+
+      const seed = [
+        {
+          timestamp: new Date(Date.now() - 1000 * 60 * 140).toISOString(),
+          poNo: "PO-026184",
+          user: "Procurement Manager",
+          action: "Approved",
+          state: "APPROVE",
+          margin: 20.6,
+          reason: "PO approved. Margin checks passed."
+        },
+        {
+          timestamp: new Date(Date.now() - 1000 * 60 * 96).toISOString(),
+          poNo: "PO-026185",
+          user: "Procurement Manager",
+          action: "Blocked",
+          state: "BLOCK",
+          margin: 14.2,
+          reason: "PO blocked by approver decision."
+        },
+        {
+          timestamp: new Date(Date.now() - 1000 * 60 * 58).toISOString(),
+          poNo: "PO-026186",
+          user: "Finance Controller",
+          action: "Overridden",
+          state: "WARNING",
+          margin: 17.1,
+          reason: "Urgent customer commitment with post-review controls."
+        },
+        {
+          timestamp: new Date(Date.now() - 1000 * 60 * 32).toISOString(),
+          poNo: "ANALYTICS-PROPOSAL",
+          user: "Category Manager",
+          action: "Proposal Routed",
+          state: "ANALYTICS",
+          margin: 0,
+          reason: "PRP-2106 routed through analytics approval workflow."
+        }
+      ];
+
+      localStorage.setItem(auditStorageKey, JSON.stringify(seed));
+    }
+
+    function loadLogs() {
+      const raw = localStorage.getItem(auditStorageKey);
+      if (!raw) return [];
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function normalizeAction(action) {
+      const text = String(action || "").toLowerCase();
+      if (text.includes("approve")) return "approve";
+      if (text.includes("block")) return "block";
+      if (text.includes("override")) return "override";
+      return "other";
+    }
+
+    function actionPillClass(actionKey) {
+      if (actionKey === "approve") return "pill-approve";
+      if (actionKey === "block") return "pill-block";
+      if (actionKey === "override") return "pill-override";
+      return "pill-other";
+    }
+
+    function integrityChecksum(entry) {
+      const basis = [entry.timestamp, entry.poNo, entry.user, entry.action, entry.state, entry.margin, entry.reason].join("|");
+      let hash = 0;
+      for (let i = 0; i < basis.length; i += 1) {
+        hash = (hash * 31 + basis.charCodeAt(i)) >>> 0;
+      }
+      return hash.toString(16).toUpperCase().padStart(8, "0");
+    }
+
+    function immutableId(entry, index) {
+      const ts = new Date(entry.timestamp || Date.now()).toISOString().replace(/[-:TZ.]/g, "").slice(0, 14);
+      return "AT-" + ts + "-" + String(index + 1).padStart(4, "0");
+    }
+
+    function inDateRange(ts, fromValue, toValue) {
+      if (!fromValue && !toValue) return true;
+      const time = new Date(ts).getTime();
+      if (Number.isNaN(time)) return false;
+      if (fromValue) {
+        const from = new Date(fromValue + "T00:00:00").getTime();
+        if (time < from) return false;
+      }
+      if (toValue) {
+        const to = new Date(toValue + "T23:59:59").getTime();
+        if (time > to) return false;
+      }
+      return true;
+    }
+
+    function filteredLogs() {
+      const logs = loadLogs();
+      const from = dateFrom.value;
+      const to = dateTo.value;
+      const po = poFilter.value.trim().toLowerCase();
+      const user = userFilter.value.trim().toLowerCase();
+      const decision = decisionFilter.value;
+
+      return logs
+        .filter((entry) => inDateRange(entry.timestamp, from, to))
+        .filter((entry) => !po || String(entry.poNo || "").toLowerCase().includes(po))
+        .filter((entry) => !user || String(entry.user || "").toLowerCase().includes(user))
+        .filter((entry) => !decision || normalizeAction(entry.action) === decision)
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    }
+
+    function updateKPIs(rows) {
+      const approveCount = rows.filter((entry) => normalizeAction(entry.action) === "approve").length;
+      const blockCount = rows.filter((entry) => normalizeAction(entry.action) === "block").length;
+      const overrideCount = rows.filter((entry) => normalizeAction(entry.action) === "override").length;
+
+      kpiRecords.textContent = rows.length;
+      kpiApprove.textContent = approveCount;
+      kpiBlock.textContent = blockCount;
+      kpiOverride.textContent = overrideCount;
+    }
+
+    function renderTable(rows) {
+      auditTableBody.innerHTML = "";
+
+      if (!rows.length) {
+        auditTableBody.innerHTML = "<tr><td colspan='9'><div class='empty'>No records match current filters.</div></td></tr>";
+        updateKPIs(rows);
+        return;
+      }
+
+      rows.forEach((entry, index) => {
+        const actionKey = normalizeAction(entry.action);
+        const actionLabel = String(entry.action || "-");
+        const id = immutableId(entry, index);
+        const checksum = integrityChecksum(entry);
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" + new Date(entry.timestamp).toLocaleString() + "</td>" +
+          "<td>" + (entry.poNo || "-") + "</td>" +
+          "<td>" + (entry.user || "-") + "</td>" +
+          "<td><span class='pill " + actionPillClass(actionKey) + "'>" + actionLabel + "</span></td>" +
+          "<td>" + (entry.state || "-") + "</td>" +
+          "<td>" + (Number(entry.margin) ? Number(entry.margin).toFixed(2) + "%" : "-") + "</td>" +
+          "<td>" + (entry.reason || "-") + "</td>" +
+          "<td>" + id + "</td>" +
+          "<td><span class='pill pill-immutable'>Immutable</span><br><small>CHK-" + checksum + "</small></td>";
+        auditTableBody.appendChild(tr);
+      });
+
+      updateKPIs(rows);
+    }
+    function toCSV(rows) {
+      const headers = ["Timestamp", "Reference", "User", "Action", "State", "Margin", "Reason", "Integrity Check"];
+      const lines = [headers];
+      rows.forEach((entry) => {
+        lines.push([
+          new Date(entry.timestamp).toLocaleString(),
+          entry.poNo || "",
+          entry.user || "",
+          entry.action || "",
+          entry.state || "",
+          Number(entry.margin) ? Number(entry.margin).toFixed(2) + "%" : "",
+          entry.reason || "",
+          "CHK-" + integrityChecksum(entry)
+        ]);
+      });
+      return lines
+        .map((row) => row.map((cell) => "\"" + String(cell).replace(/\"/g, "\"\"") + "\"").join(","))
+        .join("\n");
+    }
+
+    function exportCsv(rows) {
+      const csv = toCSV(rows);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+      link.href = URL.createObjectURL(blob);
+      link.download = "audit-trail-" + stamp + ".csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+
+    function bindEvents() {
+      [dateFrom, dateTo, poFilter, userFilter, decisionFilter].forEach((el) => {
+        el.addEventListener("input", () => renderTable(filteredLogs()));
+        el.addEventListener("change", () => renderTable(filteredLogs()));
+      });
+
+      exportCSV.addEventListener("click", () => exportCsv(filteredLogs()));
+      exportPDF.addEventListener("click", () => window.print());
+    }
+
+    function applyQueryPrefill() {
+      const params = new URLSearchParams(window.location.search);
+      const from = params.get("from");
+      const to = params.get("to");
+      const po = params.get("po");
+      const user = params.get("user");
+      const action = params.get("action") || params.get("decision");
+
+      if (from) dateFrom.value = from;
+      if (to) dateTo.value = to;
+      if (po) poFilter.value = po;
+      if (user) userFilter.value = user;
+      if (action && ["approve", "block", "override"].includes(action.toLowerCase())) {
+        decisionFilter.value = action.toLowerCase();
+      }
+    }
+
+    seedIfEmpty();
+    renderSessionStrip();
+    bindEvents();
+    applyQueryPrefill();
+    renderTable(filteredLogs());
+  </script>
+</body>
+</html>

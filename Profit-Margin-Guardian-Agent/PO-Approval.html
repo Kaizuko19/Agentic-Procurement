@@ -46,7 +46,7 @@
     <aside style="display:grid;gap:16px;">
       <section class="panel"><div class="head"><h3 class="h2" style="font-size:18px;">Real-Time Margin Summary</h3></div><div class="body"><div class="sum"><article class="s"><div class="sl">Total Cost</div><div id="totalCost" class="sv">$0</div><div class="sm">Aggregated from PO lines</div></article><article class="s"><div class="sl">Total Revenue</div><div id="totalRevenue" class="sv">$0</div><div class="sm">Expected sales value</div></article><article class="s"><div class="sl">Overall Margin</div><div id="overallMargin" class="sv">0%</div><div class="sm">Weighted across all lines</div></article><article class="s"><div class="sl">Decision State</div><div id="decisionState" class="sv">-</div><div id="decisionHint" class="sm">Evaluate rules to continue</div></article></div><div class="acts"><button id="approveBtn" class="act a1" type="button">Approve</button><button id="blockBtn" class="act a2" type="button">Block</button><button id="overrideBtn" class="act a3" type="button">Override</button></div></div></section>
       <section class="panel"><div class="head"><h3 class="h2" style="font-size:18px;">Recommendations</h3><p class="sub">Alternatives ranked by margin recovery potential.</p></div><div class="body"><div id="recommendList" class="list"></div></div></section>
-      <section class="panel"><div class="head"><h3 class="h2" style="font-size:18px;">Decision Audit Log</h3><p class="sub">Timestamped PO actions with context.</p></div><div class="body"><div id="auditList" class="list"></div></div></section>
+      <section class="panel"><div class="head"><h3 class="h2" style="font-size:18px;">Decision Audit Log</h3><a id="auditTrailLink" class="mini" href="./Audit-Trail.html">Open Full Audit</a><p class="sub">Timestamped PO actions with context.</p></div><div class="body"><div id="auditList" class="list"></div></div></section>
     </aside>
   </main>
   <footer>Copyright &copy; 2026 Profit Margin Guardian Agent</footer>
@@ -62,6 +62,7 @@
     const totalCostEl=document.getElementById("totalCost"),totalRevenueEl=document.getElementById("totalRevenue"),overallMarginEl=document.getElementById("overallMargin"),decisionStateEl=document.getElementById("decisionState"),decisionHintEl=document.getElementById("decisionHint");
     const approveBtn=document.getElementById("approveBtn"),blockBtn=document.getElementById("blockBtn"),overrideBtn=document.getElementById("overrideBtn"),reloadBtn=document.getElementById("reloadBtn");
     const overrideModal=document.getElementById("overrideModal"),overrideReason=document.getElementById("overrideReason"),overrideError=document.getElementById("overrideError"),cancelOverride=document.getElementById("cancelOverride"),confirmOverride=document.getElementById("confirmOverride");
+    const auditTrailLink=document.getElementById("auditTrailLink");
     let lastEvaluation=null; const auditKey="pmg_audit_logs";
     const money=(v)=>new Intl.NumberFormat("en-US",{style:"currency",currency:po.currency,maximumFractionDigits:2}).format(v), pct=(v)=>(Number.isFinite(v)?v:0).toFixed(2)+"%";
     const margin=(c,r)=>r<=0?0:((r-c)/r)*100;
@@ -114,6 +115,7 @@
     function openOverride(){if(!lastEvaluation||lastEvaluation.state==="APPROVE")return; overrideReason.value=""; overrideError.textContent=""; overrideModal.setAttribute("aria-hidden","false"); overrideReason.focus();}
     function closeOverride(){overrideModal.setAttribute("aria-hidden","true");}
     function confirmOverrideAction(){const reason=overrideReason.value.trim(); if(!reason){overrideError.textContent="Override reason is required."; return;} log("Overridden",reason); closeOverride();}
+    auditTrailLink.href="./Audit-Trail.html?po="+encodeURIComponent(po.poNo);
     document.getElementById("sessionBar").innerHTML=barText(); approveBtn.addEventListener("click",approve); blockBtn.addEventListener("click",block); overrideBtn.addEventListener("click",openOverride); reloadBtn.addEventListener("click",()=>{log("Data Refresh","Mock BC data refreshed and margin recalculated."); document.getElementById("sessionBar").innerHTML=barText(); evaluate();}); cancelOverride.addEventListener("click",closeOverride); confirmOverride.addEventListener("click",confirmOverrideAction); overrideModal.addEventListener("click",(e)=>{if(e.target===overrideModal)closeOverride();});
     evaluate(); renderAudit();
   </script>

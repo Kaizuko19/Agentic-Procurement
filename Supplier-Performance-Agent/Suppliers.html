@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suppliers - Supplier Performance Agent</title>
+
+<style>
+:root{
+  --blue:#193E6B;
+  --gold:#B3A125;
+  --bg:#F8F9FA;
+}
+
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",sans-serif;
+  background:var(--bg);
+}
+
+/* ===== HEADER ===== */
+.header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:56px;
+  background:var(--blue);
+  display:flex;
+  align-items:center;
+  padding:0 24px;
+  z-index:1000;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex:1;
+}
+
+.logo{
+  border:1px solid rgba(255,255,255,0.3);
+  padding:4px 10px;
+  border-radius:4px;
+  color:white;
+  font-weight:600;
+  font-size:14px;
+}
+
+.logo .gold{ color:var(--gold); }
+
+.title{
+  color:white;
+  font-weight:600;
+  font-size:18px;
+}
+
+/* NAV CENTER */
+.nav-tabs{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  flex:1;
+  justify-content:center;
+  margin-left:-10%;
+}
+
+.nav-tabs a{
+  color:rgba(255,255,255,0.85);
+  text-decoration:none;
+  padding:8px 20px;
+  border-radius:6px;
+  transition:0.2s;
+  font-size:14px;
+  font-weight:500;
+}
+
+.nav-tabs a:hover{
+  background:rgba(255,255,255,0.1);
+  color:white;
+}
+
+.nav-tabs a.active{
+  background:rgba(255,255,255,0.2);
+  color:white;
+}
+
+/* ADMIN */
+.admin{
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.2s;
+  font-size:14px;
+}
+
+.admin:hover{
+  background:var(--gold);
+  color:var(--blue);
+}
+
+/* GOLD LINE */
+.gold-line{
+  position:fixed;
+  top:56px;
+  left:0;
+  right:0;
+  height:4px;
+  background:var(--gold);
+  z-index:999;
+}
+
+/* CONTENT */
+.main{
+  margin-top:76px;
+  padding:32px;
+}
+
+.page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:32px;
+}
+
+.page-header h1{
+  font-size:28px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.page-header p{
+  color:#6c757d;
+  font-size:14px;
+}
+
+.header-actions{
+  display:flex;
+  gap:12px;
+}
+
+.btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+  font-size:14px;
+  font-weight:500;
+  border:none;
+}
+
+.btn-secondary{
+  background:white;
+  border:1px solid #dee2e6;
+  color:#333;
+}
+
+.btn-secondary:hover{
+  background:#f8f9fa;
+}
+
+.btn-primary{
+  background:var(--blue);
+  color:white;
+}
+
+.btn-primary:hover{
+  opacity:0.9;
+}
+
+/* SEARCH BAR */
+.search-section{
+  display:flex;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.search-wrapper{
+  flex:1;
+  position:relative;
+}
+
+.search-icon{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#6c757d;
+}
+
+#searchInput{
+  width:100%;
+  padding:10px 10px 10px 40px;
+  border:1px solid #dee2e6;
+  border-radius:8px;
+  font-size:14px;
+  background:white;
+}
+
+#searchInput:focus{
+  outline:none;
+  border-color:var(--blue);
+}
+
+/* CATEGORY FILTERS */
+.category-filters{
+  display:flex;
+  gap:8px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+
+.category-btn{
+  padding:8px 16px;
+  border-radius:8px;
+  border:1px solid #dee2e6;
+  background:white;
+  cursor:pointer;
+  transition:0.2s;
+  font-size:13px;
+  font-weight:500;
+}
+
+.category-btn:hover{
+  background:#f8f9fa;
+}
+
+.category-btn.active{
+  background:var(--blue);
+  color:white;
+  border-color:var(--blue);
+}
+
+/* TABLE CARD */
+.table-card{
+  background:white;
+  border:1px solid #dee2e6;
+  border-radius:12px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+
+.table-header{
+  padding:20px 24px;
+  border-bottom:1px solid #dee2e6;
+}
+
+.table-header h2{
+  font-size:16px;
+  font-weight:600;
+}
+
+/* TABLE */
+.table-wrapper{
+  overflow-x:auto;
+}
+
+.suppliers-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.suppliers-table thead{
+  background:#f8f9fa;
+}
+
+.suppliers-table th{
+  text-align:left;
+  padding:12px 24px;
+  font-size:13px;
+  font-weight:500;
+  color:#6c757d;
+  border-bottom:2px solid #E5E5E5;
+}
+
+.suppliers-table td{
+  padding:16px 24px;
+  font-size:14px;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.suppliers-table tbody tr{
+  transition:0.2s;
+  cursor:pointer;
+}
+
+.suppliers-table tbody tr:hover{
+  background:#f8f9fa;
+}
+
+.supplier-name{
+  font-weight:500;
+  color:#193E6B;
+}
+
+.supplier-name:hover{
+  text-decoration:underline;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:500;
+}
+
+.risk-low{
+  background:#d1fae5;
+  color:#065f46;
+}
+
+.risk-medium{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.risk-high{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.status-active{
+  background:#d1fae5;
+  color:#065f46;
+}
+
+.status-review{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.status-suspended{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .main{
+    padding:16px;
+  }
+
+  .page-header{
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .search-section{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+
+  <div class="header-left">
+    <div class="logo">CLaaS<span class="gold">2</span>SaaS</div>
+    <div class="title">Supplier Performance Agent</div>
+  </div>
+
+  <nav class="nav-tabs">
+    <a href="Dashboard.html">Dashboard</a>
+    <a href="Suppliers.html" class="active">Suppliers</a>
+    <a href="Performance.html">Performance</a>
+    <a href="Alerts.html">Alerts</a>
+    <a href="Reviews.html">Reviews</a>
+    <a href="Settings.html">Settings</a>
+  </nav>
+
+  <!--<div class="admin">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+    <span>Admin</span>
+  </div>-->
+
+</header>
+
+<div class="gold-line"></div>
+
+<!-- CONTENT -->
+<div class="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>Suppliers</h1>
+      <p>Manage and monitor all supplier relationships</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Export
+      </button>
+      <button class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add Supplier
+      </button>
+    </div>
+  </div>
+
+  <!-- SEARCH SECTION -->
+  <div class="search-section">
+    <div class="search-wrapper">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search suppliers by name or location..." />
+    </div>
+
+    <button class="btn btn-secondary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+      </svg>
+      More Filters
+    </button>
+  </div>
+
+  <!-- CATEGORY FILTERS -->
+  <div class="category-filters" id="categoryFilters"></div>
+
+  <!-- TABLE -->
+  <div class="table-card">
+    <div class="table-header">
+      <h2>All Suppliers (<span id="supplierCount">10</span>)</h2>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="suppliers-table">
+        <thead>
+          <tr>
+            <th>Supplier Name</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>OTD %</th>
+            <th>Quality</th>
+            <th>Score</th>
+            <th>Risk</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="suppliersTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// SUPPLIERS DATA
+const suppliersData = [
+  { id: 1, name: "Global Manufacturing Co.", category: "Electronics", location: "China", otd: 96.5, quality: 92, score: 93.5, risk: "low", status: "Active" },
+  { id: 2, name: "Pacific Logistics Ltd.", category: "Transportation", location: "Singapore", otd: 94.2, quality: 88, score: 91.2, risk: "low", status: "Active" },
+  { id: 3, name: "TechParts Industries", category: "Electronics", location: "Taiwan", otd: 89.1, quality: 85, score: 86.4, risk: "medium", status: "Active" },
+  { id: 4, name: "Northern Supply Chain", category: "Logistics", location: "USA", otd: 92.8, quality: 90, score: 91.9, risk: "low", status: "Active" },
+  { id: 5, name: "Metro Components Inc.", category: "Manufacturing", location: "Mexico", otd: 78.5, quality: 72, score: 75.2, risk: "high", status: "Under Review" },
+  { id: 6, name: "Eastern Materials Group", category: "Raw Materials", location: "India", otd: 95.1, quality: 89, score: 92.1, risk: "low", status: "Active" },
+  { id: 7, name: "Alpine Engineering GmbH", category: "Engineering", location: "Germany", otd: 97.2, quality: 94, score: 95.1, risk: "low", status: "Active" },
+  { id: 8, name: "Delta Precision Tools", category: "Manufacturing", location: "Japan", otd: 93.4, quality: 91, score: 92.7, risk: "low", status: "Active" },
+  { id: 9, name: "Coastal Shipping Co.", category: "Transportation", location: "Netherlands", otd: 88.7, quality: 86, score: 87.9, risk: "medium", status: "Active" },
+  { id: 10, name: "Summit Materials Ltd.", category: "Raw Materials", location: "Australia", otd: 91.3, quality: 87, score: 89.8, risk: "low", status: "Active" },
+];
+
+// STATE
+let selectedCategory = "All";
+let searchTerm = "";
+
+// CATEGORIES
+const categories = ["All", "Electronics", "Manufacturing", "Transportation", "Logistics", "Raw Materials", "Engineering"];
+
+// RENDER CATEGORY FILTERS
+function renderCategoryFilters() {
+  const container = document.getElementById("categoryFilters");
+  container.innerHTML = categories.map(cat =>
+    `<button class="category-btn ${selectedCategory === cat ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat}</button>`
+  ).join('');
+}
+
+// SELECT CATEGORY
+function selectCategory(category) {
+  selectedCategory = category;
+  renderCategoryFilters();
+  renderSuppliersTable();
+}
+
+// FILTER SUPPLIERS
+function getFilteredSuppliers() {
+  return suppliersData.filter(supplier => {
+    const matchesSearch = supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         supplier.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || supplier.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+}
+
+// GET RISK BADGE CLASS
+function getRiskBadgeClass(risk) {
+  const classes = {
+    low: "risk-low",
+    medium: "risk-medium",
+    high: "risk-high"
+  };
+  return classes[risk] || "risk-low";
+}
+
+// GET STATUS BADGE CLASS
+function getStatusBadgeClass(status) {
+  if (status === "Active") return "status-active";
+  if (status === "Under Review") return "status-review";
+  return "status-suspended";
+}
+
+// RENDER SUPPLIERS TABLE
+function renderSuppliersTable() {
+  const filtered = getFilteredSuppliers();
+  const tbody = document.getElementById("suppliersTableBody");
+
+  document.getElementById("supplierCount").textContent = filtered.length;
+
+  tbody.innerHTML = filtered.map(supplier => `
+    <tr onclick="window.location.href='SupplierDetail.html?id=${supplier.id}'">
+      <td>
+        <span class="supplier-name">${supplier.name}</span>
+      </td>
+      <td style="color:#6c757d;">${supplier.category}</td>
+      <td style="color:#6c757d;">${supplier.location}</td>
+      <td>${supplier.otd}%</td>
+      <td>${supplier.quality}</td>
+      <td style="font-weight:600;">${supplier.score}</td>
+      <td>
+        <span class="badge ${getRiskBadgeClass(supplier.risk)}">
+          ${supplier.risk.charAt(0).toUpperCase() + supplier.risk.slice(1)}
+        </span>
+      </td>
+      <td>
+        <span class="badge ${getStatusBadgeClass(supplier.status)}">
+          ${supplier.status}
+        </span>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// SEARCH INPUT
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  searchTerm = e.target.value;
+  renderSuppliersTable();
+});
+
+// INITIAL RENDER
+renderCategoryFilters();
+renderSuppliersTable();
+</script>
+
+</body>
+</html>

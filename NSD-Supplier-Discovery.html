@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Discovery - NSD Agent</title>
+    <style>
+        :root {
+            --midnight-blue: #193E6B;
+            --midnight-blue-dark: #143356;
+            --green-gold: #B3A125;
+            --green-gold-dark: #96851f;
+            --white: #FFFFFF;
+            --neutral-gray: #F5F5F5;
+            --border-gray: #E6ECF3;
+            --text-main: #1f2937;
+            --text-muted: #5b6678;
+            --surface-soft: #f8fbff;
+            --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+            --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at 12% 8%, rgba(179, 161, 37, 0.14), rgba(179, 161, 37, 0) 40%),
+                radial-gradient(circle at 92% 88%, rgba(25, 62, 107, 0.18), rgba(25, 62, 107, 0) 44%),
+                linear-gradient(170deg, #f3f7fd 0%, #ffffff 52%, #edf3fb 100%);
+        }
+
+        .top-bar {
+            background: var(--midnight-blue);
+            border-bottom: 4px solid var(--green-gold);
+            color: var(--white);
+            padding: 12px 20px;
+        }
+
+        .top-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            min-height: 42px;
+            padding: 7px 12px;
+            border: 2px solid rgba(255, 255, 255, 0.72);
+            border-radius: 10px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .brand-logo .accent {
+            color: var(--green-gold);
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: clamp(22px, 1.8vw, 30px);
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--white);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .main-nav a[aria-current="page"] {
+            border-color: rgba(255, 255, 255, 0.32);
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .main-nav a:hover,
+        .main-nav a:focus-visible {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.32);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: var(--focus-ring);
+        }
+
+        main {
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border: 1px solid var(--border-gray);
+        }
+
+        .summary-card label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .summary-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--midnight-blue);
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--midnight-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--midnight-blue-dark);
+        }
+
+        .btn-secondary {
+            background: var(--green-gold);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--green-gold-dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        thead {
+            background: var(--midnight-blue);
+            color: var(--white);
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-gray);
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: var(--surface-soft);
+        }
+
+        .match-high {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .match-medium {
+            color: #d97706;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--midnight-blue);
+            color: var(--white);
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .main-nav { gap: 4px; }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="top-inner">
+            <div class="brand">
+                <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+                <h1>New Supplier Discovery Agent</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="NSD-Sourcing-Request.html">Sourcing Request</a>
+                <a href="NSD-Supplier-Discovery.html" aria-current="page">Supplier Discovery</a>
+                <a href="NSD-Supplier-Ranking.html">Supplier Ranking</a>
+                <a href="NSD-Vendor-Onboarding.html">Vendor Onboarding</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="summary-cards">
+            <div class="summary-card">
+                <label>Request No</label>
+                <div class="value">REQ-2026-008</div>
+            </div>
+            <div class="summary-card">
+                <label>Status</label>
+                <div class="value" style="color: #d97706;">In Review</div>
+            </div>
+            <div class="summary-card">
+                <label>Candidates</label>
+                <div class="value">12</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Discovery Results</h2>
+            <div style="background: #f0f7ff; padding: 12px 16px; border-radius: 8px; border-left: 4px solid var(--midnight-blue); margin-bottom: 16px;">
+                <p style="margin: 0; font-size: 13px; color: var(--text-main); font-weight: 600;">⏱ Data Processing Status</p>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">✓ Duplicates removed: 8 | ✓ Data normalized | ✓ Matched against criteria</p>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary">Run Discovery</button>
+                <button class="btn btn-secondary">Refresh Results</button>
+                <button class="btn btn-secondary" style="background: #4b5563;">Filter by Criteria</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Supplier Name</th>
+                        <th>Country</th>
+                        <th>Capabilities</th>
+                        <th>Match %</th>
+                        <th>Criteria Match</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+    <tr>
+        <td><strong>Blue Ridge Components</strong></td>
+        <td>USA</td>
+        <td>Electronics assembly</td>
+        <td><span class="match-high">92%</span></td>
+        <td>Quality, Cost, Location</td>
+        <td>Marketplace</td>
+    </tr>
+    <tr>
+        <td><strong>GoldenOak Supply</strong></td>
+        <td>Germany</td>
+        <td>Packaging materials</td>
+        <td><span class="match-high">87%</span></td>
+        <td>Cost, Reliability, Compliance</td>
+        <td>Referral</td>
+    </tr>
+    <tr>
+        <td><strong>Harbor Sustainable</strong></td>
+        <td>Canada</td>
+        <td>Recycled resins</td>
+        <td><span class="match-high">84%</span></td>
+        <td>Sustainability, Quality</td>
+        <td>Database</td>
+    </tr>
+    <tr>
+        <td><strong>Atlas Precision</strong></td>
+        <td>USA</td>
+        <td>Custom machining</td>
+        <td><span class="match-medium">79%</span></td>
+        <td>Quality, Lead Time</td>
+        <td>Referral</td>
+    </tr>
+    <tr>
+        <td><strong>Nordic Industrial</strong></td>
+        <td>Sweden</td>
+        <td>Precision parts</td>
+        <td><span class="match-medium">76%</span></td>
+        <td>Quality, Cost</td>
+        <td>Marketplace</td>
+    </tr>
+</tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        Copyright © 2026 New Supplier Discovery Agent
+    </footer>
+</body>
+</html>
+           

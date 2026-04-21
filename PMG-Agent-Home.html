@@ -4,13 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profit Margin Guardian Agent</title>
-    
+    <link rel="stylesheet" href="Navigation.css">
+    <style>
+        .pmg-nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .pmg-nav a {
+            display: block;
+            text-align: center;
+            padding: 15px;
+        }
+        @media (max-width: 768px) {
+            .pmg-nav {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Profit Margin Guardian Agent</h1>
-
+        <p>Manage procurement approvals with margin governance and audit trails.</p>
+        
+        <div class="pmg-nav">
+            <a href="Profit-Margin-Guardian-Agent/Login.html">Login</a>
+            <a href="Profit-Margin-Guardian-Agent/Dashboard.html">Dashboard</a>
+            <a href="Profit-Margin-Guardian-Agent/Rule-Configuration.html">Rule Configuration</a>
+            <a href="Profit-Margin-Guardian-Agent/PO-Approval.html">PO Approval</a>
+            <a href="Profit-Margin-Guardian-Agent/Analytics.html">Analytics</a>
+            <a href="Profit-Margin-Guardian-Agent/Audit-Trail.html">Audit Trail</a>
         </div>
     </div>
 

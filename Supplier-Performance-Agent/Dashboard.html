@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Supplier Performance Agent</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",sans-serif;background:#EEE7E0;color:#111827}
+.top-nav{position:fixed;top:0;left:0;right:0;height:64px;background:#193E6B;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1000}
+.nav-left{display:flex;align-items:center;gap:16px}
+.sidebar-toggle{background:none;border:none;color:#fff;cursor:pointer;padding:8px;border-radius:4px}
+.sidebar-toggle:hover{background:rgba(255,255,255,0.1)}
+.sidebar-toggle svg{width:24px;height:24px}
+.logo{border:1px solid rgba(255,255,255,0.3);padding:4px 10px;border-radius:4px;color:#fff;font-weight:600;font-size:14px}
+.logo .gold{color:#B3A125}
+.nav-separator{color:rgba(255,255,255,0.5)}
+.nav-context-label{color:rgba(255,255,255,0.95);font-size:0.9rem}
+.nav-user{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:6px;cursor:pointer;color:rgba(255,255,255,0.95);font-size:14px}
+.nav-user:hover{background:rgba(255,255,255,0.1)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.25);color:#193E6B;font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.sidebar{position:fixed;left:0;top:64px;width:270px;height:calc(100vh - 64px);background:#F5F5F5;border-right:1px solid #E0E0E0;padding:12px 0 20px;overflow-y:auto;z-index:100;transition:width .3s}
+.sidebar.collapsed{width:70px}
+.sidebar.collapsed .nav-item span{display:none}
+.nav-items{display:flex;flex-direction:column;gap:2px;padding:0 12px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:4px;text-decoration:none;color:#424242;font-size:14px;border-left:3px solid transparent;cursor:pointer;white-space:nowrap}
+.nav-item:hover{background:#EBEBEB;color:#242424}
+.nav-item.active{background:#FFF6E5;color:#B3A125;border-left-color:#B3A125;font-weight:500}
+.nav-item-icon{width:16px;height:16px;flex-shrink:0}
+.main-content{margin-left:270px;margin-top:64px;padding:32px;min-height:calc(100vh - 64px);transition:margin-left .3s}
+.main-content.sidebar-collapsed{margin-left:70px}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.page-header h1{font-size:28px;font-weight:600;margin-bottom:4px;color:#1C2B4A}
+.page-header p{font-size:14px;color:#6B7280}
+.header-actions{display:flex;gap:12px}
+.btn{display:flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #E5E7EB;border-radius:8px;background:#fff;font-size:14px;cursor:pointer}
+.btn:hover{background:#F9FAFB}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:32px}
+.kpi-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:24px}
+.kpi-card.highlight{border-color:#B3A125}
+.kpi-label{font-size:13px;color:#6B7280;margin-bottom:8px}
+.kpi-value-row{display:flex;justify-content:space-between;align-items:flex-end}
+.kpi-value{font-size:32px;font-weight:600}
+.kpi-change{display:flex;align-items:center;gap:4px;font-size:13px}
+.kpi-change.up{color:#10B981}
+.kpi-change.down{color:#DC2626}
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:32px}
+.chart-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:24px;position:relative}
+.chart-title{font-size:16px;font-weight:600;margin-bottom:24px;color:#1C2B4A}
+canvas{cursor:crosshair;display:block}
+.chart-tooltip{position:absolute;background:rgba(0,0,0,0.9);color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:1000;white-space:nowrap}
+.chart-tooltip.visible{opacity:1}
+.quick-stat{margin-bottom:24px}
+.quick-stat:last-child{margin-bottom:0}
+.quick-stat-label{font-size:13px;color:#6B7280;margin-bottom:4px}
+.quick-stat-value{font-size:24px;font-weight:600;display:flex;align-items:center;gap:8px}
+.table-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px}
+.table-header{padding:24px;border-bottom:1px solid #E5E7EB}
+.table-header h2{font-size:16px;font-weight:600;color:#1C2B4A}
+.table-wrapper{overflow-x:auto}
+.data-table{width:100%;border-collapse:collapse}
+.data-table thead{background:#F9FAFB}
+.data-table th{text-align:left;padding:12px 24px;font-size:13px;font-weight:500;color:#6B7280;border-bottom:1px solid #E5E7EB}
+.data-table td{padding:16px 24px;font-size:14px;border-bottom:1px solid #F3F4F6}
+.data-table tbody tr{cursor:pointer}
+.data-table tbody tr:hover{background:#F9FAFB}
+.supplier-name{color:#193E6B;text-decoration:none}
+.supplier-name:hover{text-decoration:underline}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.badge-low{background:#D1FAE5;color:#065F46}
+.badge-medium{background:#FEF3C7;color:#92400E}
+.badge-high{background:#FEE2E2;color:#991B1B}
+@media(max-width:1200px){
+.kpi-grid{grid-template-columns:repeat(2,1fr)}
+.chart-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.mobile-open{transform:translateX(0)}
+.main-content,.main-content.sidebar-collapsed{margin-left:0;padding:16px}
+.kpi-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-left">
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <div class="logo">CLaaS<span class="gold">2</span>SaaS</div>
+    <span class="nav-separator">|</span>
+    <span class="nav-context-label">Supplier Performance Agent</span>
+  </div>
+  <div class="nav-user">
+    <div class="user-avatar">AD</div>
+    <span>Admin</span>
+  </div>
+</nav>
+
+<aside class="sidebar" id="sb">
+  <div class="nav-items">
+    <a href="Dashboard.html" class="nav-item active">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="Suppliers.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Suppliers</span>
+    </a>
+    <a href="Performance.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+      <span>Performance</span>
+    </a>
+    <a href="Alerts.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>Alerts</span>
+    </a>
+    <a href="Reviews.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span>Reviews</span>
+    </a>
+    <a href="Settings.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m8.66-15.66l-4.24 4.24m-8.49 8.49L3.34 20.66M23 12h-6m-6 0H1m19.66 8.66l-4.24-4.24m-8.49-8.49L3.34 3.34"></path>
+      </svg>
+      <span>Settings</span>
+    </a>
+  </div>
+</aside>
+
+<main class="main-content" id="mc">
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Monitor supplier performance across all key metrics</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        Last 6 Months
+      </button>
+      <button class="btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+        </svg>
+        Filters
+      </button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">On-Time Delivery</div>
+      <div class="kpi-value-row">
+        <div class="kpi-value">94.2%</div>
+        <div class="kpi-change up">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+          +2.1%
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Quality Score</div>
+      <div class="kpi-value-row">
+        <div class="kpi-value">87.5</div>
+        <div class="kpi-change down">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+            <polyline points="17 18 23 18 23 12"></polyline>
+          </svg>
+          -1.3%
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Cost Variance</div>
+      <div class="kpi-value-row">
+        <div class="kpi-value">3.2%</div>
+        <div class="kpi-change up">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+          +0.5%
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="kpi-label">Composite Score</div>
+      <div class="kpi-value-row">
+        <div class="kpi-value">91.8</div>
+        <div class="kpi-change up">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+          +1.8%
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h2 class="chart-title">6-Month Performance Trend</h2>
+      <div class="chart-wrapper">
+        <canvas id="trendChart"></canvas>
+        <div class="chart-tooltip" id="chartTooltip"></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h2 class="chart-title">Quick Stats</h2>
+      <div class="quick-stat">
+        <div class="quick-stat-label">Total Suppliers</div>
+        <div class="quick-stat-value">48</div>
+      </div>
+      <div class="quick-stat">
+        <div class="quick-stat-label">Active Alerts</div>
+        <div class="quick-stat-value">
+          7
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+      </div>
+      <div class="quick-stat">
+        <div class="quick-stat-label">Contracts Expiring</div>
+        <div class="quick-stat-value">3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Supplier Performance Table</h2>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Supplier Name</th>
+            <th>OTD %</th>
+            <th>Quality</th>
+            <th>Cost Variance</th>
+            <th>Score</th>
+            <th>Risk Status</th>
+          </tr>
+        </thead>
+        <tbody id="supplierTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+function toggleSidebar(){
+const s=document.getElementById('sb'),m=document.getElementById('mc');
+s.classList.toggle('collapsed');
+m.classList.toggle('sidebar-collapsed');
+localStorage.setItem('sidebarCollapsed',s.classList.contains('collapsed'));
+}
+window.addEventListener('DOMContentLoaded',()=>{
+if(localStorage.getItem('sidebarCollapsed')==='true'){
+document.getElementById('sb').classList.add('collapsed');
+document.getElementById('mc').classList.add('sidebar-collapsed');
+}
+});
+
+const sData=[
+{id:1,name:"Global Manufacturing Co.",otd:96.5,quality:92,costVariance:2.1,score:93.5,risk:"low"},
+{id:2,name:"Pacific Logistics Ltd.",otd:94.2,quality:88,costVariance:3.5,score:91.2,risk:"low"},
+{id:3,name:"TechParts Industries",otd:89.1,quality:85,costVariance:5.2,score:86.4,risk:"medium"},
+{id:4,name:"Northern Supply Chain",otd:92.8,quality:90,costVariance:2.8,score:91.9,risk:"low"},
+{id:5,name:"Metro Components Inc.",otd:78.5,quality:72,costVariance:8.9,score:75.2,risk:"high"},
+{id:6,name:"Eastern Materials Group",otd:95.1,quality:89,costVariance:3.1,score:92.1,risk:"low"}
+];
+
+const tData=[
+{month:"Oct",score:82},{month:"Nov",score:81},{month:"Dec",score:80},
+{month:"Jan",score:81},{month:"Feb",score:82},{month:"Mar",score:83}
+];
+
+document.getElementById("supplierTableBody").innerHTML=sData.map(s=>`
+<tr onclick="window.location.href='SupplierDetail.html?id=${s.id}'">
+<td><a href="SupplierDetail.html?id=${s.id}" class="supplier-name">${s.name}</a></td>
+<td>${s.otd}%</td>
+<td>${s.quality}</td>
+<td>${s.costVariance}%</td>
+<td style="font-weight:600">${s.score}</td>
+<td><span class="badge badge-${s.risk}">${s.risk.charAt(0).toUpperCase()+s.risk.slice(1)}</span></td>
+</tr>
+`).join('');
+
+let cPoints=[];
+function drawChart(){
+const c=document.getElementById("trendChart"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1,
+dw=c.parentElement.offsetWidth,dh=280;
+c.width=dw*dpr;c.height=dh*dpr;c.style.width=dw+'px';c.style.height=dh+'px';
+ctx.scale(dpr,dpr);
+const w=dw,h=dh,p=50,cw=w-p*2,ch=h-p*2;
+ctx.clearRect(0,0,w,h);cPoints=[];
+ctx.strokeStyle="#E5E7EB";ctx.lineWidth=1;
+for(let i=0;i<=4;i++){
+const y=p+(ch/4)*i;
+ctx.beginPath();ctx.setLineDash([5,5]);ctx.moveTo(p,y);ctx.lineTo(w-p,y);ctx.stroke();
+}
+ctx.setLineDash([]);
+ctx.fillStyle="#9CA3AF";ctx.font="12px 'Segoe UI'";ctx.textAlign="right";
+for(let i=0;i<=4;i++){
+const v=100-(i*25),y=p+(ch/4)*i;
+ctx.fillText(v,p-10,y+4);
+}
+ctx.textAlign="center";
+tData.forEach((d,i)=>{
+const x=p+(cw/(tData.length-1))*i;
+ctx.fillText(d.month,x,h-p+20);
+});
+ctx.strokeStyle="#193E6B";ctx.lineWidth=3;ctx.beginPath();
+tData.forEach((d,i)=>{
+const x=p+(cw/(tData.length-1))*i,yp=d.score/100,y=p+ch-(yp*ch);
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+cPoints.push({x,y,month:d.month,score:d.score});
+});
+ctx.stroke();
+tData.forEach((d,i)=>{
+const x=p+(cw/(tData.length-1))*i,yp=d.score/100,y=p+ch-(yp*ch);
+ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fillStyle="#FFF";ctx.fill();
+ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle="#193E6B";ctx.fill();
+ctx.strokeStyle="#FFF";ctx.lineWidth=2;ctx.stroke();
+});
+}
+
+const tt=document.getElementById("chartTooltip"),canvas=document.getElementById("trendChart");
+canvas.addEventListener('mousemove',e=>{
+const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+let f=false;
+for(const pt of cPoints){
+const d=Math.sqrt(Math.pow(mx-pt.x,2)+Math.pow(my-pt.y,2));
+if(d<10){
+tt.textContent=`${pt.month}: ${pt.score}`;
+tt.style.left=(e.clientX+10)+'px';tt.style.top=(e.clientY-30)+'px';
+tt.classList.add('visible');f=true;break;
+}
+}
+if(!f)tt.classList.remove('visible');
+});
+canvas.addEventListener('mouseleave',()=>tt.classList.remove('visible'));
+
+drawChart();
+window.addEventListener('resize',drawChart);
+</script>
+
+</body>
+</html>

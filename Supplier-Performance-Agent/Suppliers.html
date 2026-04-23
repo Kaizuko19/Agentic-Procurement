@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suppliers - Supplier Performance Agent</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",sans-serif;background:#EEE7E0;color:#111827}
+.top-nav{position:fixed;top:0;left:0;right:0;height:64px;background:#193E6B;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1000}
+.nav-left{display:flex;align-items:center;gap:16px}
+.sidebar-toggle{background:none;border:none;color:#fff;cursor:pointer;padding:8px;border-radius:4px}
+.sidebar-toggle:hover{background:rgba(255,255,255,0.1)}
+.sidebar-toggle svg{width:24px;height:24px}
+.logo{border:1px solid rgba(255,255,255,0.3);padding:4px 10px;border-radius:4px;color:#fff;font-weight:600;font-size:14px}
+.logo .gold{color:#B3A125}
+.nav-separator{color:rgba(255,255,255,0.5)}
+.nav-context-label{color:rgba(255,255,255,0.95);font-size:0.9rem}
+.nav-user{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:6px;cursor:pointer;color:rgba(255,255,255,0.95);font-size:14px}
+.nav-user:hover{background:rgba(255,255,255,0.1)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.25);color:#193E6B;font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.sidebar{position:fixed;left:0;top:64px;width:270px;height:calc(100vh - 64px);background:#F5F5F5;border-right:1px solid #E0E0E0;padding:12px 0 20px;overflow-y:auto;z-index:100;transition:width .3s}
+.sidebar.collapsed{width:70px}
+.sidebar.collapsed .nav-item span{display:none}
+.nav-items{display:flex;flex-direction:column;gap:2px;padding:0 12px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:4px;text-decoration:none;color:#424242;font-size:14px;border-left:3px solid transparent;cursor:pointer;white-space:nowrap}
+.nav-item:hover{background:#EBEBEB;color:#242424}
+.nav-item.active{background:#FFF6E5;color:#B3A125;border-left-color:#B3A125;font-weight:500}
+.nav-item-icon{width:16px;height:16px;flex-shrink:0}
+.main-content{margin-left:270px;margin-top:64px;padding:32px;min-height:calc(100vh - 64px);transition:margin-left .3s}
+.main-content.sidebar-collapsed{margin-left:70px}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.page-header h1{font-size:28px;font-weight:600;margin-bottom:4px;color:#1C2B4A}
+.page-header p{font-size:14px;color:#6B7280}
+.header-actions{display:flex;gap:12px}
+.btn{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;border:none}
+.btn-secondary{background:#fff;border:1px solid #E5E7EB;color:#111827}
+.btn-secondary:hover{background:#F9FAFB}
+.btn-primary{background:#193E6B;color:#fff}
+.btn-primary:hover{opacity:0.9}
+.search-section{display:flex;gap:12px;margin-bottom:24px}
+.search-wrapper{flex:1;position:relative}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#6B7280}
+#searchInput{width:100%;padding:12px 12px 12px 44px;border:1px solid #E5E7EB;border-radius:8px;font-size:14px;background:#fff;color:#111827}
+#searchInput:focus{outline:none;border-color:#193E6B;box-shadow:0 0 0 3px rgba(25,62,107,0.1)}
+.category-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.category-btn{padding:8px 16px;border-radius:8px;border:1px solid #E5E7EB;background:#fff;cursor:pointer;font-size:13px;font-weight:500;color:#374151}
+.category-btn:hover{background:#F9FAFB;border-color:#193E6B}
+.category-btn.active{background:#193E6B;color:#fff;border-color:#193E6B}
+.table-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px}
+.table-header{padding:20px 24px;border-bottom:1px solid #E5E7EB}
+.table-header h2{font-size:16px;font-weight:600;color:#1C2B4A}
+.table-wrapper{overflow-x:auto}
+.suppliers-table{width:100%;border-collapse:collapse}
+.suppliers-table thead{background:#F9FAFB}
+.suppliers-table th{text-align:left;padding:12px 24px;font-size:13px;font-weight:500;color:#6B7280;border-bottom:2px solid #E5E7EB}
+.suppliers-table td{padding:16px 24px;font-size:14px;border-bottom:1px solid #F3F4F6;color:#111827}
+.suppliers-table tbody tr{cursor:pointer}
+.suppliers-table tbody tr:hover{background:#F9FAFB}
+.supplier-name{font-weight:500;color:#193E6B}
+.supplier-name:hover{text-decoration:underline}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.risk-low{background:#D1FAE5;color:#065F46}
+.risk-medium{background:#FEF3C7;color:#92400E}
+.risk-high{background:#FEE2E2;color:#991B1B}
+.status-active{background:#D1FAE5;color:#065F46}
+.status-review{background:#FEF3C7;color:#92400E}
+.status-suspended{background:#FEE2E2;color:#991B1B}
+@media(max-width:768px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.mobile-open{transform:translateX(0)}
+.main-content,.main-content.sidebar-collapsed{margin-left:0;padding:16px}
+.page-header{flex-direction:column;gap:16px}
+.search-section{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-left">
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <div class="logo">CLaaS<span class="gold">2</span>SaaS</div>
+    <span class="nav-separator">|</span>
+    <span class="nav-context-label">Supplier Performance Agent</span>
+  </div>
+  <div class="nav-user">
+    <div class="user-avatar">AD</div>
+    <span>Admin</span>
+  </div>
+</nav>
+
+<aside class="sidebar" id="sb">
+  <div class="nav-items">
+    <a href="Dashboard.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="Suppliers.html" class="nav-item active">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Suppliers</span>
+    </a>
+    <a href="Performance.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+      <span>Performance</span>
+    </a>
+    <a href="Alerts.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>Alerts</span>
+    </a>
+    <a href="Reviews.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span>Reviews</span>
+    </a>
+    <a href="Settings.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m8.66-15.66l-4.24 4.24m-8.49 8.49L3.34 20.66M23 12h-6m-6 0H1m19.66 8.66l-4.24-4.24m-8.49-8.49L3.34 3.34"></path>
+      </svg>
+      <span>Settings</span>
+    </a>
+  </div>
+</aside>
+
+<main class="main-content" id="mc">
+  <div class="page-header">
+    <div>
+      <h1>Suppliers</h1>
+      <p>Manage and monitor all supplier relationships</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="alert('Export functionality')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Export
+      </button>
+      <button class="btn btn-primary" onclick="alert('Add new supplier')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add Supplier
+      </button>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-wrapper">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search suppliers by name or location..." />
+    </div>
+    <button class="btn btn-secondary" onclick="alert('More filters')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+      </svg>
+      More Filters
+    </button>
+  </div>
+
+  <div class="category-filters" id="categoryFilters"></div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>All Suppliers (<span id="supplierCount">10</span>)</h2>
+    </div>
+    <div class="table-wrapper">
+      <table class="suppliers-table">
+        <thead>
+          <tr>
+            <th>Supplier Name</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>OTD %</th>
+            <th>Quality</th>
+            <th>Score</th>
+            <th>Risk</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="suppliersTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+function toggleSidebar(){
+const s=document.getElementById('sb'),m=document.getElementById('mc');
+s.classList.toggle('collapsed');
+m.classList.toggle('sidebar-collapsed');
+localStorage.setItem('sidebarCollapsed',s.classList.contains('collapsed'));
+}
+window.addEventListener('DOMContentLoaded',()=>{
+if(localStorage.getItem('sidebarCollapsed')==='true'){
+document.getElementById('sb').classList.add('collapsed');
+document.getElementById('mc').classList.add('sidebar-collapsed');
+}
+});
+
+const sData=[
+{id:1,name:"Global Manufacturing Co.",category:"Electronics",location:"China",otd:96.5,quality:92,score:93.5,risk:"low",status:"Active"},
+{id:2,name:"Pacific Logistics Ltd.",category:"Transportation",location:"Singapore",otd:94.2,quality:88,score:91.2,risk:"low",status:"Active"},
+{id:3,name:"TechParts Industries",category:"Electronics",location:"Taiwan",otd:89.1,quality:85,score:86.4,risk:"medium",status:"Active"},
+{id:4,name:"Northern Supply Chain",category:"Logistics",location:"USA",otd:92.8,quality:90,score:91.9,risk:"low",status:"Active"},
+{id:5,name:"Metro Components Inc.",category:"Manufacturing",location:"Mexico",otd:78.5,quality:72,score:75.2,risk:"high",status:"Under Review"},
+{id:6,name:"Eastern Materials Group",category:"Raw Materials",location:"India",otd:95.1,quality:89,score:92.1,risk:"low",status:"Active"},
+{id:7,name:"Alpine Engineering GmbH",category:"Engineering",location:"Germany",otd:97.2,quality:94,score:95.1,risk:"low",status:"Active"},
+{id:8,name:"Delta Precision Tools",category:"Manufacturing",location:"Japan",otd:93.4,quality:91,score:92.7,risk:"low",status:"Active"},
+{id:9,name:"Coastal Shipping Co.",category:"Transportation",location:"Netherlands",otd:88.7,quality:86,score:87.9,risk:"medium",status:"Active"},
+{id:10,name:"Summit Materials Ltd.",category:"Raw Materials",location:"Australia",otd:91.3,quality:87,score:89.8,risk:"low",status:"Active"}
+];
+
+let selCat="All",sTerm="";
+const cats=["All","Electronics","Manufacturing","Transportation","Logistics","Raw Materials","Engineering"];
+
+function renderFilters(){
+document.getElementById("categoryFilters").innerHTML=cats.map(c=>
+`<button class="category-btn ${selCat===c?'active':''}" onclick="selectCat('${c}')">${c}</button>`
+).join('');
+}
+
+function selectCat(c){
+selCat=c;
+renderFilters();
+renderTable();
+}
+
+function getFiltered(){
+return sData.filter(s=>{
+const mS=s.name.toLowerCase().includes(sTerm.toLowerCase())||s.location.toLowerCase().includes(sTerm.toLowerCase());
+const mC=selCat==="All"||s.category===selCat;
+return mS&&mC;
+});
+}
+
+function getRiskClass(r){
+const c={low:"risk-low",medium:"risk-medium",high:"risk-high"};
+return c[r]||"risk-low";
+}
+
+function getStatusClass(st){
+if(st==="Active")return "status-active";
+if(st==="Under Review")return "status-review";
+return "status-suspended";
+}
+
+function renderTable(){
+const f=getFiltered();
+document.getElementById("supplierCount").textContent=f.length;
+document.getElementById("suppliersTableBody").innerHTML=f.map(s=>`
+<tr onclick="window.location.href='SupplierDetail.html?id=${s.id}'">
+<td><span class="supplier-name">${s.name}</span></td>
+<td style="color:#6B7280">${s.category}</td>
+<td style="color:#6B7280">${s.location}</td>
+<td>${s.otd}%</td>
+<td>${s.quality}</td>
+<td style="font-weight:600">${s.score}</td>
+<td><span class="badge ${getRiskClass(s.risk)}">${s.risk.charAt(0).toUpperCase()+s.risk.slice(1)}</span></td>
+<td><span class="badge ${getStatusClass(s.status)}">${s.status}</span></td>
+</tr>
+`).join('');
+}
+
+document.getElementById("searchInput").addEventListener("input",e=>{
+sTerm=e.target.value;
+renderTable();
+});
+
+renderFilters();
+renderTable();
+</script>
+
+</body>
+</html>

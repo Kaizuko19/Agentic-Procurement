@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance - Supplier Performance Agent</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",sans-serif;background:#EEE7E0;color:#111827}
+.top-nav{position:fixed;top:0;left:0;right:0;height:64px;background:#193E6B;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1000}
+.nav-left{display:flex;align-items:center;gap:16px}
+.sidebar-toggle{background:none;border:none;color:#fff;cursor:pointer;padding:8px;border-radius:4px}
+.sidebar-toggle:hover{background:rgba(255,255,255,0.1)}
+.sidebar-toggle svg{width:24px;height:24px}
+.logo{border:1px solid rgba(255,255,255,0.3);padding:4px 10px;border-radius:4px;color:#fff;font-weight:600;font-size:14px}
+.logo .gold{color:#B3A125}
+.nav-separator{color:rgba(255,255,255,0.5)}
+.nav-context-label{color:rgba(255,255,255,0.95);font-size:0.9rem}
+.nav-user{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:6px;cursor:pointer;color:rgba(255,255,255,0.95);font-size:14px}
+.nav-user:hover{background:rgba(255,255,255,0.1)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.25);color:#193E6B;font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.sidebar{position:fixed;left:0;top:64px;width:270px;height:calc(100vh - 64px);background:#F5F5F5;border-right:1px solid #E0E0E0;padding:12px 0 20px;overflow-y:auto;z-index:100;transition:width .3s}
+.sidebar.collapsed{width:70px}
+.sidebar.collapsed .nav-item span{display:none}
+.nav-items{display:flex;flex-direction:column;gap:2px;padding:0 12px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:4px;text-decoration:none;color:#424242;font-size:14px;border-left:3px solid transparent;cursor:pointer;white-space:nowrap}
+.nav-item:hover{background:#EBEBEB;color:#242424}
+.nav-item.active{background:#FFF6E5;color:#B3A125;border-left-color:#B3A125;font-weight:500}
+.nav-item-icon{width:16px;height:16px;flex-shrink:0}
+.main-content{margin-left:270px;margin-top:64px;padding:32px;min-height:calc(100vh - 64px);transition:margin-left .3s}
+.main-content.sidebar-collapsed{margin-left:70px}
+.page-header{margin-bottom:32px}
+.page-header h1{font-size:28px;font-weight:600;margin-bottom:4px;color:#1C2B4A}
+.page-header p{font-size:14px;color:#6B7280}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:32px}
+.kpi-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:24px}
+.kpi-label{display:flex;align-items:center;gap:8px;font-size:13px;color:#6B7280;margin-bottom:8px}
+.kpi-value{font-size:32px;font-weight:600;margin-bottom:4px}
+.kpi-change{display:flex;align-items:center;gap:4px;font-size:12px}
+.kpi-change.positive{color:#10B981}
+.kpi-change.negative{color:#DC2626}
+.kpi-change.neutral{color:#6B7280}
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:32px}
+.chart-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:24px;position:relative}
+.chart-title{font-size:16px;font-weight:600;margin-bottom:24px;color:#1C2B4A}
+canvas{cursor:crosshair;display:block}
+.chart-tooltip{position:absolute;background:rgba(0,0,0,0.9);color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:1000;white-space:nowrap}
+.chart-tooltip.visible{opacity:1}
+.legend{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:16px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#374151}
+.legend-dot{width:12px;height:12px;border-radius:50%}
+.risk-items{margin-top:16px}
+.risk-item{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.risk-item-left{display:flex;align-items:center;gap:8px}
+.risk-item-value{font-size:14px;font-weight:600}
+.category-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:24px}
+.category-card{padding:16px;border:1px solid #E5E7EB;border-radius:8px;cursor:pointer;transition:.2s;background:#fff}
+.category-card:hover{background:#F9FAFB;border-color:#193E6B;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.category-label{color:#6B7280;font-size:12px;margin-bottom:4px}
+.category-score{font-size:20px;font-weight:600;margin-bottom:4px}
+.category-count{color:#6B7280;font-size:11px}
+@media(max-width:1200px){
+.kpi-grid{grid-template-columns:repeat(2,1fr)}
+.chart-grid{grid-template-columns:1fr}
+.category-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.mobile-open{transform:translateX(0)}
+.main-content,.main-content.sidebar-collapsed{margin-left:0;padding:16px}
+.kpi-grid,.category-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-left">
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <div class="logo">CLaaS<span class="gold">2</span>SaaS</div>
+    <span class="nav-separator">|</span>
+    <span class="nav-context-label">Supplier Performance Agent</span>
+  </div>
+  <div class="nav-user">
+    <div class="user-avatar">AD</div>
+    <span>Admin</span>
+  </div>
+</nav>
+
+<aside class="sidebar" id="sb">
+  <div class="nav-items">
+    <a href="Dashboard.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="Suppliers.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Suppliers</span>
+    </a>
+    <a href="Performance.html" class="nav-item active">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+      <span>Performance</span>
+    </a>
+    <a href="Alerts.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>Alerts</span>
+    </a>
+    <a href="Reviews.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span>Reviews</span>
+    </a>
+    <a href="Settings.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m8.66-15.66l-4.24 4.24m-8.49 8.49L3.34 20.66M23 12h-6m-6 0H1m19.66 8.66l-4.24-4.24m-8.49-8.49L3.34 3.34"></path>
+      </svg>
+      <span>Settings</span>
+    </a>
+  </div>
+</aside>
+
+<main class="main-content" id="mc">
+  <div class="page-header">
+    <h1>Performance Analytics</h1>
+    <p>Advanced analytics and insights across all supplier performance metrics</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="7"></circle>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+        </svg>
+        Top Performers
+      </div>
+      <div class="kpi-value">12</div>
+      <div class="kpi-change positive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+          <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+        +3 from last month
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        Underperformers
+      </div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-change negative">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+          <polyline points="17 18 23 18 23 12"></polyline>
+        </svg>
+        Same as last month
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Score Change</div>
+      <div class="kpi-value">+1.4%</div>
+      <div class="kpi-change positive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+          <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+        Positive trend
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Suppliers</div>
+      <div class="kpi-value">48</div>
+      <div class="kpi-change neutral">Across 6 categories</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h2 class="chart-title">KPI Trends Over Time</h2>
+      <div class="chart-wrapper">
+        <canvas id="lineChart"></canvas>
+        <div class="chart-tooltip" id="lineTooltip"></div>
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#10B981"></div>
+          <span>On-Time Delivery</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#193E6B"></div>
+          <span>Quality Score</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#F59E0B"></div>
+          <span>Cost Variance</span>
+        </div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h2 class="chart-title">Risk Distribution</h2>
+      <div class="chart-wrapper">
+        <canvas id="pieChart"></canvas>
+        <div class="chart-tooltip" id="pieTooltip"></div>
+      </div>
+      <div class="risk-items">
+        <div class="risk-item">
+          <div class="risk-item-left">
+            <div class="legend-dot" style="background:#10B981"></div>
+            <span style="font-size:13px;color:#374151">Low Risk</span>
+          </div>
+          <span class="risk-item-value">38</span>
+        </div>
+        <div class="risk-item">
+          <div class="risk-item-left">
+            <div class="legend-dot" style="background:#F59E0B"></div>
+            <span style="font-size:13px;color:#374151">Medium Risk</span>
+          </div>
+          <span class="risk-item-value">8</span>
+        </div>
+        <div class="risk-item">
+          <div class="risk-item-left">
+            <div class="legend-dot" style="background:#DC2626"></div>
+            <span style="font-size:13px;color:#374151">High Risk</span>
+          </div>
+          <span class="risk-item-value">2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h2 class="chart-title">Performance by Category</h2>
+    <div class="chart-wrapper">
+      <canvas id="barChart"></canvas>
+      <div class="chart-tooltip" id="barTooltip"></div>
+    </div>
+    <div class="category-grid">
+      <div class="category-card" onclick="alert('Electronics: 91.5 score with 12 suppliers')">
+        <div class="category-label">Electronics</div>
+        <div class="category-score">91.5</div>
+        <div class="category-count">12 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Manufacturing: 88.2 score with 15 suppliers')">
+        <div class="category-label">Manufacturing</div>
+        <div class="category-score">88.2</div>
+        <div class="category-count">15 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Transportation: 93.1 score with 8 suppliers')">
+        <div class="category-label">Transportation</div>
+        <div class="category-score">93.1</div>
+        <div class="category-count">8 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Logistics: 89.7 score with 10 suppliers')">
+        <div class="category-label">Logistics</div>
+        <div class="category-score">89.7</div>
+        <div class="category-count">10 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Raw Materials: 90.4 score with 9 suppliers')">
+        <div class="category-label">Raw Materials</div>
+        <div class="category-score">90.4</div>
+        <div class="category-count">9 suppliers</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+function toggleSidebar(){
+const s=document.getElementById('sb'),m=document.getElementById('mc');
+s.classList.toggle('collapsed');
+m.classList.toggle('sidebar-collapsed');
+localStorage.setItem('sidebarCollapsed',s.classList.contains('collapsed'));
+}
+window.addEventListener('DOMContentLoaded',()=>{
+if(localStorage.getItem('sidebarCollapsed')==='true'){
+document.getElementById('sb').classList.add('collapsed');
+document.getElementById('mc').classList.add('sidebar-collapsed');
+}
+});
+
+const mTrend=[
+{month:"Oct",delivery:93.2,quality:88.1,cost:3.8},
+{month:"Nov",delivery:93.8,quality:89.2,cost:3.5},
+{month:"Dec",delivery:94.1,quality:89.8,cost:3.3},
+{month:"Jan",delivery:93.5,quality:88.9,cost:3.6},
+{month:"Feb",delivery:94.5,quality:90.1,cost:3.2},
+{month:"Mar",delivery:94.2,quality:87.5,cost:3.2}
+];
+
+const cPerf=[
+{category:"Electronics",score:91.5},
+{category:"Manufacturing",score:88.2},
+{category:"Transportation",score:93.1},
+{category:"Logistics",score:89.7},
+{category:"Raw Materials",score:90.4}
+];
+
+const rDist=[
+{name:"Low Risk",value:38,color:"#10B981"},
+{name:"Medium Risk",value:8,color:"#F59E0B"},
+{name:"High Risk",value:2,color:"#DC2626"}
+];
+
+let lPts=[],pSlices=[],bBars=[];
+
+function drawLine(){
+const c=document.getElementById("lineChart"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1,
+dw=c.parentElement.offsetWidth,dh=300;
+c.width=dw*dpr;c.height=dh*dpr;c.style.width=dw+'px';c.style.height=dh+'px';
+ctx.scale(dpr,dpr);
+const w=dw,h=dh,p=50,cw=w-p*2,ch=h-p*2;
+ctx.clearRect(0,0,w,h);lPts=[];
+ctx.strokeStyle="#E5E7EB";ctx.lineWidth=1;
+for(let i=0;i<=5;i++){
+const y=p+(ch/5)*i;
+ctx.beginPath();ctx.setLineDash([5,5]);ctx.moveTo(p,y);ctx.lineTo(w-p,y);ctx.stroke();
+}
+ctx.setLineDash([]);
+ctx.fillStyle="#6B7280";ctx.font="12px 'Segoe UI'";ctx.textAlign="right";
+for(let i=0;i<=5;i++){
+const v=100-(i*20),y=p+(ch/5)*i;
+ctx.fillText(v,p-10,y+4);
+}
+ctx.textAlign="center";
+mTrend.forEach((d,i)=>{
+const x=p+(cw/(mTrend.length-1))*i;
+ctx.fillText(d.month,x,h-p+20);
+});
+const drawL=(k,col,lbl)=>{
+ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=3;ctx.beginPath();
+mTrend.forEach((d,i)=>{
+const x=p+(cw/(mTrend.length-1))*i;
+let val=d[k],yp;
+if(k==="cost")yp=(10-val)/10;else yp=(val-80)/20;
+const y=p+ch-(yp*ch);
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+lPts.push({x,y,month:d.month,dataKey:lbl,value:val,color:col});
+});
+ctx.stroke();
+mTrend.forEach((d,i)=>{
+const x=p+(cw/(mTrend.length-1))*i;
+let val=d[k],yp;
+if(k==="cost")yp=(10-val)/10;else yp=(val-80)/20;
+const y=p+ch-(yp*ch);
+ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fillStyle="#FFF";ctx.fill();
+ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
+});
+};
+drawL("delivery","#10B981","On-Time Delivery");
+drawL("quality","#193E6B","Quality Score");
+drawL("cost","#F59E0B","Cost Variance");
+}
+
+function drawPie(){
+const c=document.getElementById("pieChart"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1,
+dw=c.parentElement.offsetWidth,dh=220;
+c.width=dw*dpr;c.height=dh*dpr;c.style.width=dw+'px';c.style.height=dh+'px';
+ctx.scale(dpr,dpr);
+const w=dw,h=dh,cx=w/2,cy=h/2,r=80,tot=rDist.reduce((s,i)=>s+i.value,0);
+let ang=-Math.PI/2;
+ctx.clearRect(0,0,w,h);pSlices=[];
+rDist.forEach(i=>{
+const sAng=(i.value/tot)*Math.PI*2;
+ctx.fillStyle=i.color;ctx.beginPath();ctx.moveTo(cx,cy);
+ctx.arc(cx,cy,r,ang,ang+sAng);ctx.closePath();ctx.fill();
+pSlices.push({startAngle:ang,endAngle:ang+sAng,centerX:cx,centerY:cy,radius:r,item:i});
+const lAng=ang+sAng/2,lX=cx+Math.cos(lAng)*(r+30),lY=cy+Math.sin(lAng)*(r+30);
+ctx.fillStyle="#333";ctx.font="11px 'Segoe UI'";ctx.textAlign="center";
+const pct=((i.value/tot)*100).toFixed(0);
+ctx.fillText(`${i.name}: ${pct}%`,lX,lY);
+ang+=sAng;
+});
+}
+
+function drawBar(){
+const c=document.getElementById("barChart"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1,
+dw=c.parentElement.offsetWidth,dh=300;
+c.width=dw*dpr;c.height=dh*dpr;c.style.width=dw+'px';c.style.height=dh+'px';
+ctx.scale(dpr,dpr);
+const w=dw,h=dh,p=50,cw=w-p*2,ch=h-p*2;
+ctx.clearRect(0,0,w,h);bBars=[];
+ctx.strokeStyle="#E5E7EB";ctx.lineWidth=1;
+for(let i=0;i<=5;i++){
+const y=p+(ch/5)*i;
+ctx.beginPath();ctx.setLineDash([5,5]);ctx.moveTo(p,y);ctx.lineTo(w-p,y);ctx.stroke();
+}
+ctx.setLineDash([]);
+ctx.fillStyle="#6B7280";ctx.font="12px 'Segoe UI'";ctx.textAlign="right";
+for(let i=0;i<=5;i++){
+const v=100-(i*20),y=p+(ch/5)*i;
+ctx.fillText(v,p-10,y+4);
+}
+const bw=cw/cPerf.length*0.6,bs=cw/cPerf.length;
+cPerf.forEach((d,i)=>{
+const x=p+bs*i+(bs-bw)/2,yp=(d.score-80)/20,bh=yp*ch,y=p+ch-bh;
+ctx.fillStyle="#193E6B";ctx.beginPath();ctx.roundRect(x,y,bw,bh,[8,8,0,0]);ctx.fill();
+bBars.push({x,y,width:bw,height:bh,category:d.category,score:d.score});
+ctx.fillStyle="#6B7280";ctx.textAlign="center";ctx.font="12px 'Segoe UI'";
+ctx.fillText(d.category,x+bw/2,h-p+20);
+});
+}
+
+function sTip(tt,txt,x,y){
+tt.textContent=txt;tt.style.left=x+'px';tt.style.top=y+'px';tt.classList.add('visible');
+}
+function hTip(tt){tt.classList.remove('visible')}
+
+const lC=document.getElementById("lineChart"),lT=document.getElementById("lineTooltip");
+lC.addEventListener('mousemove',e=>{
+const r=lC.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+let f=false;
+for(const pt of lPts){
+const d=Math.sqrt(Math.pow(mx-pt.x,2)+Math.pow(my-pt.y,2));
+if(d<10){sTip(lT,`${pt.month}: ${pt.dataKey} = ${pt.value}%`,e.clientX+10,e.clientY-30);f=true;break}
+}
+if(!f)hTip(lT);
+});
+lC.addEventListener('mouseleave',()=>hTip(lT));
+
+const pC=document.getElementById("pieChart"),pT=document.getElementById("pieTooltip");
+pC.addEventListener('mousemove',e=>{
+const r=pC.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+let f=false;
+for(const sl of pSlices){
+const dx=mx-sl.centerX,dy=my-sl.centerY,d=Math.sqrt(dx*dx+dy*dy);
+if(d<=sl.radius){
+let a=Math.atan2(dy,dx);
+if(a<-Math.PI/2)a+=2*Math.PI;
+if(a>=sl.startAngle&&a<=sl.endAngle){sTip(pT,`${sl.item.name}: ${sl.item.value} suppliers`,e.clientX+10,e.clientY-30);f=true;break}
+}
+}
+if(!f)hTip(pT);
+});
+pC.addEventListener('mouseleave',()=>hTip(pT));
+
+const bC=document.getElementById("barChart"),bT=document.getElementById("barTooltip");
+bC.addEventListener('mousemove',e=>{
+const r=bC.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+let f=false;
+for(const b of bBars){
+if(mx>=b.x&&mx<=b.x+b.width&&my>=b.y&&my<=b.y+b.height){
+sTip(bT,`${b.category}: ${b.score}`,e.clientX+10,e.clientY-30);f=true;break}
+}
+if(!f)hTip(bT);
+});
+bC.addEventListener('mouseleave',()=>hTip(bT));
+
+drawLine();drawPie();drawBar();
+window.addEventListener('resize',()=>{drawLine();drawPie();drawBar()});
+</script>
+
+</body>
+</html>

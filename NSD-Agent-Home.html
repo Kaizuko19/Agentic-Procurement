@@ -3,16 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Supplier Discovery Agent</title>
-    
+    <title>NSD Dashboard</title>
+    <link rel="stylesheet" href="nsd-style.css">
 </head>
 <body>
+    <div class="app-shell">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <a class="nav-brand" href="NSD-Agent-Home.html" aria-label="CLaaS2SaaS home">
+                    <span class="nav-brand-mark">CLaaS<span class="nav-brand-accent">2</span>SaaS</span>
+                </a>
+                <span class="nav-separator">|</span>
+                <span class="nav-context-label">New Supplier Discovery Agent</span>
+            </div>
+            <div class="nav-right">
+                <a class="nav-profile" href="#" aria-label="John Owen profile">
+                    <span class="user-avatar">JO</span>
+                    <span class="nav-profile-text">
+                        <span class="nav-profile-name">John Owen</span>
+                        <span class="nav-profile-role">System Administrator</span>
+                    </span>
+                </a>
+            </div>
+        </nav>
 
-    <div class="container">
-        <h1>New Supplier Discovery Agent</h1>
+        <div class="app-body">
+            <div class="rail-container" id="rail-container">
+                <nav class="nav-rail" aria-label="Primary navigation">
+                    <div class="rail-header">
+                        <span class="rail-header-label">New Supplier Discovery</span>
+                        <button class="collapse-button" type="button" aria-label="Collapse navigation">
+                            <span class="collapse-icon">&lsaquo;</span>
+                        </button>
+                    </div>
 
+                    <div class="nav-group">
+                        <div class="group-items-wrapper" style="max-height: 500px;">
+                            <div class="group-items">
+                                <a class="nav-item nav-item-active" href="NSD-Agent-Home.html" data-label="Dashboard" aria-current="page">
+                                    <span class="nav-item-icon" aria-hidden="true">&#9638;</span>
+                                    <span class="nav-item-label">Dashboard</span>
+                                </a>
+                                <a class="nav-item" href="NSD-Sourcing-Request.html" data-label="Sourcing Request">
+                                    <span class="nav-item-icon" aria-hidden="true">&#9998;</span>
+                                    <span class="nav-item-label">Sourcing Request</span>
+                                </a>
+                                <a class="nav-item" href="NSD-Supplier-Discovery.html" data-label="Supplier Discovery">
+                                    <span class="nav-item-icon" aria-hidden="true">&#128269;</span>
+                                    <span class="nav-item-label">Supplier Discovery</span>
+                                </a>
+                                <a class="nav-item" href="NSD-Supplier-Ranking.html" data-label="Supplier Ranking">
+                                    <span class="nav-item-icon" aria-hidden="true">&#9878;</span>
+                                    <span class="nav-item-label">Supplier Ranking</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-group">
+                        <div class="group-items-wrapper" style="max-height: 500px;">
+                            <div class="group-items">
+                                <a class="nav-item" href="NSD-Vendor-Onboarding.html" data-label="Vendor Onboarding">
+                                    <span class="nav-item-icon" aria-hidden="true">&#128221;</span>
+                                    <span class="nav-item-label">Vendor Onboarding</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <main class="app-main" id="main-content" tabindex="-1">
+                <div class="page-stack">
+                    <section class="page-header">
+                        <div>
+                            <p class="page-eyebrow">New Supplier Discovery</p>
+                            <h1>Supplier acquisition pipeline at a glance</h1>
+                            <p>Manage sourcing intake, discovery, evaluation, and onboarding from one shell. The layout follows the KERNEL navigation model while keeping the NSD workflow front and center.</p>
+                        </div>
+                        <div class="page-header-meta">
+                            <div class="meta-card">
+                                <span>Open Request</span>
+                                <strong>REQ-2026-008</strong>
+                            </div>
+                            <div class="meta-card">
+                                <span>Current Stage</span>
+                                <strong>Supplier Discovery</strong>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="summary-grid">
+                        <article class="metric-card">
+                            <span class="metric-label">Active Requests</span>
+                            <span class="metric-value">08</span>
+                            <div class="metric-subtext">3 require action this week.</div>
+                        </article>
+                        <article class="metric-card">
+                            <span class="metric-label">Qualified Suppliers</span>
+                            <span class="metric-value">12</span>
+                            <div class="metric-subtext">7 cleared compliance and quality filters.</div>
+                        </article>
+                        <article class="metric-card">
+                            <span class="metric-label">Ready For Onboarding</span>
+                            <span class="metric-value">02</span>
+                            <div class="metric-subtext">Blue Ridge Components leads the ranking queue.</div>
+                        </article>
+                    </section>
+
+                    <section class="two-column">
+                        <article class="surface-card">
+                            <div class="section-header">
+                                <div>
+                                    <h2 class="section-title">Workflow overview</h2>
+                                    <p class="section-copy">Track the four NSD stages inside the standard shell pattern from the guide.</p>
+                                </div>
+                            </div>
+                            <div class="stack">
+                                <div class="insight-card">
+                                    <h3>Sourcing Request</h3>
+                                    <p>Capture the demand signal, weighting model, and supply constraints before supplier search begins.</p>
+                                </div>
+                                <div class="insight-card">
+                                    <h3>Supplier Discovery</h3>
+                                    <p>Review normalized candidate data, criteria match, and source confidence in one table.</p>
+                                </div>
+                                <div class="insight-card">
+                                    <h3>Supplier Ranking</h3>
+                                    <p>Compare fit, reliability, and cost scores with a clear recommendation trail.</p>
+                                </div>
+                                <div class="insight-card">
+                                    <h3>Vendor Onboarding</h3>
+                                    <p>Finalize setup fields and validate readiness before creating the vendor record.</p>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="surface-card">
+                            <div class="section-header">
+                                <div>
+                                    <h2 class="section-title">Next best actions</h2>
+                                    <p class="section-copy">Start where the current request is waiting.</p>
+                                </div>
+                            </div>
+                            <div class="status-banner">
+                                <strong>Pipeline signal</strong>
+                                <p>Discovery results are in review and the ranking model is ready to be finalized once procurement confirms preferred lead time.</p>
+                            </div>
+                            <div class="button-row">
+                                <a class="btn btn-primary" href="NSD-Sourcing-Request.html">Open Request</a>
+                                <a class="btn btn-secondary" href="NSD-Supplier-Discovery.html">Review Discovery</a>
+                                <a class="btn btn-tertiary" href="NSD-Supplier-Ranking.html">Open Ranking</a>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+            </main>
         </div>
+
+        <footer class="app-footer">Copyright &copy; 2026 New Supplier Discovery Agent</footer>
     </div>
 
+    <script src="nsd-shell.js"></script>
 </body>
 </html>
+

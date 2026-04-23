@@ -1,275 +1,203 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor Onboarding - NSD Agent</title>
-    <style>
-        :root {
-            --midnight-blue: #193E6B;
-            --green-gold: #B3A125;
-            --white: #FFFFFF;
-            --border-gray: #E6ECF3;
-            --text-main: #1f2937;
-            --text-muted: #5b6678;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            margin: 0;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-main);
-            background: linear-gradient(170deg, #f3f7fd 0%, #ffffff 52%, #edf3fb 100%);
-        }
-
-        .top-bar {
-            background: var(--midnight-blue);
-            border-bottom: 4px solid var(--green-gold);
-            color: var(--white);
-            padding: 12px 20px;
-        }
-
-        .top-inner {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-logo {
-            min-height: 42px;
-            padding: 7px 12px;
-            border: 2px solid rgba(255, 255, 255, 0.72);
-            border-radius: 10px;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-        }
-
-        .brand-logo .accent {
-            color: var(--green-gold);
-            font-weight: 800;
-        }
-
-        .brand h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .main-nav {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .main-nav a {
-            text-decoration: none;
-            color: var(--white);
-            border: 1px solid transparent;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .main-nav a[aria-current="page"],
-        .main-nav a.active {
-            border-color: rgba(255, 255, 255, 0.32);
-            background: rgba(255, 255, 255, 0.16);
-        }
-
-        main {
-            max-width: 1300px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
-            margin-bottom: 20px;
-        }
-
-        .card h2 {
-            margin-top: 0;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        input, select, textarea {
-            border: 1px solid var(--border-gray);
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--midnight-blue);
-            box-shadow: 0 0 0 3px rgba(25, 62, 107, 0.1);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .btn {
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            padding: 10px 18px;
-            font-weight: 700;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: var(--midnight-blue);
-            color: var(--white);
-        }
-
-        .btn-secondary {
-            background: var(--green-gold);
-            color: var(--white);
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: var(--midnight-blue);
-            color: var(--white);
-            margin-top: 40px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-2 { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link rel="stylesheet" href="nsd-style.css">
 </head>
 <body>
-    <header class="top-bar">
-        <div class="top-inner">
-            <div class="brand">
-                <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
-                <h1>New Supplier Discovery Agent</h1>
+    <div class="app-shell">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <a class="nav-brand" href="NSD-Agent-Home.html" aria-label="CLaaS2SaaS home">
+                    <span class="nav-brand-mark">CLaaS<span class="nav-brand-accent">2</span>SaaS</span>
+                </a>
+                <span class="nav-separator">|</span>
+                <span class="nav-context-label">New Supplier Discovery Agent</span>
             </div>
-            <nav class="main-nav">
-                <a href="NSD-Sourcing-Request.html">Sourcing Request</a>
-                <a href="NSD-Supplier-Discovery.html">Supplier Discovery</a>
-                <a href="NSD-Supplier-Ranking.html">Supplier Ranking</a>
-                <a href="NSD-Vendor-Onboarding.html" aria-current="page">Vendor Onboarding</a>
-            </nav>
-        </div>
-    </header>
+            <div class="nav-right">
+                <a class="nav-profile" href="#" aria-label="John Owen profile">
+                    <span class="user-avatar">JO</span>
+                    <span class="nav-profile-text">
+                        <span class="nav-profile-name">John Owen</span>
+                        <span class="nav-profile-role">System Administrator</span>
+                    </span>
+                </a>
+            </div>
+        </nav>
 
-    <main>
-        <div class="card">
-            <h2>Vendor Profile</h2>
-            <div class="form-group">
-                <label>Supplier Name</label>
-                <input type="text" value="Blue Ridge Components" readonly>
+        <div class="app-body">
+            <div class="rail-container" id="rail-container">
+                <nav class="nav-rail" aria-label="Primary navigation">
+                    <div class="rail-header">
+                        <span class="rail-header-label">New Supplier Discovery</span>
+                        <button class="collapse-button" type="button" aria-label="Collapse navigation">
+                            <span class="collapse-icon">&lsaquo;</span>
+                        </button>
+                    </div>
+                    <div class="nav-group">
+                        <div class="group-items-wrapper" style="max-height: 500px;">
+                            <div class="group-items">
+                                <a class="nav-item" href="NSD-Agent-Home.html" data-label="Dashboard">
+                                    <span class="nav-item-icon" aria-hidden="true">&#9638;</span>
+                                    <span class="nav-item-label">Dashboard</span>
+                                </a>
+                                <a class="nav-item" href="NSD-Sourcing-Request.html" data-label="Sourcing Request">
+                                    <span class="nav-item-icon" aria-hidden="true">&#9998;</span>
+                                    <span class="nav-item-label">Sourcing Request</span>
+                                </a>
+                                <a class="nav-item" href="NSD-Supplier-Discovery.html" data-label="Supplier Discovery">
+                                    <span class="nav-item-icon" aria-hidden="true">&#128269;</span>
+                                    <span class="nav-item-label">Supplier Discovery</span>
+                                </a>
+                                <a class="nav-item" href="NSD-Supplier-Ranking.html" data-label="Supplier Ranking">
+                                    <span class="nav-item-icon" aria-hidden="true">&#9878;</span>
+                                    <span class="nav-item-label">Supplier Ranking</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-group">
+                        <div class="group-items-wrapper" style="max-height: 500px;">
+                            <div class="group-items">
+                                <a class="nav-item nav-item-active" href="NSD-Vendor-Onboarding.html" data-label="Vendor Onboarding" aria-current="page">
+                                    <span class="nav-item-icon" aria-hidden="true">&#128221;</span>
+                                    <span class="nav-item-label">Vendor Onboarding</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
             </div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Country</label>
-                    <input type="text" value="USA" readonly>
+
+            <main class="app-main" id="main-content" tabindex="-1">
+                <div class="page-stack">
+                    <section class="page-header">
+                        <div>
+                            <p class="page-eyebrow">Enablement</p>
+                            <h1>Vendor onboarding</h1>
+                            <p>Finalize setup details for the selected supplier and validate readiness before the vendor record is created in the system.</p>
+                        </div>
+                        <div class="page-header-meta">
+                            <div class="meta-card">
+                                <span>Selected Supplier</span>
+                                <strong>Blue Ridge Components</strong>
+                            </div>
+                            <div class="meta-card">
+                                <span>Match Score</span>
+                                <strong>94% Fit</strong>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="two-column">
+                        <article class="surface-card">
+                            <div class="section-header">
+                                <div>
+                                    <h2 class="section-title">Vendor profile</h2>
+                                    <p class="section-copy">Supplier data carried from discovery and ranking.</p>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="field-group">
+                                    <label for="supplier-name">Supplier Name</label>
+                                    <input id="supplier-name" type="text" value="Blue Ridge Components" readonly>
+                                </div>
+                                <div class="field-grid">
+                                    <div class="field-group">
+                                        <label for="supplier-country">Country</label>
+                                        <input id="supplier-country" type="text" value="USA" readonly>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="match-score">Match Score</label>
+                                        <input id="match-score" type="text" value="94% Fit" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="surface-card">
+                            <div class="section-header">
+                                <div>
+                                    <h2 class="section-title">System validation</h2>
+                                    <p class="section-copy">Checks passed before vendor creation.</p>
+                                </div>
+                            </div>
+                            <ul class="validation-list">
+                                <li>Duplicate vendor check completed.</li>
+                                <li>No existing vendor found.</li>
+                                <li>Ready for approval workflow.</li>
+                            </ul>
+                        </article>
+                    </section>
+
+                    <section class="two-column">
+                        <article class="surface-card">
+                            <div class="section-header">
+                                <div>
+                                    <h2 class="section-title">Onboarding information</h2>
+                                    <p class="section-copy">Complete the required ERP setup values.</p>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="field-group">
+                                    <label for="posting-group">Vendor Posting Group</label>
+                                    <input id="posting-group" type="text" placeholder="e.g. Standard Suppliers">
+                                </div>
+                                <div class="field-group">
+                                    <label for="payment-terms">Payment Terms</label>
+                                    <input id="payment-terms" type="text" placeholder="e.g. Net 45">
+                                </div>
+                                <div class="field-group">
+                                    <label for="purchaser-code">Purchaser Code</label>
+                                    <input id="purchaser-code" type="text" placeholder="e.g. PUR-27">
+                                </div>
+                                <div class="field-group">
+                                    <label for="performance-tracking">Enable Performance Tracking</label>
+                                    <select id="performance-tracking">
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                    </select>
+                                </div>
+                                <div class="button-row">
+                                    <button class="btn btn-secondary" type="button">Save Draft</button>
+                                    <button class="btn btn-primary" type="button">Create Vendor</button>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="surface-card">
+                            <div class="section-header">
+                                <div>
+                                    <h2 class="section-title">Onboarding guide</h2>
+                                    <p class="section-copy">Reference notes for the final setup step.</p>
+                                </div>
+                            </div>
+                            <div class="guide-list">
+                                <div>
+                                    <h4>Vendor Posting Group</h4>
+                                    <p>Choose the category that matches the supplier type such as domestic, international, or preferred supplier.</p>
+                                </div>
+                                <div>
+                                    <h4>Payment Terms</h4>
+                                    <p>Select the commercial agreement that will govern invoicing and approval timelines.</p>
+                                </div>
+                                <div>
+                                    <h4>Purchaser Code</h4>
+                                    <p>Assign the owner responsible for routing, approvals, and long-term supplier accountability.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
                 </div>
-                <div class="form-group">
-                    <label>Match Score</label>
-                    <input type="text" value="94% Fit" readonly>
-                </div>
-            </div>
+            </main>
         </div>
 
-        <div class="card">
-            <h2>Onboarding Information</h2>
-            <div class="form-group">
-                <label>Vendor Posting Group</label>
-                <input type="text" placeholder="e.g. Standard Suppliers">
-            </div>
-            <div class="form-group">
-                <label>Payment Terms</label>
-                <input type="text" placeholder="e.g. Net 45">
-            </div>
-            <div class="form-group">
-                <label>Purchaser Code</label>
-                <input type="text" placeholder="e.g. PUR-27">
-            </div>
-            <div class="form-group">
-    <label>Enable Performance Tracking</label>
-    <select>
-        <option>Yes</option>
-        <option>No</option>
-    </select>
-</div>
+        <footer class="app-footer">Copyright &copy; 2026 New Supplier Discovery Agent</footer>
+    </div>
 
-            <div class="button-group">
-                <button class="btn btn-secondary">Save Draft</button>
-                <button class="btn btn-primary">Create Vendor</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Onboarding Guide</h2>
-            <p style="color: var(--text-muted);">Use this form to finalize your selected supplier and create a vendor record in the system.</p>
-            <h4>Vendor Posting Group</h4>
-            <p style="color: var(--text-muted);">Choose a category that matches your supplier type (e.g., Domestic, International, Preferred).</p>
-            <h4>Payment Terms</h4>
-            <p style="color: var(--text-muted);">Select standard payment terms for this supplier (Net 30, Net 45, Net 60, etc.).</p>
-            <h4>Purchaser Code</h4>
-            <p style="color: var(--text-muted);">Assign a purchaser code for approval routing and responsibility tracking.</p>
-        </div>
-        <div class="card">
-    <h2>System Validation</h2>
-    <p style="color: #555;">
-        ✔ Duplicate vendor check completed<br>
-        ✔ No existing vendor found<br>
-        ✔ Ready for approval workflow
-    </p>
-</div>
-    </main>
-
-    <footer>
-        Copyright © 2026 New Supplier Discovery Agent
-    </footer>
+    <script src="nsd-shell.js"></script>
 </body>
 </html>
+

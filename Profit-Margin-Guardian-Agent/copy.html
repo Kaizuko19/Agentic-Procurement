@@ -43,9 +43,8 @@
     .app-shell {
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
       background: var(--page-bg);
-      overflow: hidden;
     }
 
     .top-bar {
@@ -99,276 +98,57 @@
       white-space: nowrap;
     }
 
-    .nav-center {
-      display: flex;
-      align-items: center;
-      min-width: 0;
+    .nav-context-subtitle {
+      display: none;
     }
 
-    .nav-app-label {
-      color: rgba(255, 255, 255, 0.95);
-      font-size: 14px;
-      font-weight: 500;
-      white-space: nowrap;
+    .nav-center-spacer {
+      min-width: 0;
     }
 
     .nav-right {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 6px;
+      gap: 12px;
       min-width: 0;
     }
 
-    .nav-user {
+    .main-nav {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 6px 10px 6px 6px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      color: rgba(255, 255, 255, 0.95);
-      flex-shrink: 0;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    .nav-avatar {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.88);
-      color: var(--midnight-blue);
-      font-size: 14px;
-      font-weight: 700;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
-    }
-
-    .nav-user-meta {
-      display: grid;
-      gap: 1px;
-      min-width: 0;
-    }
-
-    .nav-user-name {
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .nav-user-role {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.75);
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .app-body {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    .rail-container {
-      width: 270px;
-      flex-shrink: 0;
-      border-right: 1px solid #ddd8d1;
-      background: var(--surface-muted);
-      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-    }
-
-    .rail-container.collapsed {
-      width: 64px;
-    }
-
-    .nav-rail {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      background: var(--surface-muted);
-      padding: 12px 0 18px;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .rail-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 12px 12px;
-      border-bottom: 1px solid #e0e0e0;
-      margin-bottom: 8px;
-      min-height: 44px;
-    }
-
-    .rail-header-label {
-      font-size: 16px;
-      font-weight: 600;
-      color: #242424;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .rail-header-label.hidden {
-      opacity: 0;
-      position: absolute;
-      pointer-events: none;
-      width: 0;
-      overflow: hidden;
-    }
-
-    .collapse-button {
-      width: 32px;
-      height: 32px;
-      border: none;
-      background: none;
-      border-radius: 4px;
-      cursor: pointer;
-      color: #424242;
-      flex-shrink: 0;
-    }
-
-    .collapse-button:hover,
-    .collapse-button:focus-visible {
-      background: #ebebeb;
-      outline: none;
-      box-shadow: var(--focus-ring);
-    }
-
-    .collapse-icon {
-      display: inline-block;
-      transition: transform 0.28s ease;
-    }
-
-    .collapse-icon.rotated {
-      transform: rotate(180deg);
-    }
-
-    .rail-group {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding: 0 8px;
-    }
-
-    .rail-group + .rail-group {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #e0e0e0;
-    }
-
-    .rail-group-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 8px 10px;
-      color: #242424;
-      font-size: 16px;
-      font-weight: 600;
-      min-height: 40px;
-    }
-
-    .rail-group-title.hidden-labels {
-      justify-content: center;
-    }
-
-    .rail-group-icon {
-      width: 20px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .rail-group-text.hidden,
-    .rail-item-label.hidden {
-      opacity: 0;
-      position: absolute;
-      pointer-events: none;
-      width: 0;
-      overflow: hidden;
-    }
-
-    .rail-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .rail-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 40px;
-      margin: 0 4px;
-      padding: 10px 12px;
-      border-left: 3px solid transparent;
-      border-radius: 4px;
-      color: #424242;
+    .main-nav a {
       text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      position: relative;
-    }
-
-    .rail-item:hover,
-    .rail-item:focus-visible {
-      background: #ebebeb;
-      color: #242424;
-      outline: none;
-      box-shadow: var(--focus-ring);
-    }
-
-    .rail-item-active {
-      background: var(--warning-bg);
-      color: var(--green-gold);
-      border-left-color: var(--green-gold);
-    }
-
-    .rail-item-active:hover,
-    .rail-item-active:focus-visible {
-      background: var(--warning-bg);
-      color: var(--green-gold);
-    }
-
-    .rail-item.collapsed {
-      justify-content: center;
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    .rail-item-icon {
-      width: 18px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    [data-tooltip] {
-      position: relative;
-    }
-
-    [data-tooltip]:hover::after,
-    [data-tooltip]:focus-visible::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      left: 62px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #111827;
-      color: #fff;
-      padding: 6px 10px;
+      color: rgba(255, 255, 255, 0.95);
+      border: 1px solid transparent;
       border-radius: 4px;
-      font-size: 12px;
+      padding: 7px 10px;
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
       white-space: nowrap;
-      z-index: 20;
-      pointer-events: none;
+    }
+
+    .main-nav a[aria-current="page"] {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: var(--focus-ring);
     }
 
     .app-main {
       flex: 1;
-      min-width: 0;
       padding: 16px 18px 20px;
       overflow: auto;
     }
@@ -730,35 +510,13 @@
         padding: 14px 16px;
       }
 
-      .nav-center {
-        min-height: 0;
-      }
-
       .nav-right {
         justify-content: flex-start;
-        flex-wrap: wrap;
       }
+
     }
 
     @media (max-width: 720px) {
-      .app-body {
-        flex-direction: column;
-      }
-
-      .rail-container,
-      .rail-container.collapsed {
-        width: 100%;
-      }
-
-      .nav-rail {
-        max-height: 220px;
-      }
-
-      [data-tooltip]:hover::after,
-      [data-tooltip]:focus-visible::after {
-        display: none;
-      }
-
       .top-bar {
         gap: 10px;
       }
@@ -793,179 +551,135 @@
         <span class="nav-separator" aria-hidden="true">|</span>
         <div class="nav-context">
           <span class="nav-context-label">Profit Margin Guardian Agent</span>
+          <span class="nav-context-subtitle">Kernel Apps</span>
         </div>
       </div>
+
+      <div class="nav-center-spacer" aria-hidden="true"></div>
+
       <div class="nav-right">
-        <div class="nav-user" aria-label="User profile">
-          <span class="nav-avatar" aria-hidden="true">JO</span>
-          <div class="nav-user-meta">
-            <span class="nav-user-name">John Owen</span>
-            <span class="nav-user-role">System Administrator</span>
-          </div>
-        </div>
+        <nav class="main-nav" aria-label="Primary navigation">
+          <a href="./Dashboard.html" aria-current="page">Dashboard</a>
+          <a href="./Rule-Configuration.html">Rule Configuration</a>
+          <a href="./PO-Approval.html">PO Validation</a>
+          <a href="./Analytics.html">Category Risk Analytics</a>
+          <a href="./Audit-Trail.html">Audit Trail</a>
+        </nav>
       </div>
     </header>
 
-    <div class="app-body">
-      <aside class="rail-container" id="railContainer">
-        <nav class="nav-rail" aria-label="Primary navigation">
-          <div class="rail-header">
-            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
-            <button
-              type="button"
-              class="collapse-button"
-              id="railToggle"
-              aria-label="Collapse navigation"
-              aria-expanded="true"
-            >
-              <span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span>
-            </button>
-          </div>
+    <main class="app-main" id="main-content" tabindex="-1">
+      <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
 
-          <div class="rail-group">
-            <div class="rail-group-title" id="railGroupTitle">
-              <span class="rail-group-icon" aria-hidden="true">&#128202;</span>
-              <span class="rail-group-text" id="railGroupText">Profit Margin Guardian</span>
+      <div class="dashboard-layout">
+        <section class="page-header" aria-label="Dashboard heading">
+          <h1 class="page-title">Profit Margin Governance Dashboard</h1>
+          <p class="page-subtitle">Live overview of rule coverage, PO margin exceptions, and monitored category performance.</p>
+        </section>
+
+        <section class="kpi-grid" aria-label="Dashboard KPI summary">
+          <article class="card kpi">
+            <div class="kpi-icon info" aria-hidden="true">R</div>
+            <div class="kpi-copy">
+              <div id="kpiActiveRules" class="kpi-value">0</div>
+              <div class="kpi-label">Active Rule Sets</div>
+              <div class="kpi-meta">Governance profiles currently enforcing thresholds</div>
             </div>
-            <div class="rail-nav">
-              <a class="rail-item rail-item-active" href="./Dashboard.html" aria-current="page">
-                <span class="rail-item-icon" aria-hidden="true">&#9635;</span>
-                <span class="rail-item-label">Dashboard</span>
+          </article>
+          <article class="card kpi">
+            <div class="kpi-icon warn" aria-hidden="true">A</div>
+            <div class="kpi-copy">
+              <div id="kpiAlerts" class="kpi-value">0</div>
+              <div class="kpi-label">Alerts in 24 Hours</div>
+              <div class="kpi-meta">Exceptions requiring review or override justification</div>
+            </div>
+          </article>
+          <article class="card kpi">
+            <div class="kpi-icon danger" aria-hidden="true">B</div>
+            <div class="kpi-copy">
+              <div id="kpiBlocked" class="kpi-value">0</div>
+              <div class="kpi-label">Blocked POs</div>
+              <div class="kpi-meta">Transactions stopped due to threshold violations</div>
+            </div>
+          </article>
+          <article class="card kpi">
+            <div class="kpi-icon success" aria-hidden="true">%</div>
+            <div class="kpi-copy">
+              <div id="kpiAvgMargin" class="kpi-value">0%</div>
+              <div class="kpi-label">Average Margin</div>
+              <div class="kpi-meta">Across active monitored procurement categories</div>
+            </div>
+          </article>
+        </section>
+
+        <section class="two-col">
+          <article class="card">
+            <div class="panel-head">
+              <h2 class="panel-title">Active Rule Overview</h2>
+              <p class="panel-note">Current governance profiles and enforcement behavior</p>
+            </div>
+            <div class="table-wrap">
+              <table aria-label="Active rules list">
+                <thead>
+                  <tr>
+                    <th>Config Set</th>
+                    <th>Scope</th>
+                    <th>Target</th>
+                    <th>Threshold</th>
+                    <th>Behavior</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="rulesTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="panel-head">
+              <h2 class="panel-title">Quick Navigation</h2>
+              <p class="panel-note">Core operating areas for administration and review</p>
+            </div>
+            <div class="quick-grid">
+              <a class="quick-link" href="./Rule-Configuration.html">
+                <h3 class="quick-title">Rule Configuration</h3>
+                <p class="quick-text">Manage rule sets, thresholds, guardrails, and policy behavior.</p>
               </a>
-              <a class="rail-item" href="./Rule-Configuration.html">
-                <span class="rail-item-icon" aria-hidden="true">&#9881;</span>
-                <span class="rail-item-label">Rule Configuration</span>
+              <a class="quick-link" href="./PO-Approval.html">
+                <h3 class="quick-title">PO Validation</h3>
+                <p class="quick-text">Review margin checks and execute approve, block, or override decisions.</p>
               </a>
-              <a class="rail-item" href="./PO-Approval.html">
-                <span class="rail-item-icon" aria-hidden="true">&#10003;</span>
-                <span class="rail-item-label">PO Validation</span>
+              <a class="quick-link" href="./Analytics.html">
+                <h3 class="quick-title">Category Risk Analytics</h3>
+                <p class="quick-text">Track erosion trends, category hotspots, and margin performance gaps.</p>
               </a>
-              <a class="rail-item" href="./Analytics.html">
-                <span class="rail-item-icon" aria-hidden="true">&#128200;</span>
-                <span class="rail-item-label">Category Risk Analytics</span>
-              </a>
-              <a class="rail-item" href="./Audit-Trail.html">
-                <span class="rail-item-icon" aria-hidden="true">&#128221;</span>
-                <span class="rail-item-label">Audit Trail</span>
+              <a class="quick-link" href="./Audit-Trail.html">
+                <h3 class="quick-title">Audit Trail</h3>
+                <p class="quick-text">Inspect decision history for traceability, escalation, and compliance checks.</p>
               </a>
             </div>
-          </div>
-        </nav>
-      </aside>
+          </article>
+        </section>
 
-      <main class="app-main" id="main-content" tabindex="-1">
-        <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
+        <section class="two-col">
+          <article class="card">
+            <div class="panel-head">
+              <h2 class="panel-title">Recent Margin Alerts</h2>
+              <p class="panel-note">Latest warnings and blocked events raised by monitored POs</p>
+            </div>
+            <div id="alertsContainer" class="alert-list"></div>
+          </article>
 
-        <div class="dashboard-layout">
-          <section class="page-header" aria-label="Dashboard heading">
-            <h1 class="page-title">Profit Margin Governance Dashboard</h1>
-            <p class="page-subtitle">Live overview of rule coverage, PO margin exceptions, and monitored category performance.</p>
-          </section>
-
-          <section class="kpi-grid" aria-label="Dashboard KPI summary">
-            <article class="card kpi">
-              <div class="kpi-icon info" aria-hidden="true">R</div>
-              <div class="kpi-copy">
-                <div id="kpiActiveRules" class="kpi-value">0</div>
-                <div class="kpi-label">Active Rule Sets</div>
-                <div class="kpi-meta">Governance profiles currently enforcing thresholds</div>
-              </div>
-            </article>
-            <article class="card kpi">
-              <div class="kpi-icon warn" aria-hidden="true">A</div>
-              <div class="kpi-copy">
-                <div id="kpiAlerts" class="kpi-value">0</div>
-                <div class="kpi-label">Alerts in 24 Hours</div>
-                <div class="kpi-meta">Exceptions requiring review or override justification</div>
-              </div>
-            </article>
-            <article class="card kpi">
-              <div class="kpi-icon danger" aria-hidden="true">B</div>
-              <div class="kpi-copy">
-                <div id="kpiBlocked" class="kpi-value">0</div>
-                <div class="kpi-label">Blocked POs</div>
-                <div class="kpi-meta">Transactions stopped due to threshold violations</div>
-              </div>
-            </article>
-            <article class="card kpi">
-              <div class="kpi-icon success" aria-hidden="true">%</div>
-              <div class="kpi-copy">
-                <div id="kpiAvgMargin" class="kpi-value">0%</div>
-                <div class="kpi-label">Average Margin</div>
-                <div class="kpi-meta">Across active monitored procurement categories</div>
-              </div>
-            </article>
-          </section>
-
-          <section class="two-col">
-            <article class="card">
-              <div class="panel-head">
-                <h2 class="panel-title">Active Rule Overview</h2>
-                <p class="panel-note">Current governance profiles and enforcement behavior</p>
-              </div>
-              <div class="table-wrap">
-                <table aria-label="Active rules list">
-                  <thead>
-                    <tr>
-                      <th>Config Set</th>
-                      <th>Scope</th>
-                      <th>Target</th>
-                      <th>Threshold</th>
-                      <th>Behavior</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="rulesTableBody"></tbody>
-                </table>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="panel-head">
-                <h2 class="panel-title">Quick Navigation</h2>
-                <p class="panel-note">Core operating areas for administration and review</p>
-              </div>
-              <div class="quick-grid">
-                <a class="quick-link" href="./Rule-Configuration.html">
-                  <h3 class="quick-title">Rule Configuration</h3>
-                  <p class="quick-text">Manage rule sets, thresholds, guardrails, and policy behavior.</p>
-                </a>
-                <a class="quick-link" href="./PO-Approval.html">
-                  <h3 class="quick-title">PO Validation</h3>
-                  <p class="quick-text">Review margin checks and execute approve, block, or override decisions.</p>
-                </a>
-                <a class="quick-link" href="./Analytics.html">
-                  <h3 class="quick-title">Category Risk Analytics</h3>
-                  <p class="quick-text">Track erosion trends, category hotspots, and margin performance gaps.</p>
-                </a>
-                <a class="quick-link" href="./Audit-Trail.html">
-                  <h3 class="quick-title">Audit Trail</h3>
-                  <p class="quick-text">Inspect decision history for traceability, escalation, and compliance checks.</p>
-                </a>
-              </div>
-            </article>
-          </section>
-
-          <section class="two-col">
-            <article class="card">
-              <div class="panel-head">
-                <h2 class="panel-title">Recent Margin Alerts</h2>
-                <p class="panel-note">Latest warnings and blocked events raised by monitored POs</p>
-              </div>
-              <div id="alertsContainer" class="alert-list"></div>
-            </article>
-
-            <article class="card">
-              <div class="panel-head">
-                <h2 class="panel-title">Analytics Summary</h2>
-                <p class="panel-note">Category margin snapshot against monitored target baselines</p>
-              </div>
-              <div id="analyticsContainer" class="analytics-wrap"></div>
-            </article>
-          </section>
-        </div>
-      </main>
-    </div>
+          <article class="card">
+            <div class="panel-head">
+              <h2 class="panel-title">Analytics Summary</h2>
+              <p class="panel-note">Category margin snapshot against monitored target baselines</p>
+            </div>
+            <div id="analyticsContainer" class="analytics-wrap"></div>
+          </article>
+        </section>
+      </div>
+    </main>
 
     <footer>
       Copyright &copy; 2026 Profit Margin Guardian Agent
@@ -980,13 +694,6 @@
     }
 
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
-    const railContainer = document.getElementById("railContainer");
-    const railToggle = document.getElementById("railToggle");
-    const railToggleIcon = document.getElementById("railToggleIcon");
-    const railHeaderLabel = document.getElementById("railHeaderLabel");
-    const railGroupTitle = document.getElementById("railGroupTitle");
-    const railGroupText = document.getElementById("railGroupText");
-    const railItems = Array.from(document.querySelectorAll(".rail-item"));
     const roleLabelMap = {
       admin: "Administrator",
       procurement_manager: "Procurement Manager",
@@ -1119,39 +826,6 @@
         container.appendChild(row);
       });
     }
-
-    function applyRailState(collapsed) {
-      railContainer.classList.toggle("collapsed", collapsed);
-      railToggle.setAttribute("aria-expanded", String(!collapsed));
-      railToggle.setAttribute("aria-label", collapsed ? "Expand navigation" : "Collapse navigation");
-      railToggleIcon.classList.toggle("rotated", collapsed);
-      railHeaderLabel.classList.toggle("hidden", collapsed);
-      railGroupTitle.classList.toggle("hidden-labels", collapsed);
-      railGroupText.classList.toggle("hidden", collapsed);
-
-      railItems.forEach((item) => {
-        const label = item.querySelector(".rail-item-label");
-        const text = label ? label.textContent : "";
-        item.classList.toggle("collapsed", collapsed);
-        if (label) {
-          label.classList.toggle("hidden", collapsed);
-        }
-        if (collapsed) {
-          item.setAttribute("data-tooltip", text);
-        } else {
-          item.removeAttribute("data-tooltip");
-        }
-      });
-    }
-
-    const railCollapsed = localStorage.getItem("pmg_sidebar_collapsed") === "true";
-    applyRailState(railCollapsed);
-
-    railToggle.addEventListener("click", () => {
-      const collapsed = !railContainer.classList.contains("collapsed");
-      applyRailState(collapsed);
-      localStorage.setItem("pmg_sidebar_collapsed", String(collapsed));
-    });
 
     setSessionStrip();
     setKPIs();

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alerts - Supplier Performance Agent</title>
+
+<style>
+:root{
+  --color-brand-primary: #193E6B;
+  --color-brand-accent: #B3A125;
+  --color-bg-page: #EEE7E0;
+  --color-sidebar: #F5F5F5;
+  --color-sidebar-border: #E0E0E0;
+  --color-text-primary: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6B7280;
+  --color-border: #E5E7EB;
+  --color-card: #FFFFFF;
+  --color-warning-bg: #FFF6E5;
+}
+
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",sans-serif;
+  background:var(--color-bg-page);
+  color:var(--color-text-primary);
+}
+
+/* ===== TOP NAVIGATION BAR ===== */
+.top-nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:64px;
+  background:var(--color-brand-primary);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  z-index:1000;
+}
+
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.logo{
+  border:1px solid rgba(255,255,255,0.3);
+  padding:4px 10px;
+  border-radius:4px;
+  color:white;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.logo .gold{
+  color:var(--color-brand-accent);
+}
+
+.nav-separator{
+  color:rgba(255,255,255,0.5);
+  font-size:1rem;
+}
+
+.nav-context-label{
+  color:rgba(255,255,255,0.95);
+  font-size:0.9rem;
+  font-weight:400;
+}
+
+.nav-user{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background 0.15s;
+  color:rgba(255,255,255,0.95);
+  font-size:14px;
+}
+
+.nav-user:hover{
+  background:rgba(255,255,255,0.1);
+}
+
+.user-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  color:var(--color-brand-primary);
+  font-size:0.75rem;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ===== LEFT SIDEBAR ===== */
+.sidebar{
+  position:fixed;
+  left:0;
+  top:64px;
+  width:270px;
+  height:calc(100vh - 64px);
+  background:var(--color-sidebar);
+  border-right:1px solid var(--color-sidebar-border);
+  padding-top:12px;
+  padding-bottom:20px;
+  overflow-y:auto;
+  z-index:100;
+}
+
+.nav-items{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  padding:0 12px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:4px;
+  text-decoration:none;
+  color:#424242;
+  font-size:14px;
+  transition:all 0.15s;
+  border-left:3px solid transparent;
+  cursor:pointer;
+}
+
+.nav-item:hover{
+  background:#EBEBEB;
+  color:#242424;
+}
+
+.nav-item.active{
+  background:var(--color-warning-bg);
+  color:var(--color-brand-accent);
+  border-left-color:var(--color-brand-accent);
+  font-weight:500;
+}
+
+.nav-item-icon{
+  width:16px;
+  height:16px;
+  flex-shrink:0;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content{
+  margin-left:270px;
+  margin-top:64px;
+  padding:32px;
+  min-height:calc(100vh - 64px);
+  background:var(--color-bg-page);
+}
+
+.page-header{
+  margin-bottom:32px;
+}
+
+.page-header h1{
+  font-size:28px;
+  font-weight:600;
+  margin-bottom:4px;
+  color:#1C2B4A;
+}
+
+.page-header p{
+  font-size:14px;
+  color:var(--color-text-muted);
+}
+
+/* ALERT STATS */
+.alert-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+  margin-bottom:32px;
+}
+
+.stat-card{
+  background:var(--color-card);
+  border:1px solid var(--color-border);
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-label{
+  font-size:14px;
+  font-weight:600;
+  color:var(--color-text-muted);
+  margin-bottom:12px;
+}
+
+.stat-value{
+  font-size:36px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.stat-value.critical{
+  color:#DC2626;
+}
+
+.stat-value.warning{
+  color:#F59E0B;
+}
+
+.stat-value.success{
+  color:#10B981;
+}
+
+.stat-description{
+  font-size:13px;
+  color:var(--color-text-muted);
+}
+
+/* SPLIT LAYOUT */
+.split-layout{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:24px;
+}
+
+/* ALERTS TABLE */
+.table-card{
+  background:var(--color-card);
+  border:1px solid var(--color-border);
+  border-radius:12px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+
+.table-header{
+  padding:24px;
+  border-bottom:1px solid var(--color-border);
+}
+
+.table-header h2{
+  font-size:18px;
+  font-weight:600;
+  color:#1C2B4A;
+}
+
+.table-wrapper{
+  overflow-x:auto;
+}
+
+.alerts-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.alerts-table thead{
+  background:#F8F9FA;
+}
+
+.alerts-table th{
+  text-align:left;
+  padding:12px 24px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--color-text-muted);
+  border-bottom:2px solid #E5E5E5;
+}
+
+.alerts-table td{
+  padding:16px 24px;
+  font-size:14px;
+  border-bottom:1px solid #F0F0F0;
+}
+
+.alerts-table tbody tr{
+  transition:background 0.15s;
+  cursor:pointer;
+}
+
+.alerts-table tbody tr:hover{
+  background:rgba(0,0,0,0.02);
+}
+
+.alerts-table tbody tr.selected{
+  background:rgba(0,0,0,0.03);
+}
+
+.supplier-info{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.supplier-name{
+  font-weight:600;
+  color:#333;
+}
+
+.supplier-id{
+  font-size:12px;
+  color:var(--color-text-muted);
+}
+
+/* SEVERITY BADGES */
+.severity-badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.severity-badge.critical{
+  background:#FEE2E2;
+  color:#991B1B;
+}
+
+.severity-badge.warning{
+  background:#FEF3C7;
+  color:#92400E;
+}
+
+/* STATUS BADGES */
+.status-badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.status-badge.open{
+  border:1px solid #DC2626;
+  color:#DC2626;
+  background:rgba(220,38,38,0.05);
+}
+
+.status-badge.under-review{
+  border:1px solid var(--color-brand-accent);
+  color:var(--color-brand-accent);
+  background:rgba(179,161,37,0.05);
+}
+
+.status-badge.resolved{
+  border:1px solid #10B981;
+  color:#10B981;
+  background:rgba(16,185,129,0.05);
+}
+
+/* ALERT DETAILS PANEL */
+.details-card{
+  background:var(--color-card);
+  border:1px solid var(--color-border);
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+
+.details-card h3{
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:16px;
+  color:#1C2B4A;
+}
+
+.detail-section{
+  margin-bottom:16px;
+}
+
+.detail-label{
+  font-size:14px;
+  font-weight:600;
+  color:var(--color-text-muted);
+  margin-bottom:4px;
+}
+
+.detail-value{
+  font-size:14px;
+  color:#333;
+}
+
+.detail-description{
+  font-size:13px;
+  line-height:1.6;
+  color:#555;
+}
+
+.action-buttons{
+  margin-top:24px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.btn{
+  width:100%;
+  padding:12px 16px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all 0.15s;
+  border:none;
+}
+
+.btn-primary{
+  background:var(--color-brand-primary);
+  color:white;
+}
+
+.btn-primary:hover{
+  opacity:0.9;
+}
+
+.btn-secondary{
+  background:white;
+  border:1px solid var(--color-border);
+  color:#333;
+}
+
+.btn-secondary:hover{
+  background:#F9FAFB;
+}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+  .split-layout{
+    grid-template-columns:1fr;
+  }
+
+  .alert-stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:768px){
+  .sidebar{
+    display:none;
+  }
+
+  .main-content{
+    margin-left:0;
+    padding:16px;
+  }
+
+  .alert-stats{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP NAVIGATION -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <div class="logo">CLaaS<span class="gold">2</span>SaaS</div>
+    <span class="nav-separator">|</span>
+    <span class="nav-context-label">Supplier Performance Agent</span>
+  </div>
+
+  <div class="nav-user">
+    <div class="user-avatar">AD</div>
+    <span>Admin</span>
+  </div>
+</nav>
+
+<!-- LEFT SIDEBAR -->
+<aside class="sidebar">
+
+  <div class="nav-items">
+    <a href="Dashboard.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="Suppliers.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Suppliers</span>
+    </a>
+
+    <a href="Performance.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+      <span>Performance</span>
+    </a>
+
+    <a href="Alerts.html" class="nav-item active">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>Alerts</span>
+    </a>
+
+    <a href="Reviews.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span>Reviews</span>
+    </a>
+
+    <a href="Settings.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m8.66-15.66l-4.24 4.24m-8.49 8.49L3.34 20.66M23 12h-6m-6 0H1m19.66 8.66l-4.24-4.24m-8.49-8.49L3.34 3.34"></path>
+      </svg>
+      <span>Settings</span>
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>Alerts & Risk Management</h1>
+    <p>Monitor and manage supplier alerts across the procurement system</p>
+  </div>
+
+  <!-- ALERT STATS -->
+  <div class="alert-stats">
+    <div class="stat-card">
+      <div class="stat-label">Critical Alerts</div>
+      <div class="stat-value critical">2</div>
+      <p class="stat-description">Require immediate attention</p>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Warnings</div>
+      <div class="stat-value warning">3</div>
+      <p class="stat-description">Under review</p>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Resolved</div>
+      <div class="stat-value success">18</div>
+      <p class="stat-description">Last 30 days</p>
+    </div>
+  </div>
+
+  <!-- SPLIT LAYOUT -->
+  <div class="split-layout">
+
+    <!-- ALERTS TABLE -->
+    <div class="table-card">
+      <div class="table-header">
+        <h2>All Alerts</h2>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="alerts-table">
+          <thead>
+            <tr>
+              <th>Supplier</th>
+              <th>Issue</th>
+              <th>Severity</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="alertsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ALERT DETAILS -->
+    <div class="details-card" id="alertDetails">
+      <h3>Alert Details</h3>
+      <div id="detailsContent"></div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+// ALERTS DATA
+const alertsData = [
+  {
+    id: 1,
+    supplier: "Metro Components Inc.",
+    supplierId: 5,
+    issueType: "Delivery Delay",
+    severity: "critical",
+    date: "2026-04-07",
+    status: "open",
+    description: "Multiple orders delayed by 5+ days. Pattern indicates capacity issues.",
+  },
+  {
+    id: 2,
+    supplier: "TechParts Industries",
+    supplierId: 3,
+    issueType: "Quality Defects",
+    severity: "warning",
+    date: "2026-04-06",
+    status: "open",
+    description: "Increased defect rate in last batch. Quality inspection recommended.",
+  },
+  {
+    id: 3,
+    supplier: "Global Manufacturing Co.",
+    supplierId: 1,
+    issueType: "Cost Variance",
+    severity: "warning",
+    date: "2026-04-05",
+    status: "under-review",
+    description: "Price increase notification received. Negotiation in progress.",
+  },
+  {
+    id: 4,
+    supplier: "Metro Components Inc.",
+    supplierId: 5,
+    issueType: "Quality Defects",
+    severity: "critical",
+    date: "2026-04-04",
+    status: "open",
+    description: "Failed quality inspection on critical component batch.",
+  },
+  {
+    id: 5,
+    supplier: "Pacific Logistics Ltd.",
+    supplierId: 2,
+    issueType: "Compliance Issue",
+    severity: "warning",
+    date: "2026-04-03",
+    status: "resolved",
+    description: "Documentation discrepancy resolved. Process improvement implemented.",
+  },
+];
+
+let selectedAlert = alertsData[0];
+
+// RENDER ALERTS TABLE
+function renderAlertsTable() {
+  const tbody = document.getElementById("alertsTableBody");
+
+  tbody.innerHTML = alertsData.map(alert => `
+    <tr class="${selectedAlert.id === alert.id ? 'selected' : ''}" onclick="selectAlert(${alert.id})">
+      <td>
+        <div class="supplier-info">
+          <div class="supplier-name">${alert.supplier}</div>
+          <div class="supplier-id">ID: SUP-${alert.supplierId}</div>
+        </div>
+      </td>
+      <td>${alert.issueType}</td>
+      <td>
+        <span class="severity-badge ${alert.severity}">
+          ${alert.severity.charAt(0).toUpperCase() + alert.severity.slice(1)}
+        </span>
+      </td>
+      <td style="color:#6B7280;">${alert.date}</td>
+      <td>
+        <span class="status-badge ${alert.status}">
+          ${alert.status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+        </span>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// RENDER ALERT DETAILS
+function renderAlertDetails() {
+  const content = document.getElementById("detailsContent");
+
+  content.innerHTML = `
+    <div class="detail-section">
+      <div class="detail-label">Supplier</div>
+      <div class="detail-value">${selectedAlert.supplier}</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Issue Type</div>
+      <div class="detail-value">${selectedAlert.issueType}</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Severity</div>
+      <span class="severity-badge ${selectedAlert.severity}">
+        ${selectedAlert.severity.charAt(0).toUpperCase() + selectedAlert.severity.slice(1)}
+      </span>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Date</div>
+      <div class="detail-value">${selectedAlert.date}</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Status</div>
+      <span class="status-badge ${selectedAlert.status}">
+        ${selectedAlert.status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+      </span>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Description</div>
+      <p class="detail-description">${selectedAlert.description}</p>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-primary">Create Remediation Plan</button>
+      <button class="btn btn-secondary">View Supplier Details</button>
+    </div>
+  `;
+}
+
+// SELECT ALERT
+function selectAlert(id) {
+  selectedAlert = alertsData.find(a => a.id === id);
+  renderAlertsTable();
+  renderAlertDetails();
+}
+
+// INIT
+renderAlertsTable();
+renderAlertDetails();
+</script>
+
+</body>
+</html>

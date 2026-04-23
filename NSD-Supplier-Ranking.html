@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Ranking - NSD Agent</title>
+    <style>
+        :root {
+            --midnight-blue: #193E6B;
+            --midnight-blue-dark: #143356;
+            --green-gold: #B3A125;
+            --green-gold-dark: #96851f;
+            --white: #FFFFFF;
+            --neutral-gray: #F5F5F5;
+            --border-gray: #E6ECF3;
+            --text-main: #1f2937;
+            --text-muted: #5b6678;
+            --surface-soft: #f8fbff;
+            --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+            --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.08);
+            --gold: #c9a227;
+            --silver: #a0aec0;
+            --bronze: #b8860b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at 12% 8%, rgba(179, 161, 37, 0.14), rgba(179, 161, 37, 0) 40%),
+                radial-gradient(circle at 92% 88%, rgba(25, 62, 107, 0.18), rgba(25, 62, 107, 0) 44%),
+                linear-gradient(170deg, #f3f7fd 0%, #ffffff 52%, #edf3fb 100%);
+        }
+
+        .top-bar {
+            background: var(--midnight-blue);
+            border-bottom: 4px solid var(--green-gold);
+            color: var(--white);
+            padding: 12px 20px;
+        }
+
+        .top-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            min-height: 42px;
+            padding: 7px 12px;
+            border: 2px solid rgba(255, 255, 255, 0.72);
+            border-radius: 10px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .brand-logo .accent {
+            color: var(--green-gold);
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: clamp(22px, 1.8vw, 30px);
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--white);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .main-nav a[aria-current="page"] {
+            border-color: rgba(255, 255, 255, 0.32);
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .main-nav a:hover,
+        .main-nav a:focus-visible {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.32);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: var(--focus-ring);
+        }
+
+        main {
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--midnight-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--midnight-blue-dark);
+        }
+
+        .btn-secondary {
+            background: var(--green-gold);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--green-gold-dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        thead {
+            background: var(--midnight-blue);
+            color: var(--white);
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-gray);
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: var(--surface-soft);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .badge-gold {
+            background: var(--gold);
+        }
+
+        .badge-silver {
+            background: var(--silver);
+        }
+
+        .badge-bronze {
+            background: var(--bronze);
+        }
+
+        .badge-rank {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: 700;
+            color: var(--white);
+            margin-right: 8px;
+        }
+
+        .rank-1 { background: var(--gold); }
+        .rank-2 { background: var(--silver); }
+        .rank-3 { background: var(--bronze); }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--midnight-blue);
+        }
+
+        .score-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insights {
+            margin-bottom: 16px;
+            padding: 16px;
+            background: var(--surface-soft);
+            border-radius: 8px;
+            border-left: 4px solid var(--green-gold);
+        }
+
+        .insights h3 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: var(--midnight-blue);
+            font-weight: 700;
+        }
+
+        .insights p {
+            margin: 6px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--midnight-blue);
+            color: var(--white);
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .main-nav { gap: 4px; }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .progress-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="top-inner">
+            <div class="brand">
+                <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+                <h1>New Supplier Discovery Agent</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="NSD-Sourcing-Request.html">Sourcing Request</a>
+                <a href="NSD-Supplier-Discovery.html">Supplier Discovery</a>
+                <a href="NSD-Supplier-Ranking.html" aria-current="page">Supplier Ranking</a>
+                <a href="NSD-Vendor-Onboarding.html">Vendor Onboarding</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Score Comparison & Evaluation Rationale</h2>
+            <p style="color: var(--text-muted); margin: 0 0 16px 0; font-size: 13px;">Scores weighted as: Cost 30% | Quality 40% | Reliability 20% | Other 10%</p>
+            <div class="button-group">
+                <button class="btn btn-secondary">Compare Suppliers</button>
+                <button class="btn btn-primary">Proceed to RFQ</button>
+                <button class="btn btn-secondary" style="background: #059669;">Send for Onboarding</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 250px;">Supplier Name</th>
+                        <th>Fit Score</th>
+                        <th>Reliability Score</th>
+                        <th>Cost Score</th>
+                        <th>Overall Rank</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge-rank rank-1">1st</span><strong>Blue Ridge Components</strong></td>
+                        <td><div class="score-cell"><span>94%</span><div class="progress-bar"><div class="progress-fill" style="width: 94%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>90%</span><div class="progress-bar"><div class="progress-fill" style="width: 90%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>82%</span><div class="progress-bar"><div class="progress-fill" style="width: 82%;"></div></div></div></td>
+                        <td><span class="badge badge-gold">Gold</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-rank rank-2">2nd</span><strong>GoldenOak Supply</strong></td>
+                        <td><div class="score-cell"><span>88%</span><div class="progress-bar"><div class="progress-fill" style="width: 88%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>85%</span><div class="progress-bar"><div class="progress-fill" style="width: 85%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>86%</span><div class="progress-bar"><div class="progress-fill" style="width: 86%;"></div></div></div></td>
+                        <td><span class="badge badge-silver">Silver</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-rank rank-3">3rd</span><strong>Harbor Sustainable</strong></td>
+                        <td><div class="score-cell"><span>81%</span><div class="progress-bar"><div class="progress-fill" style="width: 81%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>83%</span><div class="progress-bar"><div class="progress-fill" style="width: 83%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>79%</span><div class="progress-bar"><div class="progress-fill" style="width: 79%;"></div></div></div></td>
+                        <td><span class="badge badge-bronze">Bronze</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Atlas Precision</strong></td>
+                        <td><div class="score-cell"><span>72%</span><div class="progress-bar"><div class="progress-fill" style="width: 72%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>70%</span><div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div></div></td>
+                        <td><div class="score-cell"><span>68%</span><div class="progress-bar"><div class="progress-fill" style="width: 68%;"></div></div></div></td>
+                        <td>4</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Comparison Rationale</h2>
+            <div class="insights">
+                <h3>🥇 Blue Ridge Components (Ranked 1st - RECOMMENDED)</h3>
+                <p><strong>Why ranked highest:</strong> Exceptional quality score (94%) combined with strong reliability (90%) and acceptable cost (82%). Past 5 deliveries show 100% on-time rate. Premium pricing justified by reduced quality risk.</p>
+                <p><strong>Business Impact:</strong> 15% lower defect rate vs competitors. Suitable for critical components.</p>
+            </div>
+            <div class="insights">
+                <h3>🥈 GoldenOak Supply (Ranked 2nd - ALTERNATIVE)</h3>
+                <p><strong>Why ranked second:</strong> Excellent cost efficiency (86%) with reliable delivery track record (85%). Quality slightly lower but acceptable for non-critical items. Better price negotiation potential.</p>
+                <p><strong>Business Impact:</strong> Cost savings potential: 8-12%. Good for standard items.</p>
+            </div>
+            <div class="insights">
+                <h3>🥉 Harbor Sustainable (Ranked 3rd - SPECIALTY USE)</h3>
+                <p><strong>Why ranked third:</strong> Best-in-class for sustainability requirements (eco-certifications verified). Balanced scores (81% fit, 83% reliability, 79% cost). Meets ESG commitments.</p>
+                <p><strong>Business Impact:</strong> Critical for sustainability initiatives. Supports corporate ESG goals.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Copyright © 2026 New Supplier Discovery Agent
+    </footer>
+</body>
+</html>

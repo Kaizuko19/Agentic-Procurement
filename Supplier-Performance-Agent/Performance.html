@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance - Supplier Performance Agent</title>
+
+<style>
+:root{
+  --color-brand-primary: #193E6B;
+  --color-brand-accent: #B3A125;
+  --color-bg-page: #EEE7E0;
+  --color-sidebar: #F5F5F5;
+  --color-sidebar-border: #E0E0E0;
+  --color-text-primary: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6B7280;
+  --color-border: #E5E7EB;
+  --color-card: #FFFFFF;
+  --color-warning-bg: #FFF6E5;
+}
+
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",sans-serif;
+  background:var(--color-bg-page);
+  color:var(--color-text-primary);
+}
+
+/* ===== TOP NAVIGATION BAR ===== */
+.top-nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:64px;
+  background:var(--color-brand-primary);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  z-index:1000;
+}
+
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.logo{
+  border:1px solid rgba(255,255,255,0.3);
+  padding:4px 10px;
+  border-radius:4px;
+  color:white;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.logo .gold{
+  color:var(--color-brand-accent);
+}
+
+.nav-separator{
+  color:rgba(255,255,255,0.5);
+  font-size:1rem;
+}
+
+.nav-context-label{
+  color:rgba(255,255,255,0.95);
+  font-size:0.9rem;
+  font-weight:400;
+}
+
+.nav-user{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background 0.15s;
+  color:rgba(255,255,255,0.95);
+  font-size:14px;
+}
+
+.nav-user:hover{
+  background:rgba(255,255,255,0.1);
+}
+
+.user-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  color:var(--color-brand-primary);
+  font-size:0.75rem;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ===== LEFT SIDEBAR ===== */
+.sidebar{
+  position:fixed;
+  left:0;
+  top:64px;
+  width:270px;
+  height:calc(100vh - 64px);
+  background:var(--color-sidebar);
+  border-right:1px solid var(--color-sidebar-border);
+  padding-top:12px;
+  padding-bottom:20px;
+  overflow-y:auto;
+  z-index:100;
+}
+
+.nav-items{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  padding:0 12px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:4px;
+  text-decoration:none;
+  color:#424242;
+  font-size:14px;
+  transition:all 0.15s;
+  border-left:3px solid transparent;
+  cursor:pointer;
+}
+
+.nav-item:hover{
+  background:#EBEBEB;
+  color:#242424;
+}
+
+.nav-item.active{
+  background:var(--color-warning-bg);
+  color:var(--color-brand-accent);
+  border-left-color:var(--color-brand-accent);
+  font-weight:500;
+}
+
+.nav-item-icon{
+  width:16px;
+  height:16px;
+  flex-shrink:0;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content{
+  margin-left:270px;
+  margin-top:64px;
+  padding:32px;
+  min-height:calc(100vh - 64px);
+  background:var(--color-bg-page);
+}
+
+.page-header{
+  margin-bottom:32px;
+}
+
+.page-header h1{
+  font-size:28px;
+  font-weight:600;
+  margin-bottom:4px;
+  color:#1C2B4A;
+}
+
+.page-header p{
+  font-size:14px;
+  color:var(--color-text-muted);
+}
+
+/* KPI CARDS */
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+  margin-bottom:32px;
+}
+
+.kpi-card{
+  background:var(--color-card);
+  border:1px solid var(--color-border);
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+
+.kpi-label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--color-text-muted);
+  margin-bottom:8px;
+}
+
+.kpi-value{
+  font-size:32px;
+  font-weight:600;
+  margin-bottom:4px;
+  color:var(--color-text-primary);
+}
+
+.kpi-change{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:12px;
+}
+
+.kpi-change.positive{
+  color:#10B981;
+}
+
+.kpi-change.negative{
+  color:#DC2626;
+}
+
+.kpi-change.neutral{
+  color:var(--color-text-muted);
+}
+
+/* CHART GRID */
+.chart-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:24px;
+  margin-bottom:32px;
+}
+
+.chart-card{
+  background:var(--color-card);
+  border:1px solid var(--color-border);
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+  position:relative;
+}
+
+.chart-title{
+  font-size:16px;
+  font-weight:600;
+  margin-bottom:24px;
+  color:#1C2B4A;
+}
+
+.chart-wrapper{
+  position:relative;
+}
+
+canvas{
+  cursor:crosshair;
+  display:block;
+}
+
+/* TOOLTIP */
+.chart-tooltip{
+  position:absolute;
+  background:rgba(0,0,0,0.9);
+  color:white;
+  padding:8px 12px;
+  border-radius:6px;
+  font-size:12px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.2s;
+  z-index:1000;
+  white-space:nowrap;
+}
+
+.chart-tooltip.visible{
+  opacity:1;
+}
+
+/* LEGEND */
+.legend{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:24px;
+  margin-top:16px;
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--color-text-secondary);
+}
+
+.legend-dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+}
+
+/* RISK ITEMS */
+.risk-items{
+  margin-top:16px;
+}
+
+.risk-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.risk-item-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.risk-item-value{
+  font-size:14px;
+  font-weight:600;
+  color:var(--color-text-primary);
+}
+
+/* CATEGORY CARDS */
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:16px;
+  margin-top:24px;
+}
+
+.category-card{
+  padding:16px;
+  border:1px solid var(--color-border);
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+  background:white;
+}
+
+.category-card:hover{
+  background:#F9FAFB;
+  border-color:var(--color-brand-primary);
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.category-label{
+  color:var(--color-text-muted);
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.category-score{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:4px;
+  color:var(--color-text-primary);
+}
+
+.category-count{
+  color:var(--color-text-muted);
+  font-size:11px;
+}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+  .kpi-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .chart-grid{
+    grid-template-columns:1fr;
+  }
+
+  .category-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:768px){
+  .sidebar{
+    display:none;
+  }
+
+  .main-content{
+    margin-left:0;
+    padding:16px;
+  }
+
+  .kpi-grid{
+    grid-template-columns:1fr;
+  }
+
+  .category-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP NAVIGATION -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <div class="logo">CLaaS<span class="gold">2</span>SaaS</div>
+    <span class="nav-separator">|</span>
+    <span class="nav-context-label">Supplier Performance Agent</span>
+  </div>
+
+  <div class="nav-user">
+    <div class="user-avatar">AD</div>
+    <span>Admin</span>
+  </div>
+</nav>
+
+<!-- LEFT SIDEBAR -->
+<aside class="sidebar">
+  <div class="nav-items">
+    <a href="Dashboard.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="Suppliers.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Suppliers</span>
+    </a>
+
+    <a href="Performance.html" class="nav-item active">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+      <span>Performance</span>
+    </a>
+
+    <a href="Alerts.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>Alerts</span>
+    </a>
+
+    <a href="Reviews.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span>Reviews</span>
+    </a>
+
+    <a href="Settings.html" class="nav-item">
+      <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m8.66-15.66l-4.24 4.24m-8.49 8.49L3.34 20.66M23 12h-6m-6 0H1m19.66 8.66l-4.24-4.24m-8.49-8.49L3.34 3.34"></path>
+      </svg>
+      <span>Settings</span>
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>Performance Analytics</h1>
+    <p>Advanced analytics and insights across all supplier performance metrics</p>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="7"></circle>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+        </svg>
+        Top Performers
+      </div>
+      <div class="kpi-value">12</div>
+      <div class="kpi-change positive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+          <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+        +3 from last month
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        Underperformers
+      </div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-change negative">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+          <polyline points="17 18 23 18 23 12"></polyline>
+        </svg>
+        Same as last month
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Score Change</div>
+      <div class="kpi-value">+1.4%</div>
+      <div class="kpi-change positive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+          <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+        Positive trend
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Total Suppliers</div>
+      <div class="kpi-value">48</div>
+      <div class="kpi-change neutral">Across 6 categories</div>
+    </div>
+  </div>
+
+  <!-- CHART GRID -->
+  <div class="chart-grid">
+
+    <!-- LINE CHART -->
+    <div class="chart-card">
+      <h2 class="chart-title">KPI Trends Over Time</h2>
+      <div class="chart-wrapper">
+        <canvas id="lineChart"></canvas>
+        <div class="chart-tooltip" id="lineTooltip"></div>
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#10B981;"></div>
+          <span>On-Time Delivery</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#193E6B;"></div>
+          <span>Quality Score</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#F59E0B;"></div>
+          <span>Cost Variance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIE CHART -->
+    <div class="chart-card">
+      <h2 class="chart-title">Risk Distribution</h2>
+      <div class="chart-wrapper">
+        <canvas id="pieChart"></canvas>
+        <div class="chart-tooltip" id="pieTooltip"></div>
+      </div>
+      <div class="risk-items">
+        <div class="risk-item">
+          <div class="risk-item-left">
+            <div class="legend-dot" style="background:#10B981;"></div>
+            <span style="font-size:13px;color:#374151;">Low Risk</span>
+          </div>
+          <span class="risk-item-value">38</span>
+        </div>
+        <div class="risk-item">
+          <div class="risk-item-left">
+            <div class="legend-dot" style="background:#F59E0B;"></div>
+            <span style="font-size:13px;color:#374151;">Medium Risk</span>
+          </div>
+          <span class="risk-item-value">8</span>
+        </div>
+        <div class="risk-item">
+          <div class="risk-item-left">
+            <div class="legend-dot" style="background:#DC2626;"></div>
+            <span style="font-size:13px;color:#374151;">High Risk</span>
+          </div>
+          <span class="risk-item-value">2</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="chart-card">
+    <h2 class="chart-title">Performance by Category</h2>
+    <div class="chart-wrapper">
+      <canvas id="barChart"></canvas>
+      <div class="chart-tooltip" id="barTooltip"></div>
+    </div>
+
+    <div class="category-grid">
+      <div class="category-card" onclick="alert('Electronics: 91.5 score with 12 suppliers')">
+        <div class="category-label">Electronics</div>
+        <div class="category-score">91.5</div>
+        <div class="category-count">12 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Manufacturing: 88.2 score with 15 suppliers')">
+        <div class="category-label">Manufacturing</div>
+        <div class="category-score">88.2</div>
+        <div class="category-count">15 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Transportation: 93.1 score with 8 suppliers')">
+        <div class="category-label">Transportation</div>
+        <div class="category-score">93.1</div>
+        <div class="category-count">8 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Logistics: 89.7 score with 10 suppliers')">
+        <div class="category-label">Logistics</div>
+        <div class="category-score">89.7</div>
+        <div class="category-count">10 suppliers</div>
+      </div>
+      <div class="category-card" onclick="alert('Raw Materials: 90.4 score with 9 suppliers')">
+        <div class="category-label">Raw Materials</div>
+        <div class="category-score">90.4</div>
+        <div class="category-count">9 suppliers</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// DATA
+const monthlyTrend = [
+  { month: "Oct", delivery: 93.2, quality: 88.1, cost: 3.8 },
+  { month: "Nov", delivery: 93.8, quality: 89.2, cost: 3.5 },
+  { month: "Dec", delivery: 94.1, quality: 89.8, cost: 3.3 },
+  { month: "Jan", delivery: 93.5, quality: 88.9, cost: 3.6 },
+  { month: "Feb", delivery: 94.5, quality: 90.1, cost: 3.2 },
+  { month: "Mar", delivery: 94.2, quality: 87.5, cost: 3.2 },
+];
+
+const categoryPerformance = [
+  { category: "Electronics", score: 91.5 },
+  { category: "Manufacturing", score: 88.2 },
+  { category: "Transportation", score: 93.1 },
+  { category: "Logistics", score: 89.7 },
+  { category: "Raw Materials", score: 90.4 },
+];
+
+const riskDistribution = [
+  { name: "Low Risk", value: 38, color: "#10B981" },
+  { name: "Medium Risk", value: 8, color: "#F59E0B" },
+  { name: "High Risk", value: 2, color: "#DC2626" },
+];
+
+// LINE CHART
+let lineChartPoints = [];
+
+function drawLineChart() {
+  const canvas = document.getElementById("lineChart");
+  const ctx = canvas.getContext("2d");
+
+  const dpr = window.devicePixelRatio || 1;
+  const displayWidth = canvas.parentElement.offsetWidth;
+  const displayHeight = 300;
+
+  canvas.width = displayWidth * dpr;
+  canvas.height = displayHeight * dpr;
+  canvas.style.width = displayWidth + 'px';
+  canvas.style.height = displayHeight + 'px';
+  ctx.scale(dpr, dpr);
+
+  const width = displayWidth;
+  const height = displayHeight;
+  const padding = 50;
+  const chartWidth = width - padding * 2;
+  const chartHeight = height - padding * 2;
+
+  ctx.clearRect(0, 0, width, height);
+  lineChartPoints = [];
+
+  // Grid
+  ctx.strokeStyle = "#E5E7EB";
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (chartHeight / 5) * i;
+    ctx.beginPath();
+    ctx.setLineDash([5, 5]);
+    ctx.moveTo(padding, y);
+    ctx.lineTo(width - padding, y);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Y-axis labels
+  ctx.fillStyle = "#6B7280";
+  ctx.font = "12px 'Segoe UI'";
+  ctx.textAlign = "right";
+  for (let i = 0; i <= 5; i++) {
+    const value = 100 - (i * 20);
+    const y = padding + (chartHeight / 5) * i;
+    ctx.fillText(value, padding - 10, y + 4);
+  }
+
+  // X-axis labels
+  ctx.textAlign = "center";
+  monthlyTrend.forEach((d, i) => {
+    const x = padding + (chartWidth / (monthlyTrend.length - 1)) * i;
+    ctx.fillText(d.month, x, height - padding + 20);
+  });
+
+  // Draw lines
+  const drawLine = (dataKey, color, label) => {
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    monthlyTrend.forEach((d, i) => {
+      const x = padding + (chartWidth / (monthlyTrend.length - 1)) * i;
+      let value = d[dataKey];
+      let yPercent;
+      
+      if (dataKey === "cost") {
+        yPercent = (10 - value) / 10;
+      } else {
+        yPercent = (value - 80) / 20;
+      }
+      
+      const y = padding + chartHeight - (yPercent * chartHeight);
+
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+
+      lineChartPoints.push({ x, y, month: d.month, dataKey: label, value, color });
+    });
+
+    ctx.stroke();
+
+    // Dots
+    monthlyTrend.forEach((d, i) => {
+      const x = padding + (chartWidth / (monthlyTrend.length - 1)) * i;
+      let value = d[dataKey];
+      let yPercent;
+      
+      if (dataKey === "cost") {
+        yPercent = (10 - value) / 10;
+      } else {
+        yPercent = (value - 80) / 20;
+      }
+      
+      const y = padding + chartHeight - (yPercent * chartHeight);
+
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+  };
+
+  drawLine("delivery", "#10B981", "On-Time Delivery");
+  drawLine("quality", "#193E6B", "Quality Score");
+  drawLine("cost", "#F59E0B", "Cost Variance");
+}
+
+// PIE CHART
+let pieChartSlices = [];
+
+function drawPieChart() {
+  const canvas = document.getElementById("pieChart");
+  const ctx = canvas.getContext("2d");
+
+  const dpr = window.devicePixelRatio || 1;
+  const displayWidth = canvas.parentElement.offsetWidth;
+  const displayHeight = 220;
+
+  canvas.width = displayWidth * dpr;
+  canvas.height = displayHeight * dpr;
+  canvas.style.width = displayWidth + 'px';
+  canvas.style.height = displayHeight + 'px';
+  ctx.scale(dpr, dpr);
+
+  const width = displayWidth;
+  const height = displayHeight;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = 80;
+
+  const total = riskDistribution.reduce((sum, item) => sum + item.value, 0);
+  let currentAngle = -Math.PI / 2;
+
+  ctx.clearRect(0, 0, width, height);
+  pieChartSlices = [];
+
+  riskDistribution.forEach((item) => {
+    const sliceAngle = (item.value / total) * Math.PI * 2;
+
+    ctx.fillStyle = item.color;
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+    ctx.closePath();
+    ctx.fill();
+
+    pieChartSlices.push({
+      startAngle: currentAngle,
+      endAngle: currentAngle + sliceAngle,
+      centerX,
+      centerY,
+      radius,
+      item
+    });
+
+    const labelAngle = currentAngle + sliceAngle / 2;
+    const labelX = centerX + Math.cos(labelAngle) * (radius + 30);
+    const labelY = centerY + Math.sin(labelAngle) * (radius + 30);
+    
+    ctx.fillStyle = "#333";
+    ctx.font = "11px 'Segoe UI'";
+    ctx.textAlign = "center";
+    const percent = ((item.value / total) * 100).toFixed(0);
+    ctx.fillText(`${item.name}: ${percent}%`, labelX, labelY);
+
+    currentAngle += sliceAngle;
+  });
+}
+
+// BAR CHART
+let barChartBars = [];
+
+function drawBarChart() {
+  const canvas = document.getElementById("barChart");
+  const ctx = canvas.getContext("2d");
+
+  const dpr = window.devicePixelRatio || 1;
+  const displayWidth = canvas.parentElement.offsetWidth;
+  const displayHeight = 300;
+
+  canvas.width = displayWidth * dpr;
+  canvas.height = displayHeight * dpr;
+  canvas.style.width = displayWidth + 'px';
+  canvas.style.height = displayHeight + 'px';
+  ctx.scale(dpr, dpr);
+
+  const width = displayWidth;
+  const height = displayHeight;
+  const padding = 50;
+  const chartWidth = width - padding * 2;
+  const chartHeight = height - padding * 2;
+
+  ctx.clearRect(0, 0, width, height);
+  barChartBars = [];
+
+  // Grid
+  ctx.strokeStyle = "#E5E7EB";
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (chartHeight / 5) * i;
+    ctx.beginPath();
+    ctx.setLineDash([5, 5]);
+    ctx.moveTo(padding, y);
+    ctx.lineTo(width - padding, y);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Y-axis labels
+  ctx.fillStyle = "#6B7280";
+  ctx.font = "12px 'Segoe UI'";
+  ctx.textAlign = "right";
+  for (let i = 0; i <= 5; i++) {
+    const value = 100 - (i * 20);
+    const y = padding + (chartHeight / 5) * i;
+    ctx.fillText(value, padding - 10, y + 4);
+  }
+
+  // Bars
+  const barWidth = chartWidth / categoryPerformance.length * 0.6;
+  const barSpacing = chartWidth / categoryPerformance.length;
+
+  categoryPerformance.forEach((d, i) => {
+    const x = padding + barSpacing * i + (barSpacing - barWidth) / 2;
+    const yPercent = (d.score - 80) / 20;
+    const barHeight = yPercent * chartHeight;
+    const y = padding + chartHeight - barHeight;
+
+    ctx.fillStyle = "#193E6B";
+    ctx.beginPath();
+    ctx.roundRect(x, y, barWidth, barHeight, [8, 8, 0, 0]);
+    ctx.fill();
+
+    barChartBars.push({ x, y, width: barWidth, height: barHeight, category: d.category, score: d.score });
+
+    ctx.fillStyle = "#6B7280";
+    ctx.textAlign = "center";
+    ctx.font = "12px 'Segoe UI'";
+    ctx.fillText(d.category, x + barWidth / 2, height - padding + 20);
+  });
+}
+
+// TOOLTIP HANDLING
+function showTooltip(tooltip, text, x, y) {
+  tooltip.textContent = text;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+  tooltip.classList.add('visible');
+}
+
+function hideTooltip(tooltip) {
+  tooltip.classList.remove('visible');
+}
+
+// LINE CHART INTERACTION
+const lineCanvas = document.getElementById("lineChart");
+const lineTooltip = document.getElementById("lineTooltip");
+
+lineCanvas.addEventListener('mousemove', (e) => {
+  const rect = lineCanvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  let found = false;
+  for (const point of lineChartPoints) {
+    const distance = Math.sqrt(Math.pow(mouseX - point.x, 2) + Math.pow(mouseY - point.y, 2));
+    if (distance < 10) {
+      showTooltip(lineTooltip, `${point.month}: ${point.dataKey} = ${point.value}%`, e.clientX + 10, e.clientY - 30);
+      found = true;
+      break;
+    }
+  }
+  if (!found) hideTooltip(lineTooltip);
+});
+
+lineCanvas.addEventListener('mouseleave', () => hideTooltip(lineTooltip));
+
+// PIE CHART INTERACTION
+const pieCanvas = document.getElementById("pieChart");
+const pieTooltip = document.getElementById("pieTooltip");
+
+pieCanvas.addEventListener('mousemove', (e) => {
+  const rect = pieCanvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  let found = false;
+  for (const slice of pieChartSlices) {
+    const dx = mouseX - slice.centerX;
+    const dy = mouseY - slice.centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    if (distance <= slice.radius) {
+      let angle = Math.atan2(dy, dx);
+      if (angle < -Math.PI / 2) angle += 2 * Math.PI;
+      
+      if (angle >= slice.startAngle && angle <= slice.endAngle) {
+        showTooltip(pieTooltip, `${slice.item.name}: ${slice.item.value} suppliers`, e.clientX + 10, e.clientY - 30);
+        found = true;
+        break;
+      }
+    }
+  }
+  if (!found) hideTooltip(pieTooltip);
+});
+
+pieCanvas.addEventListener('mouseleave', () => hideTooltip(pieTooltip));
+
+// BAR CHART INTERACTION
+const barCanvas = document.getElementById("barChart");
+const barTooltip = document.getElementById("barTooltip");
+
+barCanvas.addEventListener('mousemove', (e) => {
+  const rect = barCanvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  let found = false;
+  for (const bar of barChartBars) {
+    if (mouseX >= bar.x && mouseX <= bar.x + bar.width && 
+        mouseY >= bar.y && mouseY <= bar.y + bar.height) {
+      showTooltip(barTooltip, `${bar.category}: ${bar.score}`, e.clientX + 10, e.clientY - 30);
+      found = true;
+      break;
+    }
+  }
+  if (!found) hideTooltip(barTooltip);
+});
+
+barCanvas.addEventListener('mouseleave', () => hideTooltip(barTooltip));
+
+// INIT
+drawLineChart();
+drawPieChart();
+drawBarChart();
+
+// Redraw on resize
+window.addEventListener('resize', () => {
+  drawLineChart();
+  drawPieChart();
+  drawBarChart();
+});
+</script>
+
+</body>
+</html>

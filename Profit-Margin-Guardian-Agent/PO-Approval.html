@@ -794,6 +794,10 @@
           </div>
 
           <div class="rail-group">
+            <div class="rail-group-title" id="railGroupTitle">
+              <span class="rail-group-icon" aria-hidden="true">&#128202;</span>
+              <span class="rail-group-text" id="railGroupText">Profit Margin Guardian</span>
+            </div>
             <div class="rail-nav">
               <a class="rail-item" href="./Dashboard.html">
                 <span class="rail-item-icon" aria-hidden="true">&#9635;</span>
@@ -920,7 +924,7 @@
       window.location.replace("./Login.html");
     }
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
-    const roleLabels = { admin: "System Administrator", procurement_manager: "Procurement Manager", category_manager: "Category Manager" };
+    const roleLabels = { admin: "Administrator", procurement_manager: "Procurement Manager", category_manager: "Category Manager" };
 
     const navAvatar = document.getElementById("navAvatar");
     const navUserName = document.getElementById("navUserName");
@@ -939,24 +943,8 @@
       return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "US";
     }
 
-    function resolveTopNavName() {
-      const fallbackNames = {
-        admin: "John Owen",
-        procurement_manager: "Megan Cruz",
-        category_manager: "Carla Reyes"
-      };
-      const rawName = (session.userName || "").trim();
-      const roleText = (roleLabels[session.role] || session.roleLabel || "User").trim();
-      const genericNames = ["System Administrator", "Procurement Manager", "Category Manager"];
-      if (!rawName || rawName === roleText || genericNames.includes(rawName)) {
-        return fallbackNames[session.role] || rawName || "User";
-      }
-      return rawName;
-    }
-
-    const topNavName = resolveTopNavName();
-    navAvatar.textContent = getInitials(topNavName);
-    navUserName.textContent = topNavName;
+    navAvatar.textContent = getInitials(session.userName || "User");
+    navUserName.textContent = session.userName || "User";
     navUserRole.textContent = roleLabels[session.role] || session.roleLabel || "User";
 
     const po = {

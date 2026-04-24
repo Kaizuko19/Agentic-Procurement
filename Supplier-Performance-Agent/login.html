@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Supplier Performance Agent</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",sans-serif;background:linear-gradient(135deg,#193E6B 0%,#2C5282 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-container{max-width:900px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.login-left{background:linear-gradient(135deg,#193E6B 0%,#2C5282 100%);padding:48px;color:#fff;display:flex;flex-direction:column;justify-content:center}
+.logo{font-size:32px;font-weight:700;margin-bottom:16px}
+.logo .gold{color:#B3A125}
+.tagline{font-size:18px;margin-bottom:32px;opacity:0.9}
+.features{display:flex;flex-direction:column;gap:16px}
+.feature{display:flex;align-items:center;gap:12px}
+.feature-icon{width:24px;height:24px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feature-text{font-size:14px;opacity:0.9}
+.login-right{padding:48px}
+.login-header{margin-bottom:32px}
+.login-header h1{font-size:28px;font-weight:600;color:#1C2B4A;margin-bottom:8px}
+.login-header p{font-size:14px;color:#6B7280}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:14px;font-weight:500;color:#374151;margin-bottom:8px}
+.form-input,.form-select{width:100%;padding:12px 16px;border:2px solid #E5E7EB;border-radius:8px;font-size:14px;color:#111827;background:#fff;transition:all .2s}
+.form-input:focus,.form-select:focus{outline:none;border-color:#193E6B;box-shadow:0 0 0 3px rgba(25,62,107,0.1)}
+.password-wrapper{position:relative}
+.toggle-password{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#6B7280;background:none;border:none;padding:4px}
+.toggle-password:hover{color:#193E6B}
+.remember-forgot{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;font-size:14px}
+.remember-label{display:flex;align-items:center;gap:8px;color:#374151;cursor:pointer}
+.remember-label input{cursor:pointer}
+.forgot-link{color:#193E6B;text-decoration:none;font-weight:500}
+.forgot-link:hover{text-decoration:underline}
+.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,#193E6B 0%,#2C5282 100%);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(25,62,107,0.3)}
+.divider{margin:24px 0;text-align:center;position:relative}
+.divider::before{content:"";position:absolute;left:0;top:50%;width:100%;height:1px;background:#E5E7EB}
+.divider-text{position:relative;background:#fff;padding:0 16px;color:#6B7280;font-size:14px}
+.test-accounts{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:16px;margin-top:24px}
+.test-accounts-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.test-account{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.test-account:hover{border-color:#193E6B;background:#F0F7FF}
+.test-account:last-child{margin-bottom:0}
+.account-role{font-size:13px;font-weight:600;color:#193E6B}
+.account-creds{font-size:12px;color:#6B7280}
+.btn-use{font-size:12px;padding:4px 12px;background:#193E6B;color:#fff;border:none;border-radius:4px;cursor:pointer}
+.btn-use:hover{background:#2C5282}
+@media(max-width:768px){
+.login-container{grid-template-columns:1fr}
+.login-left{padding:32px;text-align:center}
+.features{align-items:center}
+.login-right{padding:32px}
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-left">
+    <div class="logo">CLaaS<span class="gold">2</span>SaaS</div>
+    <div class="tagline">Supplier Performance Agent</div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="feature-text">Real-time performance monitoring</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="feature-text">Automated supplier scoring</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="feature-text">Risk alerts and notifications</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="feature-text">Intelligent decision support</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-header">
+      <h1>Welcome Back</h1>
+      <p>Sign in to access your dashboard</p>
+    </div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">User Role</label>
+        <select class="form-select" id="userRole">
+          <option value="">Select your role</option>
+          <option value="admin">Admin</option>
+          <option value="sales">Sales Agent</option>
+          <option value="performance">Performance Agent</option>
+          <option value="purchaser">Purchaser</option>
+          <option value="manager">Manager</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" id="username" placeholder="Enter your username" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="password-wrapper">
+          <input type="password" class="form-input" id="password" placeholder="Enter your password" required>
+          <button type="button" class="toggle-password" onclick="togglePassword()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="remember-forgot">
+        <label class="remember-label">
+          <input type="checkbox" id="remember">
+          <span>Remember me</span>
+        </label>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn-login">Sign In</button>
+    </form>
+
+    <div class="divider">
+      <span class="divider-text">Demo Accounts</span>
+    </div>
+
+    <div class="test-accounts">
+      <div class="test-accounts-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+        </svg>
+        Quick Access Test Accounts
+      </div>
+
+      <div class="test-account" onclick="useTestAccount('admin', 'admin123')">
+        <div>
+          <div class="account-role">Admin User</div>
+          <div class="account-creds">admin / admin123</div>
+        </div>
+        <button class="btn-use">Use</button>
+      </div>
+
+      <div class="test-account" onclick="useTestAccount('salesagent', 'sales123')">
+        <div>
+          <div class="account-role">Sales Agent</div>
+          <div class="account-creds">salesagent / sales123</div>
+        </div>
+        <button class="btn-use">Use</button>
+      </div>
+
+      <div class="test-account" onclick="useTestAccount('performanceagent', 'perf123')">
+        <div>
+          <div class="account-role">Performance Agent</div>
+          <div class="account-creds">performanceagent / perf123</div>
+        </div>
+        <button class="btn-use">Use</button>
+      </div>
+
+      <div class="test-account" onclick="useTestAccount('purchaser', 'purchase123')">
+        <div>
+          <div class="account-role">Purchaser</div>
+          <div class="account-creds">purchaser / purchase123</div>
+        </div>
+        <button class="btn-use">Use</button>
+      </div>
+
+      <div class="test-account" onclick="useTestAccount('manager', 'manager123')">
+        <div>
+          <div class="account-role">Manager</div>
+          <div class="account-creds">manager / manager123</div>
+        </div>
+        <button class="btn-use">Use</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassword(){
+const pw=document.getElementById('password');
+pw.type=pw.type==='password'?'text':'password';
+}
+
+function useTestAccount(user,pass){
+document.getElementById('username').value=user;
+document.getElementById('password').value=pass;
+const roleMap={
+'admin':'admin',
+'salesagent':'sales',
+'performanceagent':'performance',
+'purchaser':'purchaser',
+'manager':'manager'
+};
+document.getElementById('userRole').value=roleMap[user]||'';
+}
+
+function handleLogin(e){
+e.preventDefault();
+const role=document.getElementById('userRole').value;
+const user=document.getElementById('username').value;
+const pass=document.getElementById('password').value;
+
+const validAccounts={
+'admin':'admin123',
+'salesagent':'sales123',
+'performanceagent':'perf123',
+'purchaser':'purchase123',
+'manager':'manager123'
+};
+
+if(validAccounts[user]===pass){
+localStorage.setItem('userRole',role||'admin');
+localStorage.setItem('username',user);
+alert(`Login successful!\n\nWelcome ${user}!\nRole: ${role||'Not specified'}\n\nRedirecting to dashboard...`);
+window.location.href='Dashboard.html';
+}else{
+alert('Invalid credentials!\n\nPlease use one of the test accounts or check your username/password.');
+}
+}
+</script>
+
+</body>
+</html>

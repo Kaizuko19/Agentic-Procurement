@@ -6,18 +6,25 @@
   <title>Profit Margin Guardian Agent | Rule Configuration</title>
   <style>
     :root {
-      --midnight-blue: #193E6B;
+      --midnight-blue: #193e6b;
       --midnight-blue-dark: #143356;
-      --green-gold: #B3A125;
-      --green-gold-dark: #9A8A20;
-      --white: #FFFFFF;
-      --neutral-gray: #F5F5F5;
-      --border-gray: #D8DEE8;
-      --text-main: #1F2937;
+      --green-gold: #b3a125;
+      --green-gold-dark: #9a8a20;
+      --white: #ffffff;
+      --page-bg: #eee7e0;
+      --surface: #ffffff;
+      --surface-muted: #f5f5f5;
+      --surface-soft: #f8fafd;
+      --neutral-gray: #f5f5f5;
+      --border-gray: #d8dee8;
+      --border-soft: #eef2f6;
+      --text-main: #1f2937;
+      --text-heading: #1c2b4a;
+      --text-secondary: #374151;
       --text-muted: #526075;
-      --surface-soft: #F8FAFD;
-      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
-      --shadow-soft: 0 4px 14px rgba(16, 24, 40, 0.06);
+      --warning-bg: #fff6e5;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.28);
+      --shadow-soft: 0 2px 10px rgba(15, 23, 42, 0.06);
       --row-hover: rgba(179, 161, 37, 0.14);
     }
 
@@ -25,123 +32,347 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      font-family: "Source Sans 3", "Segoe UI", sans-serif;
-      font-size: 15px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.5;
       color: var(--text-main);
-      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+      background: var(--page-bg);
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--page-bg);
+      overflow: hidden;
     }
 
     .top-bar {
-      background: var(--midnight-blue);
-      border-bottom: 4px solid var(--green-gold);
-      color: var(--white);
-      padding: 12px 20px;
-    }
-
-    .top-inner {
-      max-width: 1300px;
-      margin: 0 auto;
-      display: flex;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
+      gap: 16px;
+      min-height: 64px;
+      padding: 0 20px;
+      background: var(--midnight-blue);
+      color: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .brand {
+    .nav-left {
       display: flex;
       align-items: center;
       gap: 14px;
+      min-width: 0;
     }
 
     .brand-logo {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 6px 12px;
-      border: 2px solid rgba(255, 255, 255, 0.75);
-      border-radius: 10px;
-      color: var(--white);
-      font-family: "Segoe UI", sans-serif;
+      min-height: 32px;
       font-weight: 700;
-      font-size: 16px;
-      line-height: 1;
-      letter-spacing: 0.35px;
+      font-size: 14px;
+      letter-spacing: 0.2px;
       white-space: nowrap;
     }
 
     .brand-logo-accent {
-      color: var(--green-gold) !important;
+      color: var(--green-gold);
       font-weight: 800;
     }
 
-    .brand-title {
-      margin: 0;
-      color: var(--white);
-      font-family: "Segoe UI", sans-serif;
-      font-weight: 700;
-      font-size: clamp(24px, 1.9vw, 34px);
-      line-height: 1.1;
+    .nav-separator {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 16px;
+      user-select: none;
     }
 
-    .main-nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .nav-context {
+      min-width: 0;
     }
 
-    .main-nav a {
-      text-decoration: none;
-      color: rgba(255, 255, 255, 0.96);
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-family: "Segoe UI", sans-serif;
+    .nav-context-label {
+      display: block;
+      font-size: 14px;
       font-weight: 600;
-      font-size: 15px;
+      white-space: nowrap;
     }
 
-    .main-nav a:hover,
-    .main-nav a:focus-visible {
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px 6px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: rgba(255, 255, 255, 0.95);
+      flex-shrink: 0;
+    }
+
+    .nav-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--midnight-blue);
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-user-meta {
+      display: grid;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .nav-user-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .nav-user-role {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .rail-container {
+      width: 270px;
+      flex-shrink: 0;
+      border-right: 1px solid #ddd8d1;
+      background: var(--surface-muted);
+      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .rail-container.collapsed {
+      width: 64px;
+    }
+
+    .nav-rail {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--surface-muted);
+      padding: 12px 0 18px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .rail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 8px;
+      min-height: 44px;
+    }
+
+    .rail-header-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #242424;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .rail-header-label.hidden {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+      width: 0;
+      overflow: hidden;
+    }
+
+    .collapse-button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #424242;
+      flex-shrink: 0;
+    }
+
+    .collapse-button:hover,
+    .collapse-button:focus-visible {
+      background: #ebebeb;
       outline: none;
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.12);
       box-shadow: var(--focus-ring);
     }
 
-    .main-nav a[aria-current="page"] {
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.16);
+    .collapse-icon {
+      display: inline-block;
+      transition: transform 0.28s ease;
+    }
+
+    .collapse-icon.rotated {
+      transform: rotate(180deg);
+    }
+
+    .rail-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 8px;
+    }
+
+    .rail-group-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 8px 10px;
+      color: #242424;
+      font-size: 16px;
+      font-weight: 600;
+      min-height: 40px;
+    }
+
+    .rail-group-title.hidden-labels {
+      justify-content: center;
+    }
+
+    .rail-group-icon {
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .rail-group-text.hidden,
+    .rail-item-label.hidden {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+      width: 0;
+      overflow: hidden;
+    }
+
+    .rail-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      margin: 0 4px;
+      padding: 10px 12px;
+      border-left: 3px solid transparent;
+      border-radius: 4px;
+      color: #424242;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .rail-item:hover,
+    .rail-item:focus-visible {
+      background: #ebebeb;
+      color: #242424;
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .rail-item-active {
+      background: var(--warning-bg);
+      color: var(--green-gold);
+      border-left-color: var(--green-gold);
+    }
+
+    .rail-item-active:hover,
+    .rail-item-active:focus-visible {
+      background: var(--warning-bg);
+      color: var(--green-gold);
+    }
+
+    .rail-item.collapsed {
+      justify-content: center;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .rail-item-icon {
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 62px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #111827;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .app-main {
+      flex: 1;
+      min-width: 0;
+      padding: 16px 18px 20px;
+      overflow: auto;
     }
 
     .session-bar {
-      width: min(1300px, calc(100% - 40px));
-      margin: 16px auto 0;
-      border: 1px solid #d7e2f1;
-      border-left: 6px solid var(--green-gold);
-      border-radius: 10px;
-      background: #f5f9ff;
-      color: #204568;
-      padding: 11px 14px;
-      font-size: 14px;
+      margin: 0 0 14px;
+      border: 1px solid #ddd8d1;
+      border-left: 4px solid var(--green-gold);
+      border-radius: 8px;
+      background: #f8f5ef;
+      color: var(--text-secondary);
+      padding: 10px 14px;
+      font-size: 13px;
     }
 
     .session-bar strong {
-      font-family: "Segoe UI", sans-serif;
-      font-weight: 700;
+      color: var(--text-heading);
+      font-weight: 600;
     }
 
     .access-note {
-      width: min(1300px, calc(100% - 40px));
-      margin: 10px auto 0;
+      margin: 0 0 14px;
       border: 1px solid #fecaca;
-      border-left: 6px solid #b91c1c;
-      border-radius: 10px;
+      border-left: 4px solid #b91c1c;
+      border-radius: 8px;
       background: #fff5f5;
       color: #7f1d1d;
       padding: 10px 12px;
@@ -150,10 +381,8 @@
     }
 
     main {
-      width: min(1300px, 100%);
-      margin: 16px auto 22px;
-      padding: 0 20px 20px;
-      flex: 1;
+      margin: 0;
+      padding: 0;
       display: grid;
       grid-template-columns: minmax(400px, 500px) minmax(0, 1fr);
       gap: 18px;
@@ -161,7 +390,7 @@
     }
 
     .panel {
-      background: var(--white);
+      background: var(--surface);
       border: 1px solid var(--border-gray);
       border-radius: 12px;
       box-shadow: var(--shadow-soft);
@@ -170,17 +399,16 @@
 
     .panel-head {
       background: var(--surface-soft);
-      border-bottom: 1px solid var(--border-gray);
-      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      padding: 14px 16px 12px;
     }
 
     .panel-title {
       margin: 0;
-      color: var(--midnight-blue);
-      font-family: "Segoe UI", sans-serif;
+      color: var(--text-heading);
       font-weight: 700;
-      font-size: 20px;
-      line-height: 1.25;
+      font-size: 15px;
+      line-height: 1.3;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -189,7 +417,7 @@
     .panel-subtitle {
       margin: 6px 0 0;
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .icon-24 {
@@ -225,10 +453,9 @@
     }
 
     label {
-      font-family: "Segoe UI", sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--midnight-blue);
+      color: var(--text-heading);
     }
 
     input,
@@ -238,9 +465,8 @@
       padding: 8px 10px;
       border: 1px solid #c5cedd;
       border-radius: 9px;
-      background: var(--white);
+      background: var(--surface);
       color: var(--text-main);
-      font-family: "Source Sans 3", "Segoe UI", sans-serif;
       font-size: 14px;
     }
 
@@ -308,7 +534,6 @@
       min-height: 40px;
       padding: 8px 10px;
       color: var(--white);
-      font-family: "Segoe UI", sans-serif;
       font-weight: 600;
       font-size: 13px;
       cursor: pointer;
@@ -342,7 +567,6 @@
     }
 
     .status-strip strong {
-      font-family: "Segoe UI", sans-serif;
       font-weight: 700;
       color: var(--midnight-blue);
     }
@@ -357,7 +581,7 @@
       border: 1px solid var(--border-gray);
       border-radius: 10px;
       overflow: auto;
-      background: var(--white);
+      background: var(--surface);
     }
 
     table {
@@ -367,28 +591,25 @@
     }
 
     thead th {
-      background: var(--midnight-blue);
-      color: var(--white);
-      padding: 9px 10px;
+      color: #94a3b8;
+      padding: 12px 8px 10px;
       text-align: left;
-      font-family: "Segoe UI", sans-serif;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-gray);
       white-space: nowrap;
     }
 
-    thead th:last-child { border-right: none; }
-
     tbody td {
-      padding: 8px 10px;
+      padding: 12px 8px;
       border-top: 1px solid #e2e8f0;
-      border-right: 1px solid #e2e8f0;
       vertical-align: top;
       font-size: 13px;
+      color: var(--text-secondary);
     }
 
-    tbody td:last-child { border-right: none; }
     tbody tr:nth-child(even) { background: var(--neutral-gray); }
     tbody tr:hover { background: var(--row-hover); }
 
@@ -421,13 +642,47 @@
       border-color: #cbd5e1;
     }
 
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 120px;
+    }
+
+    .btn-row-action {
+      min-height: 30px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .btn-row-activate {
+      background: #d9a81c;
+      color: var(--white);
+    }
+
+    .btn-row-activate:hover {
+      background: #bf9214;
+    }
+
+    .btn-row-deactivate {
+      background: #6b7280;
+      color: var(--white);
+    }
+
+    .btn-row-deactivate:hover {
+      background: #4b5563;
+    }
+
     footer {
       background: var(--midnight-blue);
-      border-top: 3px solid var(--green-gold);
-      color: var(--white);
+      border-top: 2px solid var(--green-gold);
+      color: rgba(255, 255, 255, 0.9);
       text-align: center;
-      padding: 12px 14px;
-      font-size: 13px;
+      padding: 10px 14px;
+      font-size: 12px;
     }
 
     .modal {
@@ -455,7 +710,6 @@
     .modal-title {
       margin: 0 0 8px;
       color: var(--midnight-blue);
-      font-family: "Segoe UI", sans-serif;
       font-weight: 700;
       font-size: 24px;
     }
@@ -473,211 +727,295 @@
       }
     }
 
+    @media (max-width: 860px) {
+      .top-bar {
+        grid-template-columns: 1fr;
+        align-items: start;
+        padding: 14px 16px;
+      }
+
+      .nav-right {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
     @media (max-width: 760px) {
-      .top-bar { padding: 12px; }
-      .session-bar,
-      .access-note { width: calc(100% - 24px); }
-      main { padding: 0 12px 16px; }
+      .app-body {
+        flex-direction: column;
+      }
+
+      .rail-container,
+      .rail-container.collapsed {
+        width: 100%;
+      }
+
+      .nav-rail {
+        max-height: 220px;
+      }
+
+      [data-tooltip]:hover::after,
+      [data-tooltip]:focus-visible::after {
+        display: none;
+      }
+
+      .top-bar {
+        gap: 10px;
+      }
+
+      .app-main {
+        padding: 12px;
+      }
+
       .field-grid { grid-template-columns: 1fr; }
       .button-row { grid-template-columns: 1fr; }
-      .panel-title { font-size: 28px; }
     }
   </style>
 </head>
 <body>
-  <header class="top-bar">
-    <div class="top-inner">
-      <div class="brand">
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="nav-left">
         <div class="brand-logo" aria-label="CLaaS2SaaS logo">CLaaS<span class="brand-logo-accent">2</span>SaaS</div>
-        <h1 class="brand-title">Profit Margin Guardian Agent</h1>
+        <span class="nav-separator" aria-hidden="true">|</span>
+        <div class="nav-context">
+          <span class="nav-context-label">Profit Margin Guardian Agent</span>
+        </div>
       </div>
-      <nav class="main-nav" aria-label="Primary navigation">
-        <a href="./Dashboard.html">Dashboard</a>
-        <a href="./Rule-Configuration.html" aria-current="page">Rule Configuration</a>
-        <a href="./PO-Approval.html">PO Validation</a>
-        <a href="./Analytics.html">Category Risk Analytics</a>
-        <a href="./Audit-Trail.html">Audit Trail</a>
-      </nav>
+      <div class="nav-right">
+        <div class="nav-user" aria-label="User profile">
+          <span class="nav-avatar" id="navAvatar" aria-hidden="true">PM</span>
+          <div class="nav-user-meta">
+            <span class="nav-user-name" id="navUserName">User</span>
+            <span class="nav-user-role" id="navUserRole">User</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <aside class="rail-container" id="railContainer">
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <div class="rail-header">
+            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
+            <button type="button" class="collapse-button" id="railToggle" aria-label="Collapse navigation" aria-expanded="true">
+              <span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span>
+            </button>
+          </div>
+
+          <div class="rail-group">
+            <div class="rail-group-title" id="railGroupTitle">
+              <span class="rail-group-icon" aria-hidden="true">&#128202;</span>
+              <span class="rail-group-text" id="railGroupText">Profit Margin Guardian</span>
+            </div>
+            <div class="rail-nav">
+              <a class="rail-item" href="./Dashboard.html">
+                <span class="rail-item-icon" aria-hidden="true">&#9635;</span>
+                <span class="rail-item-label">Dashboard</span>
+              </a>
+              <a class="rail-item rail-item-active" href="./Rule-Configuration.html" aria-current="page">
+                <span class="rail-item-icon" aria-hidden="true">&#9881;</span>
+                <span class="rail-item-label">Rule Configuration</span>
+              </a>
+              <a class="rail-item" href="./PO-Approval.html">
+                <span class="rail-item-icon" aria-hidden="true">&#10003;</span>
+                <span class="rail-item-label">PO Validation</span>
+              </a>
+              <a class="rail-item" href="./Analytics.html">
+                <span class="rail-item-icon" aria-hidden="true">&#128200;</span>
+                <span class="rail-item-label">Category Risk Analytics</span>
+              </a>
+              <a class="rail-item" href="./Audit-Trail.html">
+                <span class="rail-item-icon" aria-hidden="true">&#128221;</span>
+                <span class="rail-item-label">Audit Trail</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="app-main">
+        <div id="sessionBar" class="session-bar"></div>
+        <div id="accessNote" class="access-note">This page is admin-only. You have read-only access in this mockup session.</div>
+
+        <main id="main-content" tabindex="-1">
+          <section class="panel" aria-labelledby="configTitle">
+            <div class="panel-head">
+              <h2 id="configTitle" class="panel-title">
+                <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 6h16"></path>
+                  <path d="M7 12h10"></path>
+                  <path d="M10 18h4"></path>
+                </svg>
+                Rule Configuration
+              </h2>
+              <p class="panel-subtitle">Define governed scope, target dimensions, thresholds, and approval behavior for PO margin checks.</p>
+            </div>
+
+            <div class="panel-body">
+              <form id="ruleForm" class="config-form" novalidate>
+                <div class="field-row">
+                  <label for="configSetName">Configuration Set Name</label>
+                  <input id="configSetName" type="text" placeholder="e.g., FY2026 Core Industrial Policy" required>
+                  <div class="hint">Use named sets to save, activate, and deactivate policy packs.</div>
+                </div>
+
+                <div class="field-grid">
+                  <div class="field-row">
+                    <label for="scopeType">Governed Scope Type</label>
+                    <select id="scopeType" required>
+                      <option value="">Choose scope type</option>
+                      <option value="Item">Item</option>
+                      <option value="Item Group">Item Group</option>
+                    </select>
+                  </div>
+                  <div class="field-row">
+                    <label for="scopeValue">Governed Scope Value</label>
+                    <select id="scopeValue" required>
+                      <option value="">Choose scope value</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-grid">
+                  <div class="field-row">
+                    <label for="targetType">Margin Target Applies To</label>
+                    <select id="targetType" required>
+                      <option value="">Choose target type</option>
+                      <option value="Item">Item</option>
+                      <option value="Item Group">Item Group</option>
+                      <option value="Customer">Customer</option>
+                      <option value="Customer Group">Customer Group</option>
+                    </select>
+                  </div>
+                  <div class="field-row">
+                    <label for="targetValue">Target Value</label>
+                    <select id="targetValue" required>
+                      <option value="">Choose target value</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <label for="threshold">Margin Threshold (%)</label>
+                  <input id="threshold" type="range" min="1" max="100" step="0.1" value="20" required>
+                  <input id="thresholdInput" type="number" min="1" max="100" step="0.1" placeholder="e.g., 18.5" value="20" required>
+                  <div class="hint">Allowed range is greater than 0 and up to 100.</div>
+                  <div id="thresholdError" class="error" role="alert" aria-live="polite"></div>
+                </div>
+
+                <div class="preview" aria-live="polite">
+                  <div class="preview-label">Threshold Preview: <span id="previewValue">0%</span></div>
+                  <div class="preview-track" aria-hidden="true">
+                    <div id="previewFill" class="preview-fill"></div>
+                  </div>
+                </div>
+
+                <div class="field-grid">
+                  <div class="field-row">
+                    <label for="alertBehavior">Alert Behavior</label>
+                    <select id="alertBehavior" required>
+                      <option value="">Choose behavior</option>
+                      <option>Block Approval</option>
+                      <option>Warn Only</option>
+                    </select>
+                  </div>
+                  <div class="field-row">
+                    <label for="recipients">Notification Recipients</label>
+                    <input id="recipients" type="text" placeholder="procurement.manager@northwind.com; finance.controller@northwind.com" required>
+                  </div>
+                </div>
+
+                <div class="button-row">
+                  <button type="button" id="saveBtn" class="btn-primary">
+                    <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 5h11l3 3v11H5z"></path>
+                      <path d="M8 5v6h8V5"></path>
+                      <path d="M8 18h8"></path>
+                    </svg>
+                    Save Configuration
+                  </button>
+                  <button type="button" id="activateBtn" class="btn-secondary">
+                    <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M9 12l2 2 4-4"></path>
+                    </svg>
+                    Activate Set
+                  </button>
+                  <button type="button" id="deactivateBtn" class="btn-danger">
+                    <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6 6l12 12"></path>
+                      <path d="M18 6L6 18"></path>
+                    </svg>
+                    Deactivate Set
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="dashboardTitle">
+            <div class="panel-head">
+              <h2 id="dashboardTitle" class="panel-title">
+                <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="4" y="4" width="6" height="6"></rect>
+                  <rect x="14" y="4" width="6" height="6"></rect>
+                  <rect x="4" y="14" width="6" height="6"></rect>
+                  <rect x="14" y="14" width="6" height="6"></rect>
+                </svg>
+                Active Rules Dashboard
+              </h2>
+              <p class="panel-subtitle">Saved governance rules and runtime status for PO approval margin checks.</p>
+            </div>
+
+            <div class="panel-body">
+              <div id="poEngineStatus" class="status-strip">
+                <strong>PO Approval Auto-Check:</strong> Not enabled. Activate at least one configuration set.
+              </div>
+              <p class="table-note">When a set is active, these rules are automatically applied during PO approval workflow events.</p>
+              <div class="table-wrap">
+                <table aria-label="Margin governance rules table">
+                  <thead>
+                    <tr>
+                      <th>Config Set</th>
+                      <th>Version</th>
+                      <th>Scope</th>
+                      <th>Margin Target</th>
+                      <th>Threshold</th>
+                    <th>Alert Behavior</th>
+                    <th>Recipients</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rulesTableBody"></tbody>
+                </table>
+              </div>
+              <p class="table-note" style="margin-top: 12px;">Version history reflects each saved revision for a configuration set.</p>
+              <div class="table-wrap">
+                <table aria-label="Rule version history table">
+                  <thead>
+                    <tr>
+                      <th>Config Set</th>
+                      <th>Version</th>
+                      <th>Action</th>
+                      <th>Updated By</th>
+                      <th>Updated At</th>
+                    </tr>
+                  </thead>
+                  <tbody id="versionHistoryBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
-  </header>
 
-  <div id="sessionBar" class="session-bar"></div>
-  <div id="accessNote" class="access-note">This page is admin-only. You have read-only access in this mockup session.</div>
-
-  <main>
-    <section class="panel" aria-labelledby="configTitle">
-      <div class="panel-head">
-        <h2 id="configTitle" class="panel-title">
-          <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 6h16"></path>
-            <path d="M7 12h10"></path>
-            <path d="M10 18h4"></path>
-          </svg>
-          Rule Configuration
-        </h2>
-        <p class="panel-subtitle">Define governed scope, target dimensions, thresholds, and approval behavior for PO margin checks.</p>
-      </div>
-
-      <div class="panel-body">
-        <form id="ruleForm" class="config-form" novalidate>
-          <div class="field-row">
-            <label for="configSetName">Configuration Set Name</label>
-            <input id="configSetName" type="text" placeholder="e.g., FY2026 Core Industrial Policy" required>
-            <div class="hint">Use named sets to save, activate, and deactivate policy packs.</div>
-          </div>
-
-          <div class="field-grid">
-            <div class="field-row">
-              <label for="scopeType">Governed Scope Type</label>
-              <select id="scopeType" required>
-                <option value="">Choose scope type</option>
-                <option value="Item">Item</option>
-                <option value="Item Group">Item Group</option>
-              </select>
-            </div>
-            <div class="field-row">
-              <label for="scopeValue">Governed Scope Value</label>
-              <select id="scopeValue" required>
-                <option value="">Choose scope value</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field-grid">
-            <div class="field-row">
-              <label for="targetType">Margin Target Applies To</label>
-              <select id="targetType" required>
-                <option value="">Choose target type</option>
-                <option value="Item">Item</option>
-                <option value="Item Group">Item Group</option>
-                <option value="Customer">Customer</option>
-                <option value="Customer Group">Customer Group</option>
-              </select>
-            </div>
-            <div class="field-row">
-              <label for="targetValue">Target Value</label>
-              <select id="targetValue" required>
-                <option value="">Choose target value</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field-row">
-            <label for="threshold">Margin Threshold (%)</label>
-            <input id="threshold" type="range" min="1" max="100" step="0.1" value="20" required>
-            <input id="thresholdInput" type="number" min="1" max="100" step="0.1" placeholder="e.g., 18.5" value="20" required>
-            <div class="hint">Allowed range is greater than 0 and up to 100.</div>
-            <div id="thresholdError" class="error" role="alert" aria-live="polite"></div>
-          </div>
-
-          <div class="preview" aria-live="polite">
-            <div class="preview-label">Threshold Preview: <span id="previewValue">0%</span></div>
-            <div class="preview-track" aria-hidden="true">
-              <div id="previewFill" class="preview-fill"></div>
-            </div>
-          </div>
-
-          <div class="field-grid">
-            <div class="field-row">
-              <label for="alertBehavior">Alert Behavior</label>
-              <select id="alertBehavior" required>
-                <option value="">Choose behavior</option>
-                <option>Block Approval</option>
-                <option>Warn Only</option>
-              </select>
-            </div>
-            <div class="field-row">
-              <label for="recipients">Notification Recipients</label>
-              <input id="recipients" type="text" placeholder="procurement.manager@northwind.com; finance.controller@northwind.com" required>
-            </div>
-          </div>
-
-          <div class="button-row">
-            <button type="button" id="saveBtn" class="btn-primary">
-              <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 5h11l3 3v11H5z"></path>
-                <path d="M8 5v6h8V5"></path>
-                <path d="M8 18h8"></path>
-              </svg>
-              Save Configuration
-            </button>
-            <button type="button" id="activateBtn" class="btn-secondary">
-              <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M9 12l2 2 4-4"></path>
-              </svg>
-              Activate Set
-            </button>
-            <button type="button" id="deactivateBtn" class="btn-danger">
-              <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 6l12 12"></path>
-                <path d="M18 6L6 18"></path>
-              </svg>
-              Deactivate Set
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <section class="panel" aria-labelledby="dashboardTitle">
-      <div class="panel-head">
-        <h2 id="dashboardTitle" class="panel-title">
-          <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="4" y="4" width="6" height="6"></rect>
-            <rect x="14" y="4" width="6" height="6"></rect>
-            <rect x="4" y="14" width="6" height="6"></rect>
-            <rect x="14" y="14" width="6" height="6"></rect>
-          </svg>
-          Active Rules Dashboard
-        </h2>
-        <p class="panel-subtitle">Saved governance rules and runtime status for PO approval margin checks.</p>
-      </div>
-
-      <div class="panel-body">
-        <div id="poEngineStatus" class="status-strip">
-          <strong>PO Approval Auto-Check:</strong> Not enabled. Activate at least one configuration set.
-        </div>
-        <p class="table-note">When a set is active, these rules are automatically applied during PO approval workflow events.</p>
-        <div class="table-wrap">
-          <table aria-label="Margin governance rules table">
-            <thead>
-              <tr>
-                <th>Config Set</th>
-                <th>Version</th>
-                <th>Scope</th>
-                <th>Margin Target</th>
-                <th>Threshold</th>
-                <th>Alert Behavior</th>
-                <th>Recipients</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="rulesTableBody"></tbody>
-          </table>
-        </div>
-        <p class="table-note" style="margin-top: 12px;">Version history reflects each saved revision for a configuration set.</p>
-        <div class="table-wrap">
-          <table aria-label="Rule version history table">
-            <thead>
-              <tr>
-                <th>Config Set</th>
-                <th>Version</th>
-                <th>Action</th>
-                <th>Updated By</th>
-                <th>Updated At</th>
-              </tr>
-            </thead>
-            <tbody id="versionHistoryBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    Copyright &copy; 2026 Procurement Governance System
-  </footer>
+    <footer>
+      Copyright &copy; 2026 Procurement Governance System
+    </footer>
+  </div>
 
   <div id="confirmModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-card">
@@ -697,15 +1035,53 @@
     if (!sessionRaw) {
       window.location.replace("./Login.html");
     }
+
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
-    const sessionBar = document.getElementById("sessionBar");
-    const accessNote = document.getElementById("accessNote");
     const roleLabels = {
-      admin: "Administrator",
+      admin: "System Administrator",
       procurement_manager: "Procurement Manager",
       category_manager: "Category Manager"
     };
+
+    const sessionBar = document.getElementById("sessionBar");
+    const accessNote = document.getElementById("accessNote");
+    const navAvatar = document.getElementById("navAvatar");
+    const navUserName = document.getElementById("navUserName");
+    const navUserRole = document.getElementById("navUserRole");
+    const railContainer = document.getElementById("railContainer");
+    const railToggle = document.getElementById("railToggle");
+    const railToggleIcon = document.getElementById("railToggleIcon");
+    const railHeaderLabel = document.getElementById("railHeaderLabel");
+    const railGroupTitle = document.getElementById("railGroupTitle");
+    const railGroupText = document.getElementById("railGroupText");
+    const railItems = Array.from(document.querySelectorAll(".rail-item"));
     const isAdmin = session && session.role === "admin";
+
+    function getInitials(name) {
+      const safeName = (name || "User").trim();
+      const parts = safeName.split(/\s+/).filter(Boolean).slice(0, 2);
+      return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "US";
+    }
+
+    function resolveTopNavName() {
+      const fallbackNames = {
+        admin: "John Owen",
+        procurement_manager: "Megan Cruz",
+        category_manager: "Carla Reyes"
+      };
+      const rawName = (session.userName || "").trim();
+      const roleText = (roleLabels[session.role] || session.roleLabel || "User").trim();
+      const genericNames = ["System Administrator", "Procurement Manager", "Category Manager"];
+      if (!rawName || rawName === roleText || genericNames.includes(rawName)) {
+        return fallbackNames[session.role] || rawName || "User";
+      }
+      return rawName;
+    }
+
+    const topNavName = resolveTopNavName();
+    navAvatar.textContent = getInitials(topNavName);
+    navUserName.textContent = topNavName;
+    navUserRole.textContent = roleLabels[session.role] || session.roleLabel || "User";
 
     const now = new Date();
     sessionBar.innerHTML =
@@ -952,9 +1328,53 @@
       return "status-saved";
     }
 
+    function currentActor() {
+      return topNavName || session.userName || roleLabels[session.role] || "System Administrator";
+    }
+
+    function updateRuleStatus(index, nextStatus) {
+      const rule = rules[index];
+      if (!rule) {
+        return;
+      }
+      rule.status = nextStatus;
+      rule.updatedBy = currentActor();
+      rule.updatedAt = new Date().toLocaleString();
+      persistRules();
+      renderTable();
+    }
+
+    function openRowActivation(index) {
+      const rule = rules[index];
+      if (!rule) {
+        return;
+      }
+      openModal(
+        "Confirm Rule Activation",
+        "Activate '" + rule.configSetName + "' version " + (rule.version || "v1") + " for automatic PO approval margin checks?",
+        { type: "activate-row", index }
+      );
+    }
+
+    function openRowDeactivation(index) {
+      const rule = rules[index];
+      if (!rule) {
+        return;
+      }
+      openModal(
+        "Confirm Rule Deactivation",
+        "Deactivate '" + rule.configSetName + "' version " + (rule.version || "v1") + " from automatic PO approval margin checks?",
+        { type: "deactivate-row", index }
+      );
+    }
+
     function renderTable() {
       tableBody.innerHTML = "";
-      rules.forEach((rule) => {
+      rules.forEach((rule, index) => {
+        const rowAction =
+          rule.status === "Active"
+            ? "<button type='button' class='btn-row-action btn-row-deactivate' data-rule-action='deactivate' data-rule-index='" + index + "'>Deactivate</button>"
+            : "<button type='button' class='btn-row-action btn-row-activate' data-rule-action='activate' data-rule-index='" + index + "'>Activate</button>";
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${rule.configSetName}</td>
@@ -965,9 +1385,24 @@
           <td>${rule.alertBehavior}</td>
           <td>${rule.recipients}</td>
           <td><span class="status-pill ${statusClass(rule.status)}">${rule.status}</span></td>
+          <td><div class="table-actions">${rowAction}</div></td>
         `;
         tableBody.appendChild(row);
       });
+
+      tableBody.querySelectorAll("[data-rule-action]").forEach((button) => {
+        button.disabled = !isAdmin;
+        button.addEventListener("click", () => {
+          const index = Number(button.getAttribute("data-rule-index"));
+          const action = button.getAttribute("data-rule-action");
+          if (action === "activate") {
+            openRowActivation(index);
+          } else if (action === "deactivate") {
+            openRowDeactivation(index);
+          }
+        });
+      });
+
       updatePOEngineStatus();
       renderVersionHistory();
       logAction("Dashboard table rendered", { totalRules: rules.length });
@@ -1016,7 +1451,7 @@
         alertBehavior: alertBehaviorEl.value,
         recipients: recipientsEl.value.trim(),
         status: "Saved",
-        updatedBy: session.userName || "System Administrator",
+        updatedBy: currentActor(),
         updatedAt: new Date().toLocaleString()
       };
 
@@ -1052,7 +1487,11 @@
         alert("No saved or inactive rules found for this configuration set.");
         return;
       }
-      openModal("Confirm Set Activation", "Activate '" + setName + "' for automatic PO approval margin checks?", "activate");
+      openModal(
+        "Confirm Set Activation",
+        "Activate '" + setName + "' for automatic PO approval margin checks?",
+        { type: "activate-set", setName }
+      );
     }
 
     function deactivateSet() {
@@ -1066,29 +1505,75 @@
         alert("No active rules found for this configuration set.");
         return;
       }
-      openModal("Confirm Set Deactivation", "Deactivate '" + setName + "' from automatic PO approval margin checks?", "deactivate");
+      openModal(
+        "Confirm Set Deactivation",
+        "Deactivate '" + setName + "' from automatic PO approval margin checks?",
+        { type: "deactivate-set", setName }
+      );
     }
 
     function confirmPendingAction() {
-      const setName = configSetNameEl.value.trim();
-      if (pendingAction === "activate") {
+      if (!pendingAction || !pendingAction.type) {
+        closeModal();
+        return;
+      }
+
+      if (pendingAction.type === "activate-set") {
+        const setName = pendingAction.setName;
         rules.forEach((rule) => {
           if (rule.configSetName === setName && (rule.status === "Saved" || rule.status === "Inactive")) {
             rule.status = "Active";
+            rule.updatedBy = currentActor();
+            rule.updatedAt = new Date().toLocaleString();
           }
         });
         logAction("Set activated", { setName });
-      } else if (pendingAction === "deactivate") {
+        persistRules();
+        renderTable();
+      } else if (pendingAction.type === "deactivate-set") {
+        const setName = pendingAction.setName;
         rules.forEach((rule) => {
           if (rule.configSetName === setName && rule.status === "Active") {
             rule.status = "Inactive";
+            rule.updatedBy = currentActor();
+            rule.updatedAt = new Date().toLocaleString();
           }
         });
         logAction("Set deactivated", { setName });
+        persistRules();
+        renderTable();
+      } else if (pendingAction.type === "activate-row") {
+        updateRuleStatus(pendingAction.index, "Active");
+        logAction("Rule activated", { index: pendingAction.index });
+      } else if (pendingAction.type === "deactivate-row") {
+        updateRuleStatus(pendingAction.index, "Inactive");
+        logAction("Rule deactivated", { index: pendingAction.index });
       }
-      persistRules();
-      renderTable();
       closeModal();
+    }
+
+    function applyRailState(collapsed) {
+      railContainer.classList.toggle("collapsed", collapsed);
+      railToggle.setAttribute("aria-expanded", String(!collapsed));
+      railToggle.setAttribute("aria-label", collapsed ? "Expand navigation" : "Collapse navigation");
+      railToggleIcon.classList.toggle("rotated", collapsed);
+      railHeaderLabel.classList.toggle("hidden", collapsed);
+      railGroupTitle.classList.toggle("hidden-labels", collapsed);
+      railGroupText.classList.toggle("hidden", collapsed);
+
+      railItems.forEach((item) => {
+        const label = item.querySelector(".rail-item-label");
+        const text = label ? label.textContent : "";
+        item.classList.toggle("collapsed", collapsed);
+        if (label) {
+          label.classList.toggle("hidden", collapsed);
+        }
+        if (collapsed) {
+          item.setAttribute("data-tooltip", text);
+        } else {
+          item.removeAttribute("data-tooltip");
+        }
+      });
     }
 
     scopeTypeEl.addEventListener("change", updateScopeValues);
@@ -1109,6 +1594,15 @@
 
     modal.addEventListener("click", (event) => {
       if (event.target === modal) closeModal();
+    });
+
+    const railCollapsed = localStorage.getItem("pmg_sidebar_collapsed") === "true";
+    applyRailState(railCollapsed);
+
+    railToggle.addEventListener("click", () => {
+      const collapsed = !railContainer.classList.contains("collapsed");
+      applyRailState(collapsed);
+      localStorage.setItem("pmg_sidebar_collapsed", String(collapsed));
     });
 
     updateScopeValues();

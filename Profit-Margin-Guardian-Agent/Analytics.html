@@ -6,66 +6,73 @@
   <title>Profit Margin Guardian Agent | Analytics</title>
   <style>
     :root {
-      --midnight-blue: #193E6B;
+      --midnight-blue: #193e6b;
       --midnight-blue-dark: #143356;
-      --green-gold: #B3A125;
+      --green-gold: #b3a125;
       --green-gold-dark: #96851f;
-      --white: #FFFFFF;
-      --neutral-gray: #F5F5F5;
-      --border-gray: #E6ECF3;
-      --text-main: #1f2937;
-      --text-muted: #5b6678;
+      --white: #ffffff;
+      --page-bg: #eee7e0;
+      --surface: #ffffff;
+      --surface-muted: #f5f5f5;
       --surface-soft: #f8fbff;
-      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
-      --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.08);
-      --risk-high: #B42318;
-      --risk-medium: #B54708;
-      --risk-low: #027A48;
+      --neutral-gray: #f5f5f5;
+      --border-gray: #e6ecf3;
+      --border-soft: #eef2f6;
+      --text-main: #1f2937;
+      --text-heading: #1c2b4a;
+      --text-secondary: #374151;
+      --text-muted: #5b6678;
+      --warning-bg: #fff6e5;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.28);
+      --shadow-soft: 0 2px 10px rgba(15, 23, 42, 0.06);
+      --risk-high: #b42318;
+      --risk-medium: #b54708;
+      --risk-low: #027a48;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      min-height: 100vh;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       color: var(--text-main);
-      background:
-        radial-gradient(circle at 12% 8%, rgba(179, 161, 37, 0.14), rgba(179, 161, 37, 0) 40%),
-        radial-gradient(circle at 92% 88%, rgba(25, 62, 107, 0.18), rgba(25, 62, 107, 0) 44%),
-        linear-gradient(170deg, #f3f7fd 0%, #ffffff 52%, #edf3fb 100%);
+      background: var(--page-bg);
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--page-bg);
+      overflow: hidden;
     }
 
     .top-bar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      min-height: 64px;
+      padding: 0 20px;
       background: var(--midnight-blue);
-      border-bottom: 4px solid var(--green-gold);
-      color: var(--white);
-      padding: 12px 20px;
+      color: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .top-inner {
-      max-width: 1300px;
-      margin: 0 auto;
+    .nav-left {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      gap: 14px;
+      min-width: 0;
     }
 
     .brand-logo {
-      min-height: 42px;
-      padding: 7px 12px;
-      border: 2px solid rgba(255, 255, 255, 0.72);
-      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
       font-weight: 700;
-      letter-spacing: 0.3px;
+      font-size: 14px;
+      letter-spacing: 0.2px;
       white-space: nowrap;
     }
 
@@ -74,67 +81,303 @@
       font-weight: 800;
     }
 
-    .brand h1 {
-      margin: 0;
-      font-size: clamp(22px, 1.8vw, 30px);
-      line-height: 1.2;
-      font-weight: 700;
+    .nav-separator {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 16px;
+      user-select: none;
     }
 
-    .main-nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .nav-context {
+      min-width: 0;
     }
 
-    .main-nav a {
-      text-decoration: none;
-      color: var(--white);
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-family: "Segoe UI", sans-serif;
+    .nav-context-label {
+      display: block;
+      font-size: 14px;
       font-weight: 600;
-      font-size: 15px;
+      white-space: nowrap;
     }
 
-    .main-nav a[aria-current="page"] {
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.16);
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
     }
 
-    .main-nav a:hover,
-    .main-nav a:focus-visible {
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px 6px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: rgba(255, 255, 255, 0.95);
+      flex-shrink: 0;
+    }
+
+    .nav-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--midnight-blue);
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-user-meta {
+      display: grid;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .nav-user-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .nav-user-role {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .rail-container {
+      width: 270px;
+      flex-shrink: 0;
+      border-right: 1px solid #ddd8d1;
+      background: var(--surface-muted);
+      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .rail-container.collapsed {
+      width: 64px;
+    }
+
+    .nav-rail {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--surface-muted);
+      padding: 12px 0 18px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .rail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 8px;
+      min-height: 44px;
+    }
+
+    .rail-header-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #242424;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .rail-header-label.hidden {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+      width: 0;
+      overflow: hidden;
+    }
+
+    .collapse-button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #424242;
+      flex-shrink: 0;
+    }
+
+    .collapse-button:hover,
+    .collapse-button:focus-visible {
+      background: #ebebeb;
       outline: none;
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.12);
       box-shadow: var(--focus-ring);
     }
 
-    .session-strip {
-      max-width: 1300px;
-      margin: 16px auto 0;
-      border: 1px solid #d7e2f1;
-      border-left: 5px solid var(--green-gold);
-      border-radius: 10px;
-      background: #f4f8ff;
-      padding: 11px 14px;
-      color: #21496f;
-      font-size: 14px;
+    .collapse-icon {
+      display: inline-block;
+      transition: transform 0.28s ease;
     }
 
-    .session-strip strong { color: var(--midnight-blue); }
+    .collapse-icon.rotated {
+      transform: rotate(180deg);
+    }
+
+    .rail-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 8px;
+    }
+
+    .rail-group-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 8px 10px;
+      color: #242424;
+      font-size: 16px;
+      font-weight: 600;
+      min-height: 40px;
+    }
+
+    .rail-group-title.hidden-labels {
+      justify-content: center;
+    }
+
+    .rail-group-icon {
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .rail-group-text.hidden,
+    .rail-item-label.hidden {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+      width: 0;
+      overflow: hidden;
+    }
+
+    .rail-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      margin: 0 4px;
+      padding: 10px 12px;
+      border-left: 3px solid transparent;
+      border-radius: 4px;
+      color: #424242;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .rail-item:hover,
+    .rail-item:focus-visible {
+      background: #ebebeb;
+      color: #242424;
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .rail-item-active {
+      background: var(--warning-bg);
+      color: var(--green-gold);
+      border-left-color: var(--green-gold);
+    }
+
+    .rail-item-active:hover,
+    .rail-item-active:focus-visible {
+      background: var(--warning-bg);
+      color: var(--green-gold);
+    }
+
+    .rail-item.collapsed {
+      justify-content: center;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .rail-item-icon {
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 62px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #111827;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .app-main {
+      flex: 1;
+      min-width: 0;
+      padding: 16px 18px 20px;
+      overflow: auto;
+    }
+
+    .session-strip {
+      margin: 0 0 14px;
+      border: 1px solid #ddd8d1;
+      border-left: 4px solid var(--green-gold);
+      border-radius: 8px;
+      background: #f8f5ef;
+      padding: 10px 14px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .session-strip strong {
+      color: var(--text-heading);
+      font-weight: 600;
+    }
 
     main {
-      max-width: 1300px;
-      margin: 16px auto 24px;
-      padding: 0 20px;
+      margin: 0;
+      padding: 0;
       display: grid;
       gap: 16px;
     }
 
     .card {
-      background: var(--white);
+      background: var(--surface);
       border: 1px solid var(--border-gray);
       border-radius: 12px;
       box-shadow: var(--shadow-soft);
@@ -142,9 +385,9 @@
     }
 
     .card-head {
-      border-bottom: 1px solid var(--border-gray);
+      border-bottom: 1px solid var(--border-soft);
       background: var(--surface-soft);
-      padding: 11px 14px;
+      padding: 14px 16px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -154,19 +397,20 @@
 
     .card-title {
       margin: 0;
-      color: var(--midnight-blue);
-      font-size: 19px;
+      color: var(--text-heading);
+      font-size: 15px;
       font-weight: 700;
+      line-height: 1.3;
     }
 
     .card-note {
       margin: 0;
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .card-body {
-      padding: 14px;
+      padding: 14px 16px 16px;
     }
 
     .control-grid {
@@ -184,7 +428,7 @@
     label {
       font-size: 13px;
       font-weight: 700;
-      color: var(--midnight-blue);
+      color: var(--text-heading);
     }
 
     select,
@@ -338,12 +582,13 @@
     }
 
     th {
-      background: var(--midnight-blue);
-      color: var(--white);
-      font-size: 13px;
-      padding: 9px 10px;
+      color: #94a3b8;
+      font-size: 11px;
+      padding: 12px 8px 10px;
       text-align: left;
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-gray);
       white-space: nowrap;
     }
 
@@ -351,10 +596,11 @@
 
     td {
       font-size: 13px;
-      padding: 8px 10px;
+      padding: 12px 8px;
       border-top: 1px solid #e1e8f2;
       border-right: 1px solid #e1e8f2;
       vertical-align: top;
+      color: var(--text-secondary);
     }
 
     tbody tr:nth-child(even) { background: var(--neutral-gray); }
@@ -427,224 +673,340 @@
 
     footer {
       background: var(--midnight-blue);
-      border-top: 3px solid var(--green-gold);
-      color: var(--white);
+      border-top: 2px solid var(--green-gold);
+      color: rgba(255, 255, 255, 0.9);
       text-align: center;
-      padding: 11px;
-      font-size: 13px;
-      margin-top: 16px;
+      padding: 10px 14px;
+      font-size: 12px;
     }
 
     @media (max-width: 1160px) {
-      .control-grid, .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .control-grid,
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid-2 { grid-template-columns: 1fr; }
     }
 
+    @media (max-width: 860px) {
+      .top-bar {
+        grid-template-columns: 1fr;
+        align-items: start;
+        padding: 14px 16px;
+      }
+
+      .nav-right {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
     @media (max-width: 720px) {
-      .top-bar { padding: 12px; }
-      main { padding: 0 12px; }
-      .session-strip { margin: 12px; }
+      .app-body {
+        flex-direction: column;
+      }
+
+      .rail-container,
+      .rail-container.collapsed {
+        width: 100%;
+      }
+
+      .nav-rail {
+        max-height: 220px;
+      }
+
+      [data-tooltip]:hover::after,
+      [data-tooltip]:focus-visible::after {
+        display: none;
+      }
+
+      .top-bar { gap: 10px; }
+      .app-main { padding: 12px; }
       .control-grid, .kpi-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <header class="top-bar">
-    <div class="top-inner">
-      <div class="brand">
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="nav-left">
         <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
-        <h1>Profit Margin Guardian Agent</h1>
+        <span class="nav-separator" aria-hidden="true">|</span>
+        <div class="nav-context">
+          <span class="nav-context-label">Profit Margin Guardian Agent</span>
+        </div>
       </div>
-      <nav class="main-nav" aria-label="Primary navigation">
-        <a href="./Dashboard.html">Dashboard</a>
-        <a href="./Rule-Configuration.html">Rule Configuration</a>
-        <a href="./PO-Approval.html">PO Validation</a>
-        <a href="./Analytics.html" aria-current="page">Category Risk Analytics</a>
-        <a href="./Audit-Trail.html">Audit Trail</a>
-      </nav>
-    </div>
-  </header>
-
-  <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
-
-  <main>
-    <section class="card">
-      <div class="card-head">
-        <h2 class="card-title">Cross-Category Margin Risk Analytics</h2>
-        <p class="card-note">Scheduled/event scans, risk detection, proposal routing, and traceability.</p>
-      </div>
-      <div class="card-body">
-        <div class="control-grid">
-          <div class="field">
-            <label for="scanFrequency">Scan Frequency</label>
-            <select id="scanFrequency">
-              <option value="hourly">Hourly</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="scanTrigger">Scan Trigger</label>
-            <select id="scanTrigger">
-              <option value="event">Event-Based (PO/Quote Create-Change-Approve)</option>
-              <option value="schedule">Scheduled Batch</option>
-              <option value="hybrid">Hybrid</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="categoryFocus">Category Focus</label>
-            <select id="categoryFocus"></select>
-          </div>
-          <div class="field">
-            <button id="runScanBtn" class="btn-primary" type="button">Run Margin Risk Scan</button>
+      <div class="nav-right">
+        <div class="nav-user" aria-label="User profile">
+          <span class="nav-avatar" id="navAvatar" aria-hidden="true">PM</span>
+          <div class="nav-user-meta">
+            <span class="nav-user-name" id="navUserName">User</span>
+            <span class="nav-user-role" id="navUserRole">User</span>
           </div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <section class="kpi-grid">
-      <article class="kpi">
-        <div class="kpi-label">Flagged Categories</div>
-        <div id="kpiFlaggedCategories" class="kpi-value">0</div>
-        <div class="kpi-meta">Below configured target margin</div>
-      </article>
-      <article class="kpi">
-        <div class="kpi-label">High-Risk Suppliers</div>
-        <div id="kpiHighRiskSuppliers" class="kpi-value">0</div>
-        <div class="kpi-meta">Require immediate sourcing action</div>
-      </article>
-      <article class="kpi">
-        <div class="kpi-label">Open Proposals</div>
-        <div id="kpiOpenProposals" class="kpi-value">0</div>
-        <div class="kpi-meta">Pending route/approval workflow</div>
-      </article>
-      <article class="kpi">
-        <div class="kpi-label">Last Scan</div>
-        <div id="kpiLastScan" class="kpi-value" style="font-size: 18px;">-</div>
-        <div class="kpi-meta">Analytics dataset refresh timestamp</div>
-      </article>
-    </section>
+    <div class="app-body">
+      <aside class="rail-container" id="railContainer">
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <div class="rail-header">
+            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
+            <button type="button" class="collapse-button" id="railToggle" aria-label="Collapse navigation" aria-expanded="true">
+              <span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span>
+            </button>
+          </div>
 
-    <section class="grid-2">
-      <article class="card">
-        <div class="card-head">
-          <h3 class="card-title">Margin Trend by Category</h3>
-          <p class="card-note">Actual vs target vs projected margin over time window.</p>
-        </div>
-        <div class="card-body">
-          <div class="chart-wrap">
-            <canvas id="lineChart" width="700" height="300"></canvas>
-            <div class="legend">
-              <span><span class="dot" style="background:#193E6B;"></span>Actual Margin %</span>
-              <span><span class="dot" style="background:#B3A125;"></span>Target Margin %</span>
-              <span><span class="dot" style="background:#0EA5E9;"></span>Projected Margin %</span>
+          <div class="rail-group">
+            <div class="rail-group-title" id="railGroupTitle">
+              <span class="rail-group-icon" aria-hidden="true">&#128202;</span>
+              <span class="rail-group-text" id="railGroupText">Profit Margin Guardian</span>
+            </div>
+            <div class="rail-nav">
+              <a class="rail-item" href="./Dashboard.html">
+                <span class="rail-item-icon" aria-hidden="true">&#9635;</span>
+                <span class="rail-item-label">Dashboard</span>
+              </a>
+              <a class="rail-item" href="./Rule-Configuration.html">
+                <span class="rail-item-icon" aria-hidden="true">&#9881;</span>
+                <span class="rail-item-label">Rule Configuration</span>
+              </a>
+              <a class="rail-item" href="./PO-Approval.html">
+                <span class="rail-item-icon" aria-hidden="true">&#10003;</span>
+                <span class="rail-item-label">PO Validation</span>
+              </a>
+              <a class="rail-item rail-item-active" href="./Analytics.html" aria-current="page">
+                <span class="rail-item-icon" aria-hidden="true">&#128200;</span>
+                <span class="rail-item-label">Category Risk Analytics</span>
+              </a>
+              <a class="rail-item" href="./Audit-Trail.html">
+                <span class="rail-item-icon" aria-hidden="true">&#128221;</span>
+                <span class="rail-item-label">Audit Trail</span>
+              </a>
             </div>
           </div>
-        </div>
-      </article>
+        </nav>
+      </aside>
 
-      <article class="card">
-        <div class="card-head">
-          <h3 class="card-title">Supplier Risk Exposure</h3>
-          <p class="card-note">Variance of projected margin versus target by supplier.</p>
-        </div>
-        <div class="card-body">
-          <div class="chart-wrap">
-            <canvas id="barChart" width="700" height="300"></canvas>
-          </div>
-        </div>
-      </article>
-    </section>
+      <div class="app-main">
+        <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
 
-    <section class="grid-2">
-      <article class="card">
-        <div class="card-head">
-          <h3 class="card-title">Risk Alerts</h3>
-          <p class="card-note">Hotspots detected from open/closed PO and quotation analysis.</p>
-        </div>
-        <div class="card-body">
-          <div id="riskList" class="risk-list"></div>
-        </div>
-      </article>
+        <main id="main-content" tabindex="-1">
+          <section class="card">
+            <div class="card-head">
+              <h2 class="card-title">Cross-Category Margin Risk Analytics</h2>
+              <p class="card-note">Scheduled/event scans, risk detection, proposal routing, and traceability.</p>
+            </div>
+            <div class="card-body">
+              <div class="control-grid">
+                <div class="field">
+                  <label for="scanFrequency">Scan Frequency</label>
+                  <select id="scanFrequency">
+                    <option value="hourly">Hourly</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="scanTrigger">Scan Trigger</label>
+                  <select id="scanTrigger">
+                    <option value="event">Event-Based (PO/Quote Create-Change-Approve)</option>
+                    <option value="schedule">Scheduled Batch</option>
+                    <option value="hybrid">Hybrid</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="categoryFocus">Category Focus</label>
+                  <select id="categoryFocus"></select>
+                </div>
+                <div class="field">
+                  <button id="runScanBtn" class="btn-primary" type="button">Run Margin Risk Scan</button>
+                </div>
+              </div>
+            </div>
+          </section>
 
-      <article class="card">
-        <div class="card-head">
-          <h3 class="card-title">Traceability Log</h3>
-          <a class="btn-mini" href="./Audit-Trail.html?po=ANALYTICS-PROPOSAL">Open Full Audit</a>
-          <p class="card-note">Routing decisions, BC update actions, and scan history.</p>
-        </div>
-        <div class="card-body">
-          <div id="traceList" class="trace-list"></div>
-        </div>
-      </article>
-    </section>
+          <section class="kpi-grid">
+            <article class="kpi">
+              <div class="kpi-label">Flagged Categories</div>
+              <div id="kpiFlaggedCategories" class="kpi-value">0</div>
+              <div class="kpi-meta">Below configured target margin</div>
+            </article>
+            <article class="kpi">
+              <div class="kpi-label">High-Risk Suppliers</div>
+              <div id="kpiHighRiskSuppliers" class="kpi-value">0</div>
+              <div class="kpi-meta">Require immediate sourcing action</div>
+            </article>
+            <article class="kpi">
+              <div class="kpi-label">Open Proposals</div>
+              <div id="kpiOpenProposals" class="kpi-value">0</div>
+              <div class="kpi-meta">Pending route/approval workflow</div>
+            </article>
+            <article class="kpi">
+              <div class="kpi-label">Last Scan</div>
+              <div id="kpiLastScan" class="kpi-value" style="font-size: 18px;">-</div>
+              <div class="kpi-meta">Analytics dataset refresh timestamp</div>
+            </article>
+          </section>
 
-    <section class="card">
-      <div class="card-head">
-        <h3 class="card-title">Working Dataset: POs & Quotations by Category/Supplier</h3>
-        <p class="card-note">Open/closed documents, projected margin, and target variance.</p>
+          <section class="grid-2">
+            <article class="card">
+              <div class="card-head">
+                <h3 class="card-title">Margin Trend by Category</h3>
+                <p class="card-note">Actual vs target vs projected margin over time window.</p>
+              </div>
+              <div class="card-body">
+                <div class="chart-wrap">
+                  <canvas id="lineChart" width="700" height="300"></canvas>
+                  <div class="legend">
+                    <span><span class="dot" style="background:#193E6B;"></span>Actual Margin %</span>
+                    <span><span class="dot" style="background:#B3A125;"></span>Target Margin %</span>
+                    <span><span class="dot" style="background:#0EA5E9;"></span>Projected Margin %</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <h3 class="card-title">Supplier Risk Exposure</h3>
+                <p class="card-note">Variance of projected margin versus target by supplier.</p>
+              </div>
+              <div class="card-body">
+                <div class="chart-wrap">
+                  <canvas id="barChart" width="700" height="300"></canvas>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section class="grid-2">
+            <article class="card">
+              <div class="card-head">
+                <h3 class="card-title">Risk Alerts</h3>
+                <p class="card-note">Hotspots detected from open/closed PO and quotation analysis.</p>
+              </div>
+              <div class="card-body">
+                <div id="riskList" class="risk-list"></div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <h3 class="card-title">Traceability Log</h3>
+                <a class="btn-mini" href="./Audit-Trail.html?po=ANALYTICS-PROPOSAL">Open Full Audit</a>
+                <p class="card-note">Routing decisions, BC update actions, and scan history.</p>
+              </div>
+              <div class="card-body">
+                <div id="traceList" class="trace-list"></div>
+              </div>
+            </article>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <h3 class="card-title">Working Dataset: POs & Quotations by Category/Supplier</h3>
+              <p class="card-note">Open/closed documents, projected margin, and target variance.</p>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table aria-label="working analytics dataset">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Supplier</th>
+                      <th>Open POs</th>
+                      <th>Closed POs</th>
+                      <th>Open Quotes</th>
+                      <th>Actual Margin</th>
+                      <th>Projected Margin</th>
+                      <th>Target Margin</th>
+                      <th>Variance</th>
+                      <th>Severity</th>
+                    </tr>
+                  </thead>
+                  <tbody id="datasetBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <h3 class="card-title">Sourcing Adjustment Proposals & Approval Routing</h3>
+              <p class="card-note">Route recommendations through governed workflow and apply BC updates on approval.</p>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table aria-label="proposal routing table">
+                  <thead>
+                    <tr>
+                      <th>Proposal ID</th>
+                      <th>Category / Supplier</th>
+                      <th>Risk</th>
+                      <th>Recommendation</th>
+                      <th>Current Route</th>
+                      <th>Status</th>
+                      <th>BC Dimension Update</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="proposalBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </main>
       </div>
-      <div class="card-body">
-        <div class="table-wrap">
-          <table aria-label="working analytics dataset">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Supplier</th>
-                <th>Open POs</th>
-                <th>Closed POs</th>
-                <th>Open Quotes</th>
-                <th>Actual Margin</th>
-                <th>Projected Margin</th>
-                <th>Target Margin</th>
-                <th>Variance</th>
-                <th>Severity</th>
-              </tr>
-            </thead>
-            <tbody id="datasetBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+    </div>
 
-    <section class="card">
-      <div class="card-head">
-        <h3 class="card-title">Sourcing Adjustment Proposals & Approval Routing</h3>
-        <p class="card-note">Route recommendations through governed workflow and apply BC updates on approval.</p>
-      </div>
-      <div class="card-body">
-        <div class="table-wrap">
-          <table aria-label="proposal routing table">
-            <thead>
-              <tr>
-                <th>Proposal ID</th>
-                <th>Category / Supplier</th>
-                <th>Risk</th>
-                <th>Recommendation</th>
-                <th>Current Route</th>
-                <th>Status</th>
-                <th>BC Dimension Update</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="proposalBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    Copyright &copy; 2026 Profit Margin Guardian Agent
-  </footer>
+    <footer>
+      Copyright &copy; 2026 Profit Margin Guardian Agent
+    </footer>
+  </div>
 
   <script>
     const sessionRaw = localStorage.getItem("pmg_session");
     if (!sessionRaw) window.location.replace("./Login.html");
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
-    const roleLabelMap = { admin: "Administrator", procurement_manager: "Procurement Manager", category_manager: "Category Manager" };
+    const roleLabelMap = { admin: "System Administrator", procurement_manager: "Procurement Manager", category_manager: "Category Manager" };
     const analyticsStorageKey = "pmg_analytics_state";
     const auditStorageKey = "pmg_audit_logs";
+
+    const navAvatar = document.getElementById("navAvatar");
+    const navUserName = document.getElementById("navUserName");
+    const navUserRole = document.getElementById("navUserRole");
+    const railContainer = document.getElementById("railContainer");
+    const railToggle = document.getElementById("railToggle");
+    const railToggleIcon = document.getElementById("railToggleIcon");
+    const railHeaderLabel = document.getElementById("railHeaderLabel");
+    const railGroupTitle = document.getElementById("railGroupTitle");
+    const railGroupText = document.getElementById("railGroupText");
+    const railItems = Array.from(document.querySelectorAll(".rail-item"));
+
+    function getInitials(name) {
+      const safeName = (name || "User").trim();
+      const parts = safeName.split(/\s+/).filter(Boolean).slice(0, 2);
+      return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "US";
+    }
+
+    function resolveTopNavName() {
+      const fallbackNames = {
+        admin: "John Owen",
+        procurement_manager: "Megan Cruz",
+        category_manager: "Carla Reyes"
+      };
+      const rawName = (session.userName || "").trim();
+      const roleText = (roleLabelMap[session.role] || session.roleLabel || "User").trim();
+      const genericNames = ["System Administrator", "Procurement Manager", "Category Manager"];
+      if (!rawName || rawName === roleText || genericNames.includes(rawName)) {
+        return fallbackNames[session.role] || rawName || "User";
+      }
+      return rawName;
+    }
+
+    const topNavName = resolveTopNavName();
+    navAvatar.textContent = getInitials(topNavName);
+    navUserName.textContent = topNavName;
+    navUserRole.textContent = roleLabelMap[session.role] || session.roleLabel || "User";
 
     const seedState = {
       settings: {
@@ -866,6 +1228,7 @@
         };
       });
     }
+
     function renderKPIs() {
       const dataset = supplierDataset();
       const flagged = dataset.filter((row) => row.variance < 0).length;
@@ -1033,6 +1396,7 @@
         button.addEventListener("click", () => handleProposalAction(button.dataset.id, button.dataset.action));
       });
     }
+
     function handleProposalAction(id, action) {
       const proposal = state.proposals.find((item) => item.id === id);
       if (!proposal) return;
@@ -1113,6 +1477,30 @@
       renderTrace();
     }
 
+    function applyRailState(collapsed) {
+      railContainer.classList.toggle("collapsed", collapsed);
+      railToggle.setAttribute("aria-expanded", String(!collapsed));
+      railToggle.setAttribute("aria-label", collapsed ? "Expand navigation" : "Collapse navigation");
+      railToggleIcon.classList.toggle("rotated", collapsed);
+      railHeaderLabel.classList.toggle("hidden", collapsed);
+      railGroupTitle.classList.toggle("hidden-labels", collapsed);
+      railGroupText.classList.toggle("hidden", collapsed);
+
+      railItems.forEach((item) => {
+        const label = item.querySelector(".rail-item-label");
+        const text = label ? label.textContent : "";
+        item.classList.toggle("collapsed", collapsed);
+        if (label) {
+          label.classList.toggle("hidden", collapsed);
+        }
+        if (collapsed) {
+          item.setAttribute("data-tooltip", text);
+        } else {
+          item.removeAttribute("data-tooltip");
+        }
+      });
+    }
+
     runScanBtn.addEventListener("click", runScan);
     categoryFocus.addEventListener("change", () => {
       state.settings.categoryFocus = categoryFocus.value;
@@ -1128,6 +1516,15 @@
       state.settings.scanTrigger = scanTrigger.value;
       saveState();
       renderKPIs();
+    });
+
+    const railCollapsed = localStorage.getItem("pmg_sidebar_collapsed") === "true";
+    applyRailState(railCollapsed);
+
+    railToggle.addEventListener("click", () => {
+      const collapsed = !railContainer.classList.contains("collapsed");
+      applyRailState(collapsed);
+      localStorage.setItem("pmg_sidebar_collapsed", String(collapsed));
     });
 
     renderAll();

@@ -5,119 +5,1322 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profit Margin Guardian Agent | PO Approval</title>
   <style>
-    :root{--blue:#193E6B;--blue2:#143356;--gold:#B3A125;--white:#fff;--gray:#F5F5F5;--line:#E6ECF3;--text:#1f2937;--muted:#5b6678;--focus:0 0 0 3px rgba(179,161,37,.35);--ok:#166534;--warn:#8a5308;--block:#7f1d1d}
-    *{box-sizing:border-box} body{margin:0;font-family:"Segoe UI",Tahoma,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 8%,rgba(179,161,37,.14),transparent 40%),radial-gradient(circle at 92% 88%,rgba(25,62,107,.18),transparent 44%),linear-gradient(170deg,#f3f7fd 0,#fff 52%,#edf3fb 100%)}
-    .top{background:var(--blue);border-bottom:4px solid var(--gold);color:#fff;padding:12px 20px}.topin{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px}.logo{padding:6px 12px;border:2px solid rgba(255,255,255,.75);border-radius:10px;font-weight:700}.logo span{color:var(--gold);font-weight:800}.title{margin:0;font-size:clamp(23px,1.8vw,30px)}
-    .nav{display:flex;gap:8px;flex-wrap:wrap}.nav a{text-decoration:none;color:#fff;border:1px solid transparent;border-radius:8px;padding:8px 12px;font-size:15px;font-weight:600}.nav a:hover,.nav a:focus-visible{outline:none;border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.12);box-shadow:var(--focus)}.nav a[aria-current="page"]{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.16)}
-    .bar{width:min(1320px,calc(100% - 40px));margin:16px auto 0;border:1px solid #d7e2f1;border-left:6px solid var(--gold);border-radius:10px;background:#f5f9ff;color:#204568;padding:11px 14px;font-size:14px}.bar strong{color:var(--blue)}
-    main{width:min(1320px,100%);margin:16px auto 22px;padding:0 20px 20px;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(340px,.9fr);gap:16px;align-items:start}
-    .panel{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(17,24,39,.08);overflow:hidden}.head{background:#f8fbff;border-bottom:1px solid var(--line);padding:11px 14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.h2{margin:0;color:var(--blue);font-size:20px}.sub{margin:5px 0 0;color:var(--muted);font-size:13px}.body{padding:14px}
-    .meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}.m{border:1px solid #dbe4f2;border-radius:10px;background:#f9fbff;padding:10px;display:grid;gap:2px}.ml{font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted)}.mv{font-size:15px;font-weight:700;color:var(--blue)}
-    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;border:1px solid transparent;font-size:12px;font-weight:700}.ok{background:#ecfdf3;color:var(--ok);border-color:#b7efcf}.warning{background:#fff8e6;color:var(--warn);border-color:#f3daa1}.block{background:#feeeee;color:var(--block);border-color:#f6b8b8}
-    .table{border:1px solid var(--line);border-radius:10px;overflow:auto} table{width:100%;border-collapse:collapse;min-width:1020px} th{background:var(--blue);color:#fff;padding:9px 10px;text-align:left;font-size:13px;border-right:1px solid rgba(255,255,255,.2)} th:last-child,td:last-child{border-right:none}
-    td{padding:8px 10px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;font-size:13px} tbody tr:nth-child(even){background:var(--gray)} .num{width:96px;min-height:34px;border:1px solid #c6d1e0;border-radius:8px;padding:6px 8px;font-size:13px}
-    .num:focus-visible,.btn:focus-visible,.mini:focus-visible,.act:focus-visible,textarea:focus-visible{outline:none;border-color:var(--gold);box-shadow:var(--focus)}
-    .sum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.s{border:1px solid #dbe4f2;border-radius:10px;background:#f9fbff;padding:10px}.sl{font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted)}.sv{font-size:26px;font-weight:700;color:var(--blue);line-height:1.1}.sm{font-size:13px;color:#334155}
-    .strip{margin-top:10px;border:1px solid #d8e2f0;border-left:5px solid var(--gold);border-radius:10px;background:#f4f9ff;padding:10px;font-size:13px;color:#234a6f}.strip strong{color:var(--blue)}
-    .acts{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.act{min-height:40px;border:none;border-radius:9px;color:#fff;font-size:13px;font-weight:700;cursor:pointer}.a1{background:#0f7a45}.a2{background:#8d1f1f}.a3{background:var(--blue)}.a1:hover{background:#0d683b}.a2:hover{background:#741919}.a3:hover{background:var(--blue2)}
-    .list{display:grid;gap:8px}.card{border:1px solid #dfe7f3;border-left:4px solid var(--gold);border-radius:10px;background:#fffef9;padding:10px;display:grid;gap:6px}.card h4{margin:0;font-size:14px;color:var(--blue)}.row{font-size:13px;color:#334155;display:flex;gap:8px;flex-wrap:wrap}
-    .btn,.mini{border:1px solid #d1dceb;border-radius:8px;min-height:32px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer}.btn{background:#edf3fb;color:var(--blue)}.mini{background:#fff;color:#1f2937}
-    .audit{border:1px solid #e2e8f2;border-radius:10px;background:#fff;padding:9px;display:grid;gap:3px;font-size:12px;color:#334155}.audit strong{color:var(--blue);font-size:13px}.empty{border:1px dashed #cfd9e9;border-radius:10px;background:#fbfdff;padding:14px;color:#64748b;font-size:13px;text-align:center}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}.modal[aria-hidden="false"]{display:flex}.mc{width:min(480px,100%);border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 14px 32px rgba(15,23,42,.2);padding:16px}
-    .mt{margin:0 0 8px;color:var(--blue);font-size:22px}.mn{margin:0 0 10px;font-size:13px;color:#334155} textarea{width:100%;min-height:120px;border:1px solid #c6d1e0;border-radius:9px;padding:10px;font-size:13px;font-family:"Segoe UI",sans-serif;resize:vertical}
-    .err{min-height:18px;font-size:13px;font-weight:700;color:#b42318;margin-top:6px}.ma{margin-top:12px;display:flex;justify-content:flex-end;gap:8px}.ghost{border:1px solid #d1dceb;border-radius:8px;min-height:36px;padding:8px 12px;background:#ecf2fb;color:var(--blue);font-size:13px;font-weight:700;cursor:pointer}
-    footer{background:var(--blue);border-top:3px solid var(--gold);color:#fff;text-align:center;padding:11px;font-size:13px;margin-top:16px}
-    @media(max-width:1180px){main{grid-template-columns:1fr}} @media(max-width:840px){.meta{grid-template-columns:repeat(2,minmax(0,1fr))}.acts{grid-template-columns:1fr}} @media(max-width:760px){.top{padding:12px}.bar{width:calc(100% - 24px)}main{padding:0 12px 16px}.meta,.sum{grid-template-columns:1fr}}
+    :root {
+      --midnight-blue: #193e6b;
+      --midnight-blue-dark: #143356;
+      --green-gold: #b3a125;
+      --white: #ffffff;
+      --page-bg: #eee7e0;
+      --surface: #ffffff;
+      --surface-muted: #f5f5f5;
+      --surface-soft: #f8fbff;
+      --line: #e6ecf3;
+      --text-main: #1f2937;
+      --text-heading: #1c2b4a;
+      --text-secondary: #374151;
+      --text-muted: #5b6678;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.28);
+      --warning-bg: #fff6e5;
+      --shadow-soft: 0 2px 10px rgba(15, 23, 42, 0.06);
+      --ok: #166534;
+      --warn: #8a5308;
+      --block: #7f1d1d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background: var(--page-bg);
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--page-bg);
+      overflow: hidden;
+    }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      min-height: 64px;
+      padding: 0 20px;
+      background: var(--midnight-blue);
+      color: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .brand-logo .accent {
+      color: var(--green-gold);
+      font-weight: 800;
+    }
+
+    .nav-separator {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 16px;
+      user-select: none;
+    }
+
+    .nav-context {
+      min-width: 0;
+    }
+
+    .nav-context-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px 6px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: rgba(255, 255, 255, 0.95);
+      flex-shrink: 0;
+    }
+
+    .nav-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--midnight-blue);
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-user-meta {
+      display: grid;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .nav-user-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .nav-user-role {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .rail-container {
+      width: 270px;
+      flex-shrink: 0;
+      border-right: 1px solid #ddd8d1;
+      background: var(--surface-muted);
+      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .rail-container.collapsed {
+      width: 64px;
+    }
+
+    .nav-rail {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--surface-muted);
+      padding: 12px 0 18px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .rail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 8px;
+      min-height: 44px;
+    }
+
+    .rail-header-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #242424;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .rail-header-label.hidden {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+      width: 0;
+      overflow: hidden;
+    }
+
+    .collapse-button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #424242;
+      flex-shrink: 0;
+    }
+
+    .collapse-button:hover,
+    .collapse-button:focus-visible {
+      background: #ebebeb;
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .collapse-icon {
+      display: inline-block;
+      transition: transform 0.28s ease;
+    }
+
+    .collapse-icon.rotated {
+      transform: rotate(180deg);
+    }
+
+    .rail-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 8px;
+    }
+
+    .rail-group-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 8px 10px;
+      color: #242424;
+      font-size: 16px;
+      font-weight: 600;
+      min-height: 40px;
+    }
+
+    .rail-group-title.hidden-labels {
+      justify-content: center;
+    }
+
+    .rail-group-icon {
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .rail-group-text.hidden,
+    .rail-item-label.hidden {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+      width: 0;
+      overflow: hidden;
+    }
+
+    .rail-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      margin: 0 4px;
+      padding: 10px 12px;
+      border-left: 3px solid transparent;
+      border-radius: 4px;
+      color: #424242;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .rail-item:hover,
+    .rail-item:focus-visible {
+      background: #ebebeb;
+      color: #242424;
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .rail-item-active {
+      background: var(--warning-bg);
+      color: var(--green-gold);
+      border-left-color: var(--green-gold);
+    }
+
+    .rail-item-active:hover,
+    .rail-item-active:focus-visible {
+      background: var(--warning-bg);
+      color: var(--green-gold);
+    }
+
+    .rail-item.collapsed {
+      justify-content: center;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .rail-item-icon {
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 62px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #111827;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .app-main {
+      flex: 1;
+      min-width: 0;
+      padding: 16px 18px 20px;
+      overflow: auto;
+    }
+
+    .session-bar {
+      margin: 0 0 14px;
+      border: 1px solid #ddd8d1;
+      border-left: 4px solid var(--green-gold);
+      border-radius: 8px;
+      background: #f8f5ef;
+      color: var(--text-secondary);
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    .session-bar strong {
+      color: var(--text-heading);
+      font-weight: 600;
+    }
+
+    main {
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(340px, .9fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .head {
+      background: var(--surface-soft);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 16px 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .h2 {
+      margin: 0;
+      color: var(--text-heading);
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .sub {
+      margin: 5px 0 0;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .body { padding: 14px 16px 16px; }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .m {
+      border: 1px solid #dbe4f2;
+      border-radius: 10px;
+      background: #f9fbff;
+      padding: 10px;
+      display: grid;
+      gap: 2px;
+    }
+
+    .ml {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .mv {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--midnight-blue);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .ok { background: #ecfdf3; color: var(--ok); border-color: #b7efcf; }
+    .warning { background: #fff8e6; color: var(--warn); border-color: #f3daa1; }
+    .block { background: #feeeee; color: var(--block); border-color: #f6b8b8; }
+
+    .table {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1020px;
+    }
+
+    th {
+      color: #94a3b8;
+      padding: 12px 8px 10px;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    th:last-child, td:last-child { border-right: none; }
+
+    td {
+      padding: 12px 8px;
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      font-size: 13px;
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) { background: var(--surface-muted); }
+
+    .num {
+      width: 96px;
+      min-height: 34px;
+      border: 1px solid #c6d1e0;
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 13px;
+    }
+
+    .num:focus-visible,
+    .btn:focus-visible,
+    .mini:focus-visible,
+    .act:focus-visible,
+    textarea:focus-visible {
+      outline: none;
+      border-color: var(--green-gold);
+      box-shadow: var(--focus-ring);
+    }
+
+    .sum {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .s {
+      border: 1px solid #dbe4f2;
+      border-radius: 10px;
+      background: #f9fbff;
+      padding: 10px;
+    }
+
+    .sl {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .sv {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--midnight-blue);
+      line-height: 1.1;
+    }
+
+    .sm {
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .strip {
+      margin-top: 10px;
+      border: 1px solid #d8e2f0;
+      border-left: 5px solid var(--green-gold);
+      border-radius: 10px;
+      background: #f4f9ff;
+      padding: 10px;
+      font-size: 13px;
+      color: #234a6f;
+    }
+
+    .strip strong { color: var(--midnight-blue); }
+
+    .acts {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .act {
+      min-height: 40px;
+      border: none;
+      border-radius: 9px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .a1 { background: #0f7a45; }
+    .a2 { background: #8d1f1f; }
+    .a3 { background: var(--midnight-blue); }
+    .a1:hover { background: #0d683b; }
+    .a2:hover { background: #741919; }
+    .a3:hover { background: var(--midnight-blue-dark); }
+
+    .list { display: grid; gap: 8px; }
+
+    .card {
+      border: 1px solid #dfe7f3;
+      border-left: 4px solid var(--green-gold);
+      border-radius: 10px;
+      background: #fffef9;
+      padding: 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .card h4 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--midnight-blue);
+    }
+
+    .row {
+      font-size: 13px;
+      color: #334155;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn,
+    .mini {
+      border: 1px solid #d1dceb;
+      border-radius: 8px;
+      min-height: 32px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn { background: #edf3fb; color: var(--midnight-blue); }
+    .mini { background: #fff; color: #1f2937; }
+
+    .audit {
+      border: 1px solid #e2e8f2;
+      border-radius: 10px;
+      background: #fff;
+      padding: 9px;
+      display: grid;
+      gap: 3px;
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .audit strong {
+      color: var(--midnight-blue);
+      font-size: 13px;
+    }
+
+    .empty {
+      border: 1px dashed #cfd9e9;
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 14px;
+      color: #64748b;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal[aria-hidden="false"] { display: flex; }
+
+    .mc {
+      width: min(480px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 14px 32px rgba(15, 23, 42, .2);
+      padding: 16px;
+    }
+
+    .mt {
+      margin: 0 0 8px;
+      color: var(--midnight-blue);
+      font-size: 22px;
+    }
+
+    .mn {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid #c6d1e0;
+      border-radius: 9px;
+      padding: 10px;
+      font-size: 13px;
+      font-family: "Segoe UI", sans-serif;
+      resize: vertical;
+    }
+
+    .err {
+      min-height: 18px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #b42318;
+      margin-top: 6px;
+    }
+
+    .ma {
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .ghost {
+      border: 1px solid #d1dceb;
+      border-radius: 8px;
+      min-height: 36px;
+      padding: 8px 12px;
+      background: #ecf2fb;
+      color: var(--midnight-blue);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    footer {
+      background: var(--midnight-blue);
+      border-top: 2px solid var(--green-gold);
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      padding: 10px 14px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 1180px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 840px) {
+      .meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .acts { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 860px) {
+      .top-bar {
+        grid-template-columns: 1fr;
+        align-items: start;
+        padding: 14px 16px;
+      }
+
+      .nav-right {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app-body { flex-direction: column; }
+      .rail-container,
+      .rail-container.collapsed { width: 100%; }
+      .nav-rail { max-height: 220px; }
+
+      [data-tooltip]:hover::after,
+      [data-tooltip]:focus-visible::after {
+        display: none;
+      }
+
+      .top-bar { gap: 10px; }
+      .app-main { padding: 12px; }
+      .meta,
+      .sum { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <header class="top"><div class="topin"><div class="brand"><div class="logo">CLaaS<span>2</span>SaaS</div><h1 class="title">Profit Margin Guardian Agent</h1></div><nav class="nav" aria-label="Primary navigation"><a href="./Dashboard.html">Dashboard</a><a href="./Rule-Configuration.html">Rule Configuration</a><a href="./PO-Approval.html" aria-current="page">PO Validation</a><a href="./Analytics.html">Category Risk Analytics</a><a href="./Audit-Trail.html">Audit Trail</a></nav></div></header>
-  <div id="sessionBar" class="bar"></div>
-  <main>
-    <section class="panel">
-      <div class="head"><div><h2 class="h2">PO Approval Margin Check</h2><p class="sub">Auto-retrieved BC cost and expected sales data evaluated against governance rules.</p></div><button id="reloadBtn" class="mini" type="button">Refresh Mock BC Data</button></div>
-      <div class="body">
-        <div id="poMeta" class="meta"></div>
-        <div class="table"><table aria-label="Purchase order margin validation lines"><thead><tr><th>Line</th><th>Item</th><th>Item Group</th><th>Qty</th><th>Unit Cost</th><th>Expected Sales Price</th><th>Line Cost</th><th>Line Revenue</th><th>Margin %</th><th>Threshold %</th><th>Behavior</th><th>Status</th></tr></thead><tbody id="linesBody"></tbody></table></div>
-        <div id="decisionStrip" class="strip"><strong>Rule Engine:</strong> Waiting for calculation...</div>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="nav-left">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <span class="nav-separator" aria-hidden="true">|</span>
+        <div class="nav-context">
+          <span class="nav-context-label">Profit Margin Guardian Agent</span>
+        </div>
       </div>
-    </section>
-    <aside style="display:grid;gap:16px;">
-      <section class="panel"><div class="head"><h3 class="h2" style="font-size:18px;">Real-Time Margin Summary</h3></div><div class="body"><div class="sum"><article class="s"><div class="sl">Total Cost</div><div id="totalCost" class="sv">$0</div><div class="sm">Aggregated from PO lines</div></article><article class="s"><div class="sl">Total Revenue</div><div id="totalRevenue" class="sv">$0</div><div class="sm">Expected sales value</div></article><article class="s"><div class="sl">Overall Margin</div><div id="overallMargin" class="sv">0%</div><div class="sm">Weighted across all lines</div></article><article class="s"><div class="sl">Decision State</div><div id="decisionState" class="sv">-</div><div id="decisionHint" class="sm">Evaluate rules to continue</div></article></div><div class="acts"><button id="approveBtn" class="act a1" type="button">Approve</button><button id="blockBtn" class="act a2" type="button">Block</button><button id="overrideBtn" class="act a3" type="button">Override</button></div></div></section>
-      <section class="panel"><div class="head"><h3 class="h2" style="font-size:18px;">Recommendations</h3><p class="sub">Alternatives ranked by margin recovery potential.</p></div><div class="body"><div id="recommendList" class="list"></div></div></section>
-      <section class="panel"><div class="head"><h3 class="h2" style="font-size:18px;">Decision Audit Log</h3><a id="auditTrailLink" class="mini" href="./Audit-Trail.html">Open Full Audit</a><p class="sub">Timestamped PO actions with context.</p></div><div class="body"><div id="auditList" class="list"></div></div></section>
-    </aside>
-  </main>
-  <footer>Copyright &copy; 2026 Profit Margin Guardian Agent</footer>
-  <div id="overrideModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="overrideTitle"><div class="mc"><h3 id="overrideTitle" class="mt">Override Justification Required</h3><p class="mn">This PO violates margin policy. Enter a business justification to proceed.</p><textarea id="overrideReason" placeholder="Explain why this PO should be overridden and what controls are in place..."></textarea><div id="overrideError" class="err"></div><div class="ma"><button type="button" id="cancelOverride" class="ghost">Cancel</button><button type="button" id="confirmOverride" class="act a3" style="min-width:160px;">Confirm Override</button></div></div></div>
+      <div class="nav-right">
+        <div class="nav-user" aria-label="User profile">
+          <span class="nav-avatar" id="navAvatar" aria-hidden="true">PM</span>
+          <div class="nav-user-meta">
+            <span class="nav-user-name" id="navUserName">User</span>
+            <span class="nav-user-role" id="navUserRole">User</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <aside class="rail-container" id="railContainer">
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <div class="rail-header">
+            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
+            <button type="button" class="collapse-button" id="railToggle" aria-label="Collapse navigation" aria-expanded="true">
+              <span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span>
+            </button>
+          </div>
+
+          <div class="rail-group">
+            <div class="rail-nav">
+              <a class="rail-item" href="./Dashboard.html">
+                <span class="rail-item-icon" aria-hidden="true">&#9635;</span>
+                <span class="rail-item-label">Dashboard</span>
+              </a>
+              <a class="rail-item" href="./Rule-Configuration.html">
+                <span class="rail-item-icon" aria-hidden="true">&#9881;</span>
+                <span class="rail-item-label">Rule Configuration</span>
+              </a>
+              <a class="rail-item rail-item-active" href="./PO-Approval.html" aria-current="page">
+                <span class="rail-item-icon" aria-hidden="true">&#10003;</span>
+                <span class="rail-item-label">PO Validation</span>
+              </a>
+              <a class="rail-item" href="./Analytics.html">
+                <span class="rail-item-icon" aria-hidden="true">&#128200;</span>
+                <span class="rail-item-label">Category Risk Analytics</span>
+              </a>
+              <a class="rail-item" href="./Audit-Trail.html">
+                <span class="rail-item-icon" aria-hidden="true">&#128221;</span>
+                <span class="rail-item-label">Audit Trail</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="app-main">
+        <div id="sessionBar" class="session-bar"></div>
+
+        <main id="main-content" tabindex="-1">
+          <section class="panel">
+            <div class="head">
+              <div>
+                <h2 class="h2">PO Approval Margin Check</h2>
+                <p class="sub">Auto-retrieved BC cost and expected sales data evaluated against governance rules.</p>
+              </div>
+              <button id="reloadBtn" class="mini" type="button">Refresh Mock BC Data</button>
+            </div>
+            <div class="body">
+              <div id="poMeta" class="meta"></div>
+              <div class="table">
+                <table aria-label="Purchase order margin validation lines">
+                  <thead>
+                    <tr>
+                      <th>Line</th>
+                      <th>Item</th>
+                      <th>Item Group</th>
+                      <th>Qty</th>
+                      <th>Unit Cost</th>
+                      <th>Expected Sales Price</th>
+                      <th>Line Cost</th>
+                      <th>Line Revenue</th>
+                      <th>Margin %</th>
+                      <th>Threshold %</th>
+                      <th>Behavior</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="linesBody"></tbody>
+                </table>
+              </div>
+              <div id="decisionStrip" class="strip"><strong>Rule Engine:</strong> Waiting for calculation...</div>
+            </div>
+          </section>
+
+          <aside style="display:grid;gap:16px;">
+            <section class="panel">
+              <div class="head"><h3 class="h2">Real-Time Margin Summary</h3></div>
+              <div class="body">
+                <div class="sum">
+                  <article class="s"><div class="sl">Total Cost</div><div id="totalCost" class="sv">$0</div><div class="sm">Aggregated from PO lines</div></article>
+                  <article class="s"><div class="sl">Total Revenue</div><div id="totalRevenue" class="sv">$0</div><div class="sm">Expected sales value</div></article>
+                  <article class="s"><div class="sl">Overall Margin</div><div id="overallMargin" class="sv">0%</div><div class="sm">Weighted across all lines</div></article>
+                  <article class="s"><div class="sl">Decision State</div><div id="decisionState" class="sv">-</div><div id="decisionHint" class="sm">Evaluate rules to continue</div></article>
+                </div>
+                <div class="acts">
+                  <button id="approveBtn" class="act a1" type="button">Approve</button>
+                  <button id="blockBtn" class="act a2" type="button">Block</button>
+                  <button id="overrideBtn" class="act a3" type="button">Override</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="head">
+                <h3 class="h2">Recommendations</h3>
+                <p class="sub">Alternatives ranked by margin recovery potential.</p>
+              </div>
+              <div class="body"><div id="recommendList" class="list"></div></div>
+            </section>
+
+            <section class="panel">
+              <div class="head">
+                <h3 class="h2">Decision Audit Log</h3>
+                <a id="auditTrailLink" class="mini" href="./Audit-Trail.html">Open Full Audit</a>
+                <p class="sub">Timestamped PO actions with context.</p>
+              </div>
+              <div class="body"><div id="auditList" class="list"></div></div>
+            </section>
+          </aside>
+        </main>
+      </div>
+    </div>
+
+    <footer>Copyright &copy; 2026 Profit Margin Guardian Agent</footer>
+  </div>
+
+  <div id="overrideModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="overrideTitle">
+    <div class="mc">
+      <h3 id="overrideTitle" class="mt">Override Justification Required</h3>
+      <p class="mn">This PO violates margin policy. Enter a business justification to proceed.</p>
+      <textarea id="overrideReason" placeholder="Explain why this PO should be overridden and what controls are in place..."></textarea>
+      <div id="overrideError" class="err"></div>
+      <div class="ma">
+        <button type="button" id="cancelOverride" class="ghost">Cancel</button>
+        <button type="button" id="confirmOverride" class="act a3" style="min-width:160px;">Confirm Override</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const sessionRaw = localStorage.getItem("pmg_session"); if(!sessionRaw){window.location.replace("./Login.html");}
+    const sessionRaw = localStorage.getItem("pmg_session");
+    if (!sessionRaw) {
+      window.location.replace("./Login.html");
+    }
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
-    const roleLabels={admin:"Administrator",procurement_manager:"Procurement Manager",category_manager:"Category Manager"};
-    const po={poNo:"PO-026184",supplier:"Prime Industrial Supply",customerCode:"CUST-1008",customer:"Golden Bridge Construction",customerGroup:"Large Enterprise",currency:"USD",lines:[{lineNo:10000,itemNo:"ITM-110245",itemName:"Stainless Hex Bolt M12",itemGroup:"Industrial Fasteners",qty:250,unitCost:2.15,expectedSalesUnit:2.52},{lineNo:20000,itemNo:"ITM-320118",itemName:"Hydraulic Seal Kit HS-90",itemGroup:"Hydraulic Components",qty:80,unitCost:15.5,expectedSalesUnit:18.2},{lineNo:30000,itemNo:"ITM-440071",itemName:"PLC I/O Module 16DI",itemGroup:"Electrical Control Parts",qty:35,unitCost:58,expectedSalesUnit:66}]};
-    const rulesStorageKey="pmg_rules";
-    const fallbackRules=[{scopeType:"Item Group",scopeValue:"Industrial Fasteners",targetType:"Customer Group",targetValue:"Large Enterprise",threshold:20,alertBehavior:"Block Approval",status:"Active"},{scopeType:"Item Group",scopeValue:"Hydraulic Components",targetType:"Customer Group",targetValue:"Large Enterprise",threshold:18,alertBehavior:"Warning Only",status:"Active"},{scopeType:"Item Group",scopeValue:"Electrical Control Parts",targetType:"Customer Group",targetValue:"Large Enterprise",threshold:19,alertBehavior:"Block Approval",status:"Active"}];
-    const linesBody=document.getElementById("linesBody"),poMeta=document.getElementById("poMeta"),decisionStrip=document.getElementById("decisionStrip"),recommendList=document.getElementById("recommendList"),auditList=document.getElementById("auditList");
-    const totalCostEl=document.getElementById("totalCost"),totalRevenueEl=document.getElementById("totalRevenue"),overallMarginEl=document.getElementById("overallMargin"),decisionStateEl=document.getElementById("decisionState"),decisionHintEl=document.getElementById("decisionHint");
-    const approveBtn=document.getElementById("approveBtn"),blockBtn=document.getElementById("blockBtn"),overrideBtn=document.getElementById("overrideBtn"),reloadBtn=document.getElementById("reloadBtn");
-    const overrideModal=document.getElementById("overrideModal"),overrideReason=document.getElementById("overrideReason"),overrideError=document.getElementById("overrideError"),cancelOverride=document.getElementById("cancelOverride"),confirmOverride=document.getElementById("confirmOverride");
-    const auditTrailLink=document.getElementById("auditTrailLink");
-    let lastEvaluation=null; const auditKey="pmg_audit_logs";
-    const money=(v)=>new Intl.NumberFormat("en-US",{style:"currency",currency:po.currency,maximumFractionDigits:2}).format(v), pct=(v)=>(Number.isFinite(v)?v:0).toFixed(2)+"%";
-    const margin=(c,r)=>r<=0?0:((r-c)/r)*100;
-    function normalizeBehavior(value){const text=String(value||"").toLowerCase(); return text.includes("block") ? "Block Approval" : "Warning Only";}
-    function parseRuleItemCode(value){return String(value||"").split(" |")[0].trim();}
-    function scopeMatches(rule,line){
-      if(rule.scopeType==="Item Group"){return String(rule.scopeValue).trim()===line.itemGroup;}
-      if(rule.scopeType==="Item"){const code=parseRuleItemCode(rule.scopeValue); return code===line.itemNo;}
+    const roleLabels = { admin: "System Administrator", procurement_manager: "Procurement Manager", category_manager: "Category Manager" };
+
+    const navAvatar = document.getElementById("navAvatar");
+    const navUserName = document.getElementById("navUserName");
+    const navUserRole = document.getElementById("navUserRole");
+    const railContainer = document.getElementById("railContainer");
+    const railToggle = document.getElementById("railToggle");
+    const railToggleIcon = document.getElementById("railToggleIcon");
+    const railHeaderLabel = document.getElementById("railHeaderLabel");
+    const railGroupTitle = document.getElementById("railGroupTitle");
+    const railGroupText = document.getElementById("railGroupText");
+    const railItems = Array.from(document.querySelectorAll(".rail-item"));
+
+    function getInitials(name) {
+      const safeName = (name || "User").trim();
+      const parts = safeName.split(/\s+/).filter(Boolean).slice(0, 2);
+      return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "US";
+    }
+
+    function resolveTopNavName() {
+      const fallbackNames = {
+        admin: "John Owen",
+        procurement_manager: "Megan Cruz",
+        category_manager: "Carla Reyes"
+      };
+      const rawName = (session.userName || "").trim();
+      const roleText = (roleLabels[session.role] || session.roleLabel || "User").trim();
+      const genericNames = ["System Administrator", "Procurement Manager", "Category Manager"];
+      if (!rawName || rawName === roleText || genericNames.includes(rawName)) {
+        return fallbackNames[session.role] || rawName || "User";
+      }
+      return rawName;
+    }
+
+    const topNavName = resolveTopNavName();
+    navAvatar.textContent = getInitials(topNavName);
+    navUserName.textContent = topNavName;
+    navUserRole.textContent = roleLabels[session.role] || session.roleLabel || "User";
+
+    const po = {
+      poNo: "PO-026184",
+      supplier: "Prime Industrial Supply",
+      customerCode: "CUST-1008",
+      customer: "Golden Bridge Construction",
+      customerGroup: "Large Enterprise",
+      currency: "USD",
+      lines: [
+        { lineNo: 10000, itemNo: "ITM-110245", itemName: "Stainless Hex Bolt M12", itemGroup: "Industrial Fasteners", qty: 250, unitCost: 2.15, expectedSalesUnit: 2.52 },
+        { lineNo: 20000, itemNo: "ITM-320118", itemName: "Hydraulic Seal Kit HS-90", itemGroup: "Hydraulic Components", qty: 80, unitCost: 15.5, expectedSalesUnit: 18.2 },
+        { lineNo: 30000, itemNo: "ITM-440071", itemName: "PLC I/O Module 16DI", itemGroup: "Electrical Control Parts", qty: 35, unitCost: 58, expectedSalesUnit: 66 }
+      ]
+    };
+
+    const rulesStorageKey = "pmg_rules";
+    const fallbackRules = [
+      { scopeType: "Item Group", scopeValue: "Industrial Fasteners", targetType: "Customer Group", targetValue: "Large Enterprise", threshold: 20, alertBehavior: "Block Approval", status: "Active" },
+      { scopeType: "Item Group", scopeValue: "Hydraulic Components", targetType: "Customer Group", targetValue: "Large Enterprise", threshold: 18, alertBehavior: "Warning Only", status: "Active" },
+      { scopeType: "Item Group", scopeValue: "Electrical Control Parts", targetType: "Customer Group", targetValue: "Large Enterprise", threshold: 19, alertBehavior: "Block Approval", status: "Active" }
+    ];
+
+    const linesBody = document.getElementById("linesBody");
+    const poMeta = document.getElementById("poMeta");
+    const decisionStrip = document.getElementById("decisionStrip");
+    const recommendList = document.getElementById("recommendList");
+    const auditList = document.getElementById("auditList");
+    const totalCostEl = document.getElementById("totalCost");
+    const totalRevenueEl = document.getElementById("totalRevenue");
+    const overallMarginEl = document.getElementById("overallMargin");
+    const decisionStateEl = document.getElementById("decisionState");
+    const decisionHintEl = document.getElementById("decisionHint");
+    const approveBtn = document.getElementById("approveBtn");
+    const blockBtn = document.getElementById("blockBtn");
+    const overrideBtn = document.getElementById("overrideBtn");
+    const reloadBtn = document.getElementById("reloadBtn");
+    const overrideModal = document.getElementById("overrideModal");
+    const overrideReason = document.getElementById("overrideReason");
+    const overrideError = document.getElementById("overrideError");
+    const cancelOverride = document.getElementById("cancelOverride");
+    const confirmOverride = document.getElementById("confirmOverride");
+    const auditTrailLink = document.getElementById("auditTrailLink");
+    let lastEvaluation = null;
+    const auditKey = "pmg_audit_logs";
+
+    const money = (v) => new Intl.NumberFormat("en-US", { style: "currency", currency: po.currency, maximumFractionDigits: 2 }).format(v);
+    const pct = (v) => (Number.isFinite(v) ? v : 0).toFixed(2) + "%";
+    const margin = (c, r) => r <= 0 ? 0 : ((r - c) / r) * 100;
+
+    function normalizeBehavior(value) {
+      const text = String(value || "").toLowerCase();
+      return text.includes("block") ? "Block Approval" : "Warning Only";
+    }
+
+    function parseRuleItemCode(value) {
+      return String(value || "").split(" |")[0].trim();
+    }
+
+    function scopeMatches(rule, line) {
+      if (rule.scopeType === "Item Group") return String(rule.scopeValue).trim() === line.itemGroup;
+      if (rule.scopeType === "Item") return parseRuleItemCode(rule.scopeValue) === line.itemNo;
       return true;
     }
-    function targetMatches(rule,line){
-      if(rule.targetType==="Customer Group"){return String(rule.targetValue).trim()===po.customerGroup;}
-      if(rule.targetType==="Customer"){const value=String(rule.targetValue||""); return value.includes(po.customerCode)||value.includes(po.customer);}
-      if(rule.targetType==="Item Group"){return String(rule.targetValue).trim()===line.itemGroup;}
-      if(rule.targetType==="Item"){const code=parseRuleItemCode(rule.targetValue); return code===line.itemNo;}
+
+    function targetMatches(rule, line) {
+      if (rule.targetType === "Customer Group") return String(rule.targetValue).trim() === po.customerGroup;
+      if (rule.targetType === "Customer") {
+        const value = String(rule.targetValue || "");
+        return value.includes(po.customerCode) || value.includes(po.customer);
+      }
+      if (rule.targetType === "Item Group") return String(rule.targetValue).trim() === line.itemGroup;
+      if (rule.targetType === "Item") return parseRuleItemCode(rule.targetValue) === line.itemNo;
       return true;
     }
-    function ruleSpecificity(rule){
-      let score=0;
-      if(rule.scopeType==="Item") score+=4;
-      if(rule.scopeType==="Item Group") score+=2;
-      if(rule.targetType==="Customer") score+=4;
-      if(rule.targetType==="Customer Group") score+=3;
-      if(rule.targetType==="Item") score+=2;
-      if(rule.targetType==="Item Group") score+=1;
+
+    function ruleSpecificity(rule) {
+      let score = 0;
+      if (rule.scopeType === "Item") score += 4;
+      if (rule.scopeType === "Item Group") score += 2;
+      if (rule.targetType === "Customer") score += 4;
+      if (rule.targetType === "Customer Group") score += 3;
+      if (rule.targetType === "Item") score += 2;
+      if (rule.targetType === "Item Group") score += 1;
       return score;
     }
-    function loadActiveConfiguredRules(){
-      const raw=localStorage.getItem(rulesStorageKey);
-      let parsed=[];
-      if(raw){try{parsed=JSON.parse(raw);}catch(error){parsed=[];}}
-      const source=(Array.isArray(parsed)&&parsed.length?parsed:fallbackRules).filter(r=>r.status==="Active");
-      return source.map((r)=>({scopeType:r.scopeType||"Item Group",scopeValue:r.scopeValue||"",targetType:r.targetType||"Customer Group",targetValue:r.targetValue||"",threshold:Number(r.threshold)||18,behavior:normalizeBehavior(r.alertBehavior||r.behavior)}));
+
+    function loadActiveConfiguredRules() {
+      const raw = localStorage.getItem(rulesStorageKey);
+      let parsed = [];
+      if (raw) {
+        try { parsed = JSON.parse(raw); } catch (error) { parsed = []; }
+      }
+      const source = (Array.isArray(parsed) && parsed.length ? parsed : fallbackRules).filter((r) => r.status === "Active");
+      return source.map((r) => ({
+        scopeType: r.scopeType || "Item Group",
+        scopeValue: r.scopeValue || "",
+        targetType: r.targetType || "Customer Group",
+        targetValue: r.targetValue || "",
+        threshold: Number(r.threshold) || 18,
+        behavior: normalizeBehavior(r.alertBehavior || r.behavior)
+      }));
     }
-    function getRule(line){
-      const activeRules=loadActiveConfiguredRules().filter((rule)=>scopeMatches(rule,line)&&targetMatches(rule,line));
-      if(!activeRules.length){return {threshold:18,behavior:"Warning Only"};}
-      const ranked=[...activeRules].sort((a,b)=>ruleSpecificity(b)-ruleSpecificity(a));
-      return ranked[0];
+
+    function getRule(line) {
+      const activeRules = loadActiveConfiguredRules().filter((rule) => scopeMatches(rule, line) && targetMatches(rule, line));
+      if (!activeRules.length) {
+        return { threshold: 18, behavior: "Warning Only" };
+      }
+      return [...activeRules].sort((a, b) => ruleSpecificity(b) - ruleSpecificity(a))[0];
     }
-    function barText(){const now=new Date();return "<strong>Signed In:</strong> "+(session.userName||"User")+" ("+(roleLabels[session.role]||session.roleLabel||"User")+") | <strong>Email:</strong> "+(session.email||"unknown@claas2saas.com")+" | <strong>Company:</strong> "+(session.company||"Lithan Academy Pte Ltd")+" | <strong>Last Refresh:</strong> "+now.toLocaleString();}
-    function log(action,reason){let logs=[];try{logs=JSON.parse(localStorage.getItem(auditKey)||"[]");}catch(e){logs=[];} logs.unshift({timestamp:new Date().toISOString(),poNo:po.poNo,user:session.userName||session.email||"User",action,state:lastEvaluation?lastEvaluation.state:"-",margin:lastEvaluation?Number(lastEvaluation.margin.toFixed(2)):0,reason:reason||"-"}); localStorage.setItem(auditKey,JSON.stringify(logs.slice(0,60))); renderAudit();}
-    function renderAudit(){let logs=[];try{logs=JSON.parse(localStorage.getItem(auditKey)||"[]");}catch(e){logs=[];} logs=logs.filter(x=>x.poNo===po.poNo).slice(0,8); auditList.innerHTML=""; if(!logs.length){auditList.innerHTML="<div class='empty'>No actions yet. Decision events will appear here.</div>";return;} logs.forEach(x=>{const n=document.createElement("article"); n.className="audit"; n.innerHTML="<strong>"+x.action+"</strong><span><strong>PO:</strong> "+x.poNo+" | <strong>User:</strong> "+x.user+"</span><span><strong>State:</strong> "+x.state+" | <strong>Margin:</strong> "+pct(x.margin)+"</span><span><strong>Reason:</strong> "+x.reason+"</span><span><strong>Timestamp:</strong> "+new Date(x.timestamp).toLocaleString()+"</span>"; auditList.appendChild(n);});}
-    function renderMeta(state,badge){poMeta.innerHTML=""; const m=[["PO Number",po.poNo],["Supplier",po.supplier],["Customer",po.customer+" ("+po.customerGroup+")"],["Auto-Check Status","<span class='pill "+badge+"'>"+state+"</span>"]]; m.forEach(x=>{const c=document.createElement("article"); c.className="m"; c.innerHTML="<div class='ml'>"+x[0]+"</div><div class='mv'>"+x[1]+"</div>"; poMeta.appendChild(c);});}
-    function bindEdits(){document.querySelectorAll(".num").forEach(i=>i.addEventListener("input",()=>{const idx=Number(i.dataset.index),f=i.dataset.field,v=Number(i.value); if(!Number.isFinite(v)||v<=0)return; po.lines[idx][f]=v; evaluate();}));}
-    function recs(vios){recommendList.innerHTML=""; if(!vios.length){recommendList.innerHTML="<div class='empty'>No recommendations needed. All lines are margin-compliant.</div>"; return;} vios.forEach(e=>{const l=e.line,cur=e.margin,need=Math.max(0,e.rule.threshold-cur),altCost=l.unitCost*.92,altM=margin(l.qty*altCost,l.qty*l.expectedSalesUnit),gainA=Math.max(0,altM-cur),newSales=l.expectedSalesUnit*1.09,salesM=margin(l.qty*l.unitCost,l.qty*newSales),gainB=Math.max(0,salesM-cur); const card=document.createElement("article"); card.className="card"; card.innerHTML="<h4>"+l.itemNo+" | "+l.itemName+"</h4><div class='row'><span><strong>Current:</strong> "+pct(cur)+"</span><span><strong>Target:</strong> "+pct(e.rule.threshold)+"</span><span><strong>Gap:</strong> "+pct(need)+"</span></div><div class='row'>Option 1: Alternate source cost to "+money(altCost)+" (Recovery +"+pct(gainA)+")</div><button class='btn' data-a='alt' data-ln='"+l.lineNo+"'>Apply Option 1</button><div class='row'>Option 2: Expected sales to "+money(newSales)+" (Recovery +"+pct(gainB)+")</div><button class='btn' data-a='sale' data-ln='"+l.lineNo+"'>Apply Option 2</button>"; recommendList.appendChild(card);}); recommendList.querySelectorAll(".btn").forEach(b=>b.addEventListener("click",()=>{const ln=Number(b.dataset.ln),a=b.dataset.a,l=po.lines.find(x=>x.lineNo===ln); if(!l)return; if(a==="alt"){l.unitCost=Number((l.unitCost*.92).toFixed(2)); log("Recommendation Applied","Alternate sourcing cost applied on line "+ln+".");} if(a==="sale"){l.expectedSalesUnit=Number((l.expectedSalesUnit*1.09).toFixed(2)); log("Recommendation Applied","Sales price adjustment applied on line "+ln+".");} evaluate();}));}
-    function evaluate(){linesBody.innerHTML=""; let tc=0,tr=0,hasB=false,hasW=false,vios=[]; po.lines.forEach((l,i)=>{const r=getRule(l),lc=l.qty*l.unitCost,lr=l.qty*l.expectedSalesUnit,m=margin(lc,lr); tc+=lc; tr+=lr; let st="APPROVE",badge="ok"; if(m<r.threshold){if(r.behavior==="Block Approval"){st="BLOCK";badge="block";hasB=true;}else{st="WARNING";badge="warning";hasW=true;} vios.push({line:l,rule:r,margin:m});} const trn=document.createElement("tr"); trn.innerHTML="<td>"+l.lineNo+"</td><td>"+l.itemNo+" | "+l.itemName+"</td><td>"+l.itemGroup+"</td><td><input class='num' data-index='"+i+"' data-field='qty' type='number' min='1' step='1' value='"+l.qty+"'></td><td>"+money(l.unitCost)+"</td><td><input class='num' data-index='"+i+"' data-field='expectedSalesUnit' type='number' min='0.1' step='0.1' value='"+l.expectedSalesUnit+"'></td><td>"+money(lc)+"</td><td>"+money(lr)+"</td><td>"+pct(m)+"</td><td>"+pct(r.threshold)+"</td><td>"+r.behavior+"</td><td><span class='pill "+badge+"'>"+st+"</span></td>"; linesBody.appendChild(trn);}); const om=margin(tc,tr); let st="APPROVE",badge="ok",hint="All monitored lines meet configured margin rules."; if(hasB){st="BLOCK";badge="block";hint="One or more lines are below block threshold. Approval requires override.";} else if(hasW){st="WARNING";badge="warning";hint="Margin warning detected. Override is recommended before final approval.";} totalCostEl.textContent=money(tc); totalRevenueEl.textContent=money(tr); overallMarginEl.textContent=pct(om); decisionStateEl.innerHTML="<span class='pill "+badge+"'>"+st+"</span>"; decisionHintEl.textContent=hint; decisionStrip.innerHTML="<strong>Rule Engine:</strong> "+hint; approveBtn.disabled=st!=="APPROVE"; overrideBtn.disabled=st==="APPROVE"; lastEvaluation={state:st,margin:om,violations:vios}; renderMeta(st,badge); recs(vios); bindEdits();}
-    function approve(){if(!lastEvaluation)return; if(lastEvaluation.state!=="APPROVE"){log("Approve Attempt Blocked","Approval blocked because PO is not compliant. Use override."); return;} log("Approved","PO approved. Margin checks passed.");}
-    function block(){log("Blocked","PO blocked by approver decision.");}
-    function openOverride(){if(!lastEvaluation||lastEvaluation.state==="APPROVE")return; overrideReason.value=""; overrideError.textContent=""; overrideModal.setAttribute("aria-hidden","false"); overrideReason.focus();}
-    function closeOverride(){overrideModal.setAttribute("aria-hidden","true");}
-    function confirmOverrideAction(){const reason=overrideReason.value.trim(); if(!reason){overrideError.textContent="Override reason is required."; return;} log("Overridden",reason); closeOverride();}
-    auditTrailLink.href="./Audit-Trail.html?po="+encodeURIComponent(po.poNo);
-    document.getElementById("sessionBar").innerHTML=barText(); approveBtn.addEventListener("click",approve); blockBtn.addEventListener("click",block); overrideBtn.addEventListener("click",openOverride); reloadBtn.addEventListener("click",()=>{log("Data Refresh","Mock BC data refreshed and margin recalculated."); document.getElementById("sessionBar").innerHTML=barText(); evaluate();}); cancelOverride.addEventListener("click",closeOverride); confirmOverride.addEventListener("click",confirmOverrideAction); overrideModal.addEventListener("click",(e)=>{if(e.target===overrideModal)closeOverride();});
-    evaluate(); renderAudit();
+
+    function barText() {
+      const now = new Date();
+      return "<strong>Signed In:</strong> " + (session.userName || "User") +
+        " (" + (roleLabels[session.role] || session.roleLabel || "User") + ") | " +
+        "<strong>Email:</strong> " + (session.email || "unknown@claas2saas.com") + " | " +
+        "<strong>Company:</strong> " + (session.company || "Lithan Academy Pte Ltd") + " | " +
+        "<strong>Last Refresh:</strong> " + now.toLocaleString();
+    }
+
+    function log(action, reason) {
+      let logs = [];
+      try { logs = JSON.parse(localStorage.getItem(auditKey) || "[]"); } catch (error) { logs = []; }
+      logs.unshift({
+        timestamp: new Date().toISOString(),
+        poNo: po.poNo,
+        user: session.userName || session.email || "User",
+        action,
+        state: lastEvaluation ? lastEvaluation.state : "-",
+        margin: lastEvaluation ? Number(lastEvaluation.margin.toFixed(2)) : 0,
+        reason: reason || "-"
+      });
+      localStorage.setItem(auditKey, JSON.stringify(logs.slice(0, 60)));
+      renderAudit();
+    }
+
+    function renderAudit() {
+      let logs = [];
+      try { logs = JSON.parse(localStorage.getItem(auditKey) || "[]"); } catch (error) { logs = []; }
+      logs = logs.filter((x) => x.poNo === po.poNo).slice(0, 8);
+      auditList.innerHTML = "";
+      if (!logs.length) {
+        auditList.innerHTML = "<div class='empty'>No actions yet. Decision events will appear here.</div>";
+        return;
+      }
+      logs.forEach((x) => {
+        const n = document.createElement("article");
+        n.className = "audit";
+        n.innerHTML = "<strong>" + x.action + "</strong><span><strong>PO:</strong> " + x.poNo + " | <strong>User:</strong> " + x.user + "</span><span><strong>State:</strong> " + x.state + " | <strong>Margin:</strong> " + pct(x.margin) + "</span><span><strong>Reason:</strong> " + x.reason + "</span><span><strong>Timestamp:</strong> " + new Date(x.timestamp).toLocaleString() + "</span>";
+        auditList.appendChild(n);
+      });
+    }
+
+    function renderMeta(state, badge) {
+      poMeta.innerHTML = "";
+      const m = [
+        ["PO Number", po.poNo],
+        ["Supplier", po.supplier],
+        ["Customer", po.customer + " (" + po.customerGroup + ")"],
+        ["Auto-Check Status", "<span class='pill " + badge + "'>" + state + "</span>"]
+      ];
+      m.forEach((x) => {
+        const c = document.createElement("article");
+        c.className = "m";
+        c.innerHTML = "<div class='ml'>" + x[0] + "</div><div class='mv'>" + x[1] + "</div>";
+        poMeta.appendChild(c);
+      });
+    }
+
+    function bindEdits() {
+      document.querySelectorAll(".num").forEach((i) => i.addEventListener("input", () => {
+        const idx = Number(i.dataset.index);
+        const f = i.dataset.field;
+        const v = Number(i.value);
+        if (!Number.isFinite(v) || v <= 0) return;
+        po.lines[idx][f] = v;
+        evaluate();
+      }));
+    }
+
+    function recs(vios) {
+      recommendList.innerHTML = "";
+      if (!vios.length) {
+        recommendList.innerHTML = "<div class='empty'>No recommendations needed. All lines are margin-compliant.</div>";
+        return;
+      }
+      vios.forEach((e) => {
+        const l = e.line;
+        const cur = e.margin;
+        const need = Math.max(0, e.rule.threshold - cur);
+        const altCost = l.unitCost * .92;
+        const altM = margin(l.qty * altCost, l.qty * l.expectedSalesUnit);
+        const gainA = Math.max(0, altM - cur);
+        const newSales = l.expectedSalesUnit * 1.09;
+        const salesM = margin(l.qty * l.unitCost, l.qty * newSales);
+        const gainB = Math.max(0, salesM - cur);
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = "<h4>" + l.itemNo + " | " + l.itemName + "</h4><div class='row'><span><strong>Current:</strong> " + pct(cur) + "</span><span><strong>Target:</strong> " + pct(e.rule.threshold) + "</span><span><strong>Gap:</strong> " + pct(need) + "</span></div><div class='row'>Option 1: Alternate source cost to " + money(altCost) + " (Recovery +" + pct(gainA) + ")</div><button class='btn' data-a='alt' data-ln='" + l.lineNo + "'>Apply Option 1</button><div class='row'>Option 2: Expected sales to " + money(newSales) + " (Recovery +" + pct(gainB) + ")</div><button class='btn' data-a='sale' data-ln='" + l.lineNo + "'>Apply Option 2</button>";
+        recommendList.appendChild(card);
+      });
+      recommendList.querySelectorAll(".btn").forEach((b) => b.addEventListener("click", () => {
+        const ln = Number(b.dataset.ln);
+        const a = b.dataset.a;
+        const l = po.lines.find((x) => x.lineNo === ln);
+        if (!l) return;
+        if (a === "alt") {
+          l.unitCost = Number((l.unitCost * .92).toFixed(2));
+          log("Recommendation Applied", "Alternate sourcing cost applied on line " + ln + ".");
+        }
+        if (a === "sale") {
+          l.expectedSalesUnit = Number((l.expectedSalesUnit * 1.09).toFixed(2));
+          log("Recommendation Applied", "Sales price adjustment applied on line " + ln + ".");
+        }
+        evaluate();
+      }));
+    }
+
+    function evaluate() {
+      linesBody.innerHTML = "";
+      let tc = 0;
+      let tr = 0;
+      let hasB = false;
+      let hasW = false;
+      const vios = [];
+
+      po.lines.forEach((l, i) => {
+        const r = getRule(l);
+        const lc = l.qty * l.unitCost;
+        const lr = l.qty * l.expectedSalesUnit;
+        const m = margin(lc, lr);
+        tc += lc;
+        tr += lr;
+        let st = "APPROVE";
+        let badge = "ok";
+        if (m < r.threshold) {
+          if (r.behavior === "Block Approval") {
+            st = "BLOCK";
+            badge = "block";
+            hasB = true;
+          } else {
+            st = "WARNING";
+            badge = "warning";
+            hasW = true;
+          }
+          vios.push({ line: l, rule: r, margin: m });
+        }
+        const trn = document.createElement("tr");
+        trn.innerHTML = "<td>" + l.lineNo + "</td><td>" + l.itemNo + " | " + l.itemName + "</td><td>" + l.itemGroup + "</td><td><input class='num' data-index='" + i + "' data-field='qty' type='number' min='1' step='1' value='" + l.qty + "'></td><td>" + money(l.unitCost) + "</td><td><input class='num' data-index='" + i + "' data-field='expectedSalesUnit' type='number' min='0.1' step='0.1' value='" + l.expectedSalesUnit + "'></td><td>" + money(lc) + "</td><td>" + money(lr) + "</td><td>" + pct(m) + "</td><td>" + pct(r.threshold) + "</td><td>" + r.behavior + "</td><td><span class='pill " + badge + "'>" + st + "</span></td>";
+        linesBody.appendChild(trn);
+      });
+
+      const om = margin(tc, tr);
+      let st = "APPROVE";
+      let badge = "ok";
+      let hint = "All monitored lines meet configured margin rules.";
+      if (hasB) {
+        st = "BLOCK";
+        badge = "block";
+        hint = "One or more lines are below block threshold. Approval requires override.";
+      } else if (hasW) {
+        st = "WARNING";
+        badge = "warning";
+        hint = "Margin warning detected. Override is recommended before final approval.";
+      }
+      totalCostEl.textContent = money(tc);
+      totalRevenueEl.textContent = money(tr);
+      overallMarginEl.textContent = pct(om);
+      decisionStateEl.innerHTML = "<span class='pill " + badge + "'>" + st + "</span>";
+      decisionHintEl.textContent = hint;
+      decisionStrip.innerHTML = "<strong>Rule Engine:</strong> " + hint;
+      approveBtn.disabled = st !== "APPROVE";
+      overrideBtn.disabled = st === "APPROVE";
+      lastEvaluation = { state: st, margin: om, violations: vios };
+      renderMeta(st, badge);
+      recs(vios);
+      bindEdits();
+    }
+
+    function approve() {
+      if (!lastEvaluation) return;
+      if (lastEvaluation.state !== "APPROVE") {
+        log("Approve Attempt Blocked", "Approval blocked because PO is not compliant. Use override.");
+        return;
+      }
+      log("Approved", "PO approved. Margin checks passed.");
+    }
+
+    function block() {
+      log("Blocked", "PO blocked by approver decision.");
+    }
+
+    function openOverride() {
+      if (!lastEvaluation || lastEvaluation.state === "APPROVE") return;
+      overrideReason.value = "";
+      overrideError.textContent = "";
+      overrideModal.setAttribute("aria-hidden", "false");
+      overrideReason.focus();
+    }
+
+    function closeOverride() {
+      overrideModal.setAttribute("aria-hidden", "true");
+    }
+
+    function confirmOverrideAction() {
+      const reason = overrideReason.value.trim();
+      if (!reason) {
+        overrideError.textContent = "Override reason is required.";
+        return;
+      }
+      log("Overridden", reason);
+      closeOverride();
+    }
+
+    function applyRailState(collapsed) {
+      railContainer.classList.toggle("collapsed", collapsed);
+      railToggle.setAttribute("aria-expanded", String(!collapsed));
+      railToggle.setAttribute("aria-label", collapsed ? "Expand navigation" : "Collapse navigation");
+      railToggleIcon.classList.toggle("rotated", collapsed);
+      railHeaderLabel.classList.toggle("hidden", collapsed);
+      railGroupTitle.classList.toggle("hidden-labels", collapsed);
+      railGroupText.classList.toggle("hidden", collapsed);
+
+      railItems.forEach((item) => {
+        const label = item.querySelector(".rail-item-label");
+        const text = label ? label.textContent : "";
+        item.classList.toggle("collapsed", collapsed);
+        if (label) {
+          label.classList.toggle("hidden", collapsed);
+        }
+        if (collapsed) {
+          item.setAttribute("data-tooltip", text);
+        } else {
+          item.removeAttribute("data-tooltip");
+        }
+      });
+    }
+
+    auditTrailLink.href = "./Audit-Trail.html?po=" + encodeURIComponent(po.poNo);
+    document.getElementById("sessionBar").innerHTML = barText();
+    approveBtn.addEventListener("click", approve);
+    blockBtn.addEventListener("click", block);
+    overrideBtn.addEventListener("click", openOverride);
+    reloadBtn.addEventListener("click", () => {
+      log("Data Refresh", "Mock BC data refreshed and margin recalculated.");
+      document.getElementById("sessionBar").innerHTML = barText();
+      evaluate();
+    });
+    cancelOverride.addEventListener("click", closeOverride);
+    confirmOverride.addEventListener("click", confirmOverrideAction);
+    overrideModal.addEventListener("click", (e) => { if (e.target === overrideModal) closeOverride(); });
+
+    const railCollapsed = localStorage.getItem("pmg_sidebar_collapsed") === "true";
+    applyRailState(railCollapsed);
+
+    railToggle.addEventListener("click", () => {
+      const collapsed = !railContainer.classList.contains("collapsed");
+      applyRailState(collapsed);
+      localStorage.setItem("pmg_sidebar_collapsed", String(collapsed));
+    });
+
+    evaluate();
+    renderAudit();
   </script>
 </body>
 </html>

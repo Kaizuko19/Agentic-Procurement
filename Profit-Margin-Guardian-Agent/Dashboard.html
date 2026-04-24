@@ -797,10 +797,10 @@
       </div>
       <div class="nav-right">
         <div class="nav-user" aria-label="User profile">
-          <span class="nav-avatar" aria-hidden="true">JO</span>
+          <span class="nav-avatar" id="navAvatar" aria-hidden="true">JO</span>
           <div class="nav-user-meta">
-            <span class="nav-user-name">John Owen</span>
-            <span class="nav-user-role">System Administrator</span>
+            <span class="nav-user-name" id="navUserName">John Owen</span>
+            <span class="nav-user-role" id="navUserRole">System Administrator</span>
           </div>
         </div>
       </div>
@@ -980,6 +980,9 @@
     }
 
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const navAvatar = document.getElementById("navAvatar");
+    const navUserName = document.getElementById("navUserName");
+    const navUserRole = document.getElementById("navUserRole");
     const railContainer = document.getElementById("railContainer");
     const railToggle = document.getElementById("railToggle");
     const railToggleIcon = document.getElementById("railToggleIcon");
@@ -988,10 +991,36 @@
     const railGroupText = document.getElementById("railGroupText");
     const railItems = Array.from(document.querySelectorAll(".rail-item"));
     const roleLabelMap = {
-      admin: "Administrator",
+      admin: "System Administrator",
       procurement_manager: "Procurement Manager",
       category_manager: "Category Manager"
     };
+
+    function getInitials(name) {
+      const safeName = (name || "User").trim();
+      const parts = safeName.split(/\s+/).filter(Boolean).slice(0, 2);
+      return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "US";
+    }
+
+    function resolveTopNavName() {
+      const fallbackNames = {
+        admin: "John Owen",
+        procurement_manager: "Megan Cruz",
+        category_manager: "Carla Reyes"
+      };
+      const rawName = (session.userName || "").trim();
+      const roleText = (roleLabelMap[session.role] || session.roleLabel || "User").trim();
+      const genericNames = ["System Administrator", "Procurement Manager", "Category Manager"];
+      if (!rawName || rawName === roleText || genericNames.includes(rawName)) {
+        return fallbackNames[session.role] || rawName || "User";
+      }
+      return rawName;
+    }
+
+    const topNavName = resolveTopNavName();
+    navAvatar.textContent = getInitials(topNavName);
+    navUserName.textContent = topNavName;
+    navUserRole.textContent = roleLabelMap[session.role] || session.roleLabel || "User";
 
     const rules = [
       {

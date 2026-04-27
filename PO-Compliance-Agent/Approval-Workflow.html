@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PO Compliance Agent | Approval Workflow</title>
+  <link rel="stylesheet" href="./ui.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="nav-left">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <span class="nav-separator" aria-hidden="true">|</span>
+        <div class="nav-context"><span class="nav-context-label">PO Compliance Agent</span></div>
+      </div>
+      <div></div>
+      <div class="nav-right">
+        <div class="nav-user" aria-label="User profile">
+          <span class="nav-avatar" aria-hidden="true">PA</span>
+          <div class="nav-user-meta">
+            <span class="nav-user-name">PO Approval Engine</span>
+            <span class="nav-user-role">Workflow Enforcer</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <aside class="rail-container" id="railContainer">
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <div class="rail-header">
+            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
+            <button type="button" class="collapse-button" id="railToggle" aria-label="Collapse navigation" aria-expanded="true"><span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span></button>
+          </div>
+          <div class="rail-group">
+            <div class="rail-group-title"><span class="rail-group-icon" aria-hidden="true">&#128202;</span><span class="rail-group-text" id="railGroupText">PO Compliance</span></div>
+            <div class="rail-nav">
+              <a class="rail-item" href="./Dashboard.html"><span class="rail-item-icon" aria-hidden="true">&#9635;</span><span class="rail-item-label">Dashboard</span></a>
+              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Compliance Setup</span></a>
+              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">Vendor Validation</span></a>
+              <a class="rail-item rail-item-active" href="./Approval-Workflow.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Approval Workflow</span></a>
+              <a class="rail-item" href="./Audit-Evidence.html"><span class="rail-item-icon" aria-hidden="true">&#128221;</span><span class="rail-item-label">Audit Evidence</span></a>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <section class="page-header">
+          <div>
+            <h1 class="page-title">Approval Workflow</h1>
+            <p class="page-subtitle">Approval validation UI with authorization checks, restriction handling, chain alignment, and report output.</p>
+          </div>
+          <div class="toolbar">
+            <button class="btn btn-soft" type="button">Export Report</button>
+            <button class="btn btn-primary" type="button">Re-run Approval Logic</button>
+          </div>
+        </section>
+
+        <section class="grid-2">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">PO Approval Packet</h2>
+                <p class="card-subtitle">Mock decision surface for a live purchase order.</p>
+              </div>
+            </div>
+            <div class="detail-panel">
+              <div class="detail-row"><div class="detail-label">PO Reference</div><div class="detail-value">PO-20841 / Electrical assemblies / SGD 148,200</div></div>
+              <div class="detail-row"><div class="detail-label">Requester</div><div class="detail-value">Mila Chen, Operations Procurement</div></div>
+              <div class="detail-row"><div class="detail-label">Current Approver</div><div class="detail-value">Regional Purchasing Manager</div></div>
+              <div class="detail-row"><div class="detail-label">Authority Check</div><div class="detail-value">Within limit for approver, but restricted commodity rule adds secondary sign-off</div></div>
+              <div class="detail-row"><div class="detail-label">Restriction Match</div><div class="detail-value">Controlled item family detected: ELEC-CONTROL</div></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Compliance Report Snapshot</h2>
+                <p class="card-subtitle">What the generated report would summarize.</p>
+              </div>
+            </div>
+            <div class="mini-kpi-grid">
+              <div class="mini-kpi"><div class="mini-kpi-label">Rules Passed</div><div class="mini-kpi-value">09</div></div>
+              <div class="mini-kpi"><div class="mini-kpi-label">Warnings</div><div class="mini-kpi-value">02</div></div>
+              <div class="mini-kpi"><div class="mini-kpi-label">Hard Stops</div><div class="mini-kpi-value">01</div></div>
+            </div>
+            <div style="margin-top:16px;" class="toggle-list">
+              <div class="toggle-row"><div class="toggle-copy"><strong>Purchaser authorization</strong><span>Validated against spend threshold and cost center.</span></div><span class="pill success">Verified</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Approval chain alignment</strong><span>Secondary approver missing for restricted commodity.</span></div><span class="pill warning">Mismatch</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Final compliance decision</strong><span>PO cannot proceed until secondary restricted-item approver is inserted.</span></div><span class="pill danger">Blocked</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="grid-2" style="margin-top:20px;">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Approval Chain Matrix</h2>
+                <p class="card-subtitle">Mock alignment between required and actual route.</p>
+              </div>
+            </div>
+            <div class="matrix">
+              <div class="matrix-row header"><div>Approval Stage</div><div>Required</div><div>Actual</div><div>Status</div></div>
+              <div class="matrix-row"><div>Requester validation</div><div>Requester + cost center owner</div><div>Matched</div><div><span class="pill success">Pass</span></div></div>
+              <div class="matrix-row"><div>Spend authority</div><div>Regional Purchasing Manager</div><div>Matched</div><div><span class="pill success">Pass</span></div></div>
+              <div class="matrix-row"><div>Restricted item review</div><div>Compliance Co-approver</div><div>Missing</div><div><span class="pill danger">Gap</span></div></div>
+              <div class="matrix-row"><div>Final release</div><div>Finance control node</div><div>Pending</div><div><span class="pill info">Waiting</span></div></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Decision Queue</h2>
+                <p class="card-subtitle">Concrete queue of approval exceptions and ready items.</p>
+              </div>
+            </div>
+            <div class="kanban">
+              <div class="kanban-col">
+                <h3>Needs Review</h3>
+                <div class="kanban-card"><strong>PO-20841</strong><span>Restricted item path incomplete. Secondary approver required.</span></div>
+                <div class="kanban-card"><strong>PO-20838</strong><span>Authority matrix changed after revision, revalidation needed.</span></div>
+              </div>
+              <div class="kanban-col">
+                <h3>Escalated</h3>
+                <div class="kanban-card"><strong>PO-20836</strong><span>GST discrepancy plus approval reroute to Compliance Officer.</span></div>
+              </div>
+              <div class="kanban-col">
+                <h3>Ready to Release</h3>
+                <div class="kanban-card"><strong>PO-20827</strong><span>All approvals aligned and compliance report generated.</span></div>
+                <div class="kanban-card"><strong>PO-20819</strong><span>Low-risk MRO order cleared for BC posting.</span></div>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="./ui.js"></script>
+</body>
+</html>

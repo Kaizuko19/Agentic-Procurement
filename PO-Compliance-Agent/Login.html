@@ -6,16 +6,14 @@
   <title>PO Compliance Agent | Login</title>
   <style>
     :root {
-      --midnight-blue: #193E6B;
+      --midnight-blue: #193e6b;
       --midnight-blue-dark: #143356;
-      --gold: #B3A125;
-      --gold-dark: #96851f;
-      --white: #FFFFFF;
-      --neutral-gray: #F5F5F5;
-      --border-gray: #E6ECF3;
+      --green-gold: #b3a125;
+      --green-gold-dark: #96851f;
+      --white: #ffffff;
+      --border-gray: #e6ecf3;
       --text-main: #1f2937;
       --text-muted: #5b6678;
-      --surface-soft: #f7faff;
       --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
       --shadow-card: 0 14px 35px rgba(17, 24, 39, 0.14);
       --shadow-soft: 0 6px 20px rgba(25, 62, 107, 0.1);
@@ -46,12 +44,11 @@
       box-shadow: var(--shadow-card);
       overflow: hidden;
       display: grid;
-      grid-template-columns: 0.96fr 1.04fr;
-      gap: 1px;
+      grid-template-columns: 1.1fr 1fr;
     }
 
     .showcase {
-      background: linear-gradient(155deg, #193E6B 0%, #1f4e86 58%, #10263f 100%);
+      background: linear-gradient(155deg, #193e6b 0%, #1f4e86 58%, #10263f 100%);
       color: var(--white);
       padding: clamp(24px, 3vw, 42px);
       position: relative;
@@ -59,7 +56,6 @@
       display: grid;
       align-content: space-between;
       gap: 24px;
-      overflow: hidden;
     }
 
     .showcase::before {
@@ -68,24 +64,8 @@
       inset: 0;
       background:
         linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
-        radial-gradient(circle at 20% 20%, rgba(179, 161, 37, 0.32), rgba(179, 161, 37, 0) 45%);
+        radial-gradient(circle at 20% 20%, rgba(179, 161, 37, 0.35), rgba(179, 161, 37, 0) 45%);
       z-index: -1;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.13);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.94);
-      width: fit-content;
     }
 
     .brand-row {
@@ -103,7 +83,10 @@
       white-space: nowrap;
     }
 
-    .logo-pill .accent { color: var(--gold); font-weight: 800; }
+    .logo-pill .accent {
+      color: var(--green-gold);
+      font-weight: 800;
+    }
 
     .title {
       margin: 0;
@@ -122,80 +105,35 @@
 
     .feature-grid {
       display: grid;
-      gap: 12px;
+      gap: 10px;
     }
 
     .feature {
-      position: relative;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 14px;
-      padding: 14px 14px 14px 24px;
+      border-radius: 10px;
+      padding: 10px 12px;
       font-size: 14px;
-      line-height: 1.5;
     }
 
-    .feature::before {
-      content: "✔";
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gold);
-      font-size: 14px;
-      font-weight: 700;
+    .feature strong {
+      color: #fff2b2;
     }
-
-    .feature strong { color: #fff2b2; }
 
     .login-zone {
-      background: linear-gradient(180deg, #fbfdff 0%, #f2f7ff 100%);
-      padding: clamp(24px, 3vw, 46px);
+      background: var(--white);
+      padding: clamp(22px, 3vw, 42px);
       display: grid;
       align-content: center;
-      border-right: 6px solid rgba(179, 161, 37, 0.18);
     }
 
     .login-card {
-      border: 1px solid rgba(179, 161, 37, 0.15);
-      border-radius: 20px;
-      background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
-      box-shadow: 0 20px 45px rgba(25, 62, 107, 0.08);
-      padding: clamp(24px, 3vw, 36px);
+      border: 1px solid var(--border-gray);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      box-shadow: var(--shadow-soft);
+      padding: clamp(20px, 2.6vw, 30px);
     }
-
-    .banner {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 18px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(179, 161, 37, 0.14);
-      color: var(--midnight-blue);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .btn-primary {
-      background: linear-gradient(90deg, var(--gold), #d1bd5d);
-      color: var(--midnight-blue);
-      box-shadow: 0 10px 20px rgba(179, 161, 37, 0.18);
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(90deg, #c5ad2d, #af9822);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--midnight-blue);
-      border: 1.5px solid var(--midnight-blue);
-    }
-
-    .btn-secondary:hover { background: rgba(25, 62, 107, 0.05); }
 
     .card-title {
       margin: 0;
@@ -237,11 +175,13 @@
       background: #fff;
     }
 
-    input::placeholder { color: #8a95a6; }
+    input::placeholder {
+      color: #8a95a6;
+    }
 
     input:focus-visible, select:focus-visible, button:focus-visible {
       outline: none;
-      border-color: var(--gold);
+      border-color: var(--green-gold);
       box-shadow: var(--focus-ring);
     }
 
@@ -249,40 +189,6 @@
       font-size: 12px;
       color: var(--text-muted);
     }
-
-    .inline {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 2px;
-    }
-
-    .remember {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: #334155;
-    }
-
-    .remember input {
-      width: 16px;
-      height: 16px;
-      min-height: 16px;
-      margin: 0;
-      accent-color: var(--gold);
-    }
-
-    .forgot {
-      color: var(--midnight-blue);
-      font-size: 13px;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .forgot:hover { color: var(--gold-dark); }
 
     .btn-row {
       display: grid;
@@ -298,256 +204,269 @@
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
     }
 
-    .btn:hover { transform: translateY(-1px); }
-
-    .demo-row {
-      margin-top: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .btn:hover {
+      transform: translateY(-1px);
     }
 
-    .demo-chip {
-      border: 1px solid #d3dbe8;
-      border-radius: 999px;
+    .btn-primary {
+      background: linear-gradient(90deg, var(--midnight-blue), #22558f);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(25, 62, 107, 0.22);
+    }
+
+    .divider {
+      margin: 24px 0 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .divider::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .divider-text {
+      position: relative;
       background: #fff;
-      color: var(--midnight-blue);
-      padding: 6px 10px;
+      padding: 0 16px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .test-accounts {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 18px;
+    }
+
+    .test-accounts-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 12px;
+    }
+
+    .test-account {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .test-account:hover {
+      border-color: #193e6b;
+      background: #f0f7ff;
+    }
+
+    .test-account:last-child {
+      margin-bottom: 0;
+    }
+
+    .account-role {
+      font-size: 13px;
+      font-weight: 700;
+      color: #193e6b;
+    }
+
+    .account-creds {
       font-size: 12px;
-      font-weight: 600;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .btn-use {
+      font-size: 12px;
+      padding: 4px 12px;
+      background: #193e6b;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
       cursor: pointer;
     }
 
-    .demo-chip:hover {
-      border-color: var(--gold);
-      color: var(--gold-dark);
+    .btn-use:hover {
+      background: #2c5282;
     }
 
-    .feedback {
-      margin-top: 10px;
-      min-height: 22px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .feedback.error { color: #b42318; }
-    .feedback.success { color: #166534; }
-
-    .footer-note {
-      margin-top: 16px;
-      font-size: 12px;
-      color: #64748b;
-      line-height: 1.4;
-    }
-
-    @media (max-width: 980px) {
-      .shell { grid-template-columns: 1fr; }
-      .showcase { min-height: 260px; }
-    }
-
-    @media (max-width: 520px) {
-      body { padding: 12px; }
-      .logo-pill { font-size: 14px; }
-      .title { font-size: 23px; }
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="shell" aria-label="PO Compliance Agent Login">
-    <section class="login-zone">
-      <div class="login-card">
-        <div class="banner">Compliance Workspace</div>
-        <h2 class="card-title">Secure Sign-In</h2>
-        <p class="card-caption">Use your role credentials to access PO compliance evaluation tools.</p>
-
-        <form id="loginForm" class="form-grid" novalidate>
-          <div class="field">
-            <label for="role">Role</label>
-            <select id="role" required>
-              <option value="">Select your role</option>
-              <option value="admin">Administrator</option>
-              <option value="procurement_analyst">Procurement Analyst</option>
-              <option value="compliance_officer">Compliance Officer</option>
-            </select>
-            <div class="helper">Role determines page-level access and approval authority.</div>
-          </div>
-
-          <div class="field">
-            <label for="email">Business Email</label>
-            <input id="email" type="email" placeholder="name@claas2saas.com" autocomplete="username" required>
-          </div>
-
-          <div class="field">
-            <label for="password">Password</label>
-            <input id="password" type="password" placeholder="Enter password" autocomplete="current-password" required>
-          </div>
-
-          <div class="inline">
-            <label class="remember" for="remember">
-              <input id="remember" type="checkbox">
-              Keep me signed in on this device
-            </label>
-            <a class="forgot" href="#" aria-label="Reset password (mock)">Forgot password?</a>
-          </div>
-
-          <div class="btn-row">
-            <button class="btn btn-primary" type="submit">Sign In</button>
-            <button class="btn btn-secondary" type="button" id="clearBtn">Clear Form</button>
-          </div>
-
-          <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
-        </form>
-
-        <div class="demo-row" aria-label="Demo role shortcuts">
-          <button type="button" class="demo-chip" data-demo="admin">Use Admin Demo</button>
-          <button type="button" class="demo-chip" data-demo="procurement_analyst">Use Analyst Demo</button>
-          <button type="button" class="demo-chip" data-demo="compliance_officer">Use Officer Demo</button>
-        </div>
-
-        <p class="footer-note">
-          Mockup mode: credentials are validated against prototype users in-browser and session data is stored in localStorage.
-        </p>
-      </div>
-    </section>
-
-    <section class="showcase" aria-label="Product context">
+  <div class="shell">
+    <section class="showcase">
       <div>
         <div class="brand-row">
           <div class="logo-pill">CLaaS<span class="accent">2</span>SaaS</div>
         </div>
-        <div class="hero-tag">Policy & audit first</div>
         <h1 class="title">PO Compliance Agent</h1>
-        <p class="subtitle">
-          Automated supplier approval and procurement policy enforcement with real-time exception handling and audit traceability.
-        </p>
+        <p class="subtitle">Access the compliance workflow for setup, vendor checks, approval validation, and audit evidence capture.</p>
       </div>
 
       <div class="feature-grid">
-        <div class="feature"><strong>Role-Based Access:</strong> Admin, Procurement Analyst, and Compliance Officer role-specific views.</div>
-        <div class="feature"><strong>PO Compliance:</strong> Enforce supplier, header, contract, and budget compliance controls.</div>
-        <div class="feature"><strong>Audit Traceability:</strong> Every review decision and oversight action is recorded for compliance.</div>
+        <div class="feature"><strong>Compliance Officer</strong> manages policy setup, escalations, and exceptions.</div>
+        <div class="feature"><strong>PO Approval Engine</strong> enforces approval rules and blocking logic.</div>
+        <div class="feature"><strong>Policy Engine</strong> runs certification, vendor status, GST, and tax validation.</div>
+        <div class="feature"><strong>Audit Engine</strong> stores logs, overrides, and evidence bundles for BC repository processing.</div>
       </div>
     </section>
-  </main>
+
+    <section class="login-zone">
+      <div class="login-card">
+        <h2 class="card-title">Sign In</h2>
+        <p class="card-caption">Use one of the accounts below to enter the PO Compliance Agent.</p>
+
+        <form id="loginForm" class="form-grid" onsubmit="handleLogin(event)">
+          <div class="field">
+            <label for="userRole">User Role</label>
+            <select id="userRole" required>
+              <option value="">Select your role</option>
+              <option value="compliance_officer">Compliance Officer</option>
+              <option value="po_approval_engine">PO Approval Engine</option>
+              <option value="policy_engine">Policy Engine</option>
+              <option value="audit_engine">Audit Engine</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <div class="helper">Credentials below are provided for quick access during review.</div>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary">Sign In to PO Compliance</button>
+          </div>
+        </form>
+
+        <div class="divider">
+          <span class="divider-text">Demo Accounts</span>
+        </div>
+
+        <div class="test-accounts">
+          <div class="test-accounts-title">Quick Access Test Accounts</div>
+
+          <div class="test-account" onclick="useTestAccount('Compliance Officer', 'compliance_officer', 'compliance.officer', 'compliance123')">
+            <div>
+              <div class="account-role">Compliance Officer</div>
+              <div class="account-creds">compliance.officer / compliance123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+
+          <div class="test-account" onclick="useTestAccount('PO Approval Engine', 'po_approval_engine', 'po.approval', 'approval123')">
+            <div>
+              <div class="account-role">PO Approval Engine</div>
+              <div class="account-creds">po.approval / approval123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+
+          <div class="test-account" onclick="useTestAccount('Policy Engine', 'policy_engine', 'policy.engine', 'policy123')">
+            <div>
+              <div class="account-role">Policy Engine</div>
+              <div class="account-creds">policy.engine / policy123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+
+          <div class="test-account" onclick="useTestAccount('Audit Engine', 'audit_engine', 'audit.engine', 'audit123')">
+            <div>
+              <div class="account-role">Audit Engine</div>
+              <div class="account-creds">audit.engine / audit123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <script>
-    const ROLE_LABELS = {
-      admin: "Administrator",
-      procurement_analyst: "Procurement Analyst",
-      compliance_officer: "Compliance Officer"
-    };
-
-    const ROUTES = {
-      admin: "./Dashboard.html?role=admin",
-      procurement_analyst: "./Dashboard.html?role=procurement_analyst",
-      compliance_officer: "./Dashboard.html?role=compliance_officer"
-    };
-
-    const MOCK_USERS = {
-      admin: {
-        email: "admin@claas2saas.com",
-        password: "Admin@123",
-        displayName: "System Administrator"
+    const accounts = {
+      "compliance.officer": {
+        password: "compliance123",
+        role: "compliance_officer",
+        displayName: "Compliance Officer",
+        roleLabel: "Policy Administrator",
+        avatar: "CO"
       },
-      procurement_analyst: {
-        email: "analyst@claas2saas.com",
-        password: "Analyst@123",
-        displayName: "Procurement Analyst"
+      "po.approval": {
+        password: "approval123",
+        role: "po_approval_engine",
+        displayName: "PO Approval Engine",
+        roleLabel: "Workflow Enforcer",
+        avatar: "PA"
       },
-      compliance_officer: {
-        email: "compliance.officer@claas2saas.com",
-        password: "Compliance@123",
-        displayName: "Compliance Officer"
+      "policy.engine": {
+        password: "policy123",
+        role: "policy_engine",
+        displayName: "Policy Engine",
+        roleLabel: "Automated Validator",
+        avatar: "PE"
+      },
+      "audit.engine": {
+        password: "audit123",
+        role: "audit_engine",
+        displayName: "Audit Engine",
+        roleLabel: "Evidence Recorder",
+        avatar: "AE"
       }
     };
 
-    const form = document.getElementById("loginForm");
-    const roleEl = document.getElementById("role");
-    const emailEl = document.getElementById("email");
-    const passwordEl = document.getElementById("password");
-    const rememberEl = document.getElementById("remember");
-    const clearBtn = document.getElementById("clearBtn");
-    const feedback = document.getElementById("feedback");
-    const demoButtons = document.querySelectorAll("[data-demo]");
-
-    function setFeedback(message, type) {
-      feedback.textContent = message;
-      feedback.className = "feedback " + (type || "");
+    function useTestAccount(displayName, role, username, password) {
+      document.getElementById("userRole").value = role;
+      document.getElementById("username").value = username;
+      document.getElementById("password").value = password;
     }
 
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    function writeSession(role, email) {
-      const profile = MOCK_USERS[role];
-      const session = {
-        role: role,
-        roleLabel: ROLE_LABELS[role],
-        email: email,
-        userName: profile.displayName,
-        company: "ProcureCo",
-        signedInAt: new Date().toISOString(),
-        remember: rememberEl.checked
-      };
-      localStorage.setItem("poc_session", JSON.stringify(session));
-    }
-
-    function validateAndLogin(event) {
+    function handleLogin(event) {
       event.preventDefault();
-      setFeedback("", "");
+      const role = document.getElementById("userRole").value;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const account = accounts[username];
 
-      const role = roleEl.value.trim();
-      const email = emailEl.value.trim().toLowerCase();
-      const password = passwordEl.value;
-
-      if (!role || !email || !password) {
-        setFeedback("Please complete role, email, and password to sign in.", "error");
+      if (!account || account.password !== password || account.role !== role) {
+        alert("Invalid credentials. Please use one of the demo accounts listed on the page.");
         return;
       }
 
-      if (!isValidEmail(email)) {
-        setFeedback("Please enter a valid business email address.", "error");
-        return;
-      }
+      localStorage.setItem("poComplianceSession", JSON.stringify({
+        role: account.role,
+        userName: account.displayName,
+        roleLabel: account.roleLabel,
+        avatar: account.avatar,
+        username
+      }));
 
-      const expected = MOCK_USERS[role];
-      if (!expected || expected.email !== email || expected.password !== password) {
-        setFeedback("Invalid credentials for the selected role. Use demo chips for mock access.", "error");
-        return;
-      }
-
-      writeSession(role, email);
-      setFeedback("Login successful. Redirecting to " + ROLE_LABELS[role] + " workspace...", "success");
-
-      const target = ROUTES[role] || "./Dashboard.html";
-      window.setTimeout(() => {
-        window.location.href = target;
-      }, 800);
+      window.location.href = "./Dashboard.html";
     }
-
-    function clearForm() {
-      form.reset();
-      setFeedback("", "");
-      roleEl.focus();
-    }
-
-    function applyDemo(role) {
-      const demo = MOCK_USERS[role];
-      roleEl.value = role;
-      emailEl.value = demo.email;
-      passwordEl.value = demo.password;
-      setFeedback("Demo credentials loaded for " + ROLE_LABELS[role] + ".", "success");
-    }
-
-    form.addEventListener("submit", validateAndLogin);
-    clearBtn.addEventListener("click", clearForm);
-    demoButtons.forEach((button) => {
-      button.addEventListener("click", () => applyDemo(button.dataset.demo));
-    });
   </script>
 </body>
 </html>

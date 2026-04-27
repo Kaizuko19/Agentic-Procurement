@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PO Compliance Agent | Audit Evidence</title>
+  <link rel="stylesheet" href="./ui.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="nav-left">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <span class="nav-separator" aria-hidden="true">|</span>
+        <div class="nav-context"><span class="nav-context-label">PO Compliance Agent</span></div>
+      </div>
+      <div></div>
+      <div class="nav-right">
+        <div class="nav-user" aria-label="User profile">
+          <span class="nav-avatar" aria-hidden="true">AE</span>
+          <div class="nav-user-meta">
+            <span class="nav-user-name">Audit Engine</span>
+            <span class="nav-user-role">Evidence Recorder</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <aside class="rail-container" id="railContainer">
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <div class="rail-header">
+            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
+            <button type="button" class="collapse-button" id="railToggle" aria-label="Collapse navigation" aria-expanded="true"><span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span></button>
+          </div>
+          <div class="rail-group">
+            <div class="rail-group-title"><span class="rail-group-icon" aria-hidden="true">&#128202;</span><span class="rail-group-text" id="railGroupText">PO Compliance</span></div>
+            <div class="rail-nav">
+              <a class="rail-item" href="./Dashboard.html"><span class="rail-item-icon" aria-hidden="true">&#9635;</span><span class="rail-item-label">Dashboard</span></a>
+              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Compliance Setup</span></a>
+              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">Vendor Validation</span></a>
+              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Approval Workflow</span></a>
+              <a class="rail-item rail-item-active" href="./Audit-Evidence.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#128221;</span><span class="rail-item-label">Audit Evidence</span></a>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <section class="page-header">
+          <div>
+            <h1 class="page-title">Audit Evidence</h1>
+            <p class="page-subtitle">Evidence management UI for logged rule results, overrides, supporting files, and BC repository storage.</p>
+          </div>
+          <div class="toolbar">
+            <button class="btn btn-soft" type="button">Generate Bundle</button>
+            <button class="btn btn-primary" type="button">Push to BC</button>
+          </div>
+        </section>
+
+        <section class="grid-2">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Evidence Bundle Composer</h2>
+                <p class="card-subtitle">Mock assembly view for a single compliance event.</p>
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field-block">
+                <label>PO Reference</label>
+                <select><option>PO-20841</option></select>
+              </div>
+              <div class="field-block">
+                <label>Bundle Type</label>
+                <select><option>Critical Violation Packet</option></select>
+              </div>
+            </div>
+            <div style="margin-top:16px;" class="toggle-list">
+              <div class="toggle-row"><div class="toggle-copy"><strong>Rule evaluation log</strong><span>Include policy trace and timestamps.</span></div><div class="switch on"></div></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Override justification</strong><span>Attach approver rationale and sign-off metadata.</span></div><div class="switch on"></div></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Supporting documents</strong><span>Collect certificates, tax files, and screenshots.</span></div><div class="switch on"></div></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>BC attachment sync</strong><span>Mark ready for repository upload after review.</span></div><div class="switch on"></div></div>
+            </div>
+          </article>
+
+          <article class="card doc-table">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Bundle File List</h2>
+                <p class="card-subtitle">Concrete evidence objects included in the packet.</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Source</th>
+                    <th>Version</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Evaluation Summary.pdf</td>
+                    <td>Policy Engine</td>
+                    <td>v1.4</td>
+                    <td><span class="pill success">Attached</span></td>
+                  </tr>
+                  <tr>
+                    <td>Override Justification.msg</td>
+                    <td>Compliance Officer</td>
+                    <td>v1.0</td>
+                    <td><span class="pill warning">Pending sign-off</span></td>
+                  </tr>
+                  <tr>
+                    <td>GST Registration.pdf</td>
+                    <td>Vendor Master</td>
+                    <td>v3.1</td>
+                    <td><span class="pill success">Attached</span></td>
+                  </tr>
+                  <tr>
+                    <td>Certificate Snapshot.zip</td>
+                    <td>Document Repository</td>
+                    <td>v2.2</td>
+                    <td><span class="pill info">Staged</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section class="grid-2" style="margin-top:20px;">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Event Log Timeline</h2>
+                <p class="card-subtitle">Chronological record of the compliance event.</p>
+              </div>
+            </div>
+            <div class="timeline">
+              <div class="timeline-item"><div class="timeline-dot">08:11</div><div class="timeline-copy"><h3>Rule evaluation recorded</h3><p>Certificate expiry and restricted item checks written to the compliance log.</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot">08:14</div><div class="timeline-copy"><h3>PO blocked</h3><p>Approval workflow received a hard-stop response from the Policy Engine.</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot">08:27</div><div class="timeline-copy"><h3>Override note drafted</h3><p>Compliance Officer added temporary business justification pending documentation.</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot">08:41</div><div class="timeline-copy"><h3>Bundle staged for BC</h3><p>Audit Engine assembled evidence packet and queued it for repository sync.</p></div></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Repository and Audit Status</h2>
+                <p class="card-subtitle">Operational view of evidence health.</p>
+              </div>
+            </div>
+            <div class="mini-kpi-grid">
+              <div class="mini-kpi"><div class="mini-kpi-label">Bundles This Week</div><div class="mini-kpi-value">31</div></div>
+              <div class="mini-kpi"><div class="mini-kpi-label">Complete Justifications</div><div class="mini-kpi-value">96%</div></div>
+              <div class="mini-kpi"><div class="mini-kpi-label">BC Sync Success</div><div class="mini-kpi-value">100%</div></div>
+            </div>
+            <div style="margin-top:16px;" class="toggle-list">
+              <div class="toggle-row"><div class="toggle-copy"><strong>Audit-ready evidence bundle</strong><span>All mandatory artifacts present except final override signature.</span></div><span class="pill warning">Review</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>BC attachment repository</strong><span>Connection healthy and ready for upload.</span></div><span class="pill success">In Sync</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Retention policy</strong><span>Seven-year retention tag already applied.</span></div><span class="pill info">Tagged</span></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="./ui.js"></script>
+</body>
+</html>

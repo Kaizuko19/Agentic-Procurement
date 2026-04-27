@@ -1,602 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PO Compliance Agent | Dashboard</title>
-  <style>
-    :root {
-      --midnight-blue: #193e6b;
-      --midnight-blue-dark: #143356;
-      --gold: #b3a125;
-      --gold-dark: #96851f;
-      --white: #ffffff;
-      --neutral-gray: #f5f5f5;
-      --border-gray: #e6ecf3;
-      --text-main: #1f2937;
-      --text-muted: #5b6678;
-      --surface-soft: #f7fbff;
-      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
-      --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.08);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--text-main);
-      background: linear-gradient(170deg, #f4f7fc 0%, #ffffff 55%, #eef4fb 100%);
-    }
-
-    .top-bar {
-      background: var(--midnight-blue);
-      border-bottom: 4px solid var(--gold);
-      color: var(--white);
-      padding: 14px 20px;
-    }
-
-    .top-inner {
-      max-width: 1300px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-logo {
-      min-height: 42px;
-      padding: 7px 12px;
-      border: 2px solid rgba(255, 255, 255, 0.72);
-      border-radius: 10px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      white-space: nowrap;
-    }
-
-    .brand-logo .accent {
-      color: var(--gold);
-      font-weight: 800;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: clamp(22px, 1.8vw, 30px);
-      line-height: 1.2;
-      font-weight: 700;
-    }
-
-    .main-nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .main-nav a {
-      text-decoration: none;
-      color: var(--white);
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-weight: 600;
-      font-size: 15px;
-    }
-
-    .main-nav a[aria-current="page"] {
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.16);
-    }
-
-    .main-nav a:hover,
-    .main-nav a:focus-visible {
-      outline: none;
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: var(--focus-ring);
-    }
-
-    .session-strip {
-      max-width: 1300px;
-      margin: 16px auto 0;
-      border: 1px solid #d7e2f1;
-      border-left: 5px solid var(--gold);
-      border-radius: 10px;
-      background: #f4f8ff;
-      padding: 12px 14px;
-      color: #21496f;
-      font-size: 14px;
-    }
-
-    .session-strip strong { color: var(--midnight-blue); }
-
-    main {
-      max-width: 1300px;
-      margin: 16px auto 24px;
-      padding: 0 20px;
-      display: grid;
-      gap: 16px;
-    }
-
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      background: var(--white);
-      border: 1px solid var(--border-gray);
-      border-radius: 12px;
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
-    }
-
-    .kpi {
-      padding: 16px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .kpi-label {
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .kpi-value {
-      color: var(--midnight-blue);
-      font-size: 30px;
-      font-weight: 700;
-    }
-
-    .kpi-meta {
-      font-size: 13px;
-      color: #334155;
-      min-height: 18px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .pill-ok { color: #166534; background: #ecfdf3; border: 1px solid #bbf0ca; }
-    .pill-alert { color: #92400e; background: #ffedd5; border: 1px solid #fed7aa; }
-    .pill-risk { color: #7f1d1d; background: #fee2e2; border: 1px solid #fecaca; }
-
-    .panel-head {
-      border-bottom: 1px solid var(--border-gray);
-      background: var(--surface-soft);
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .panel-title {
-      margin: 0;
-      color: var(--midnight-blue);
-      font-size: 19px;
-      font-weight: 700;
-    }
-
-    .panel-note {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 14px;
-    }
-
-    .table-wrap {
-      overflow: auto;
-      max-height: 380px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 760px;
-    }
-
-    th {
-      background: var(--midnight-blue);
-      color: var(--white);
-      font-size: 13px;
-      padding: 10px 12px;
-      text-align: left;
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
-      white-space: nowrap;
-    }
-
-    td {
-      font-size: 13px;
-      padding: 10px 12px;
-      border-top: 1px solid #e1e8f2;
-      vertical-align: top;
-    }
-
-    tbody tr:nth-child(even) { background: var(--neutral-gray); }
-
-    .quick-grid {
-      padding: 14px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .quick-link {
-      display: grid;
-      gap: 6px;
-      background: #f9fbff;
-      border: 1px solid #dbe5f2;
-      border-left: 4px solid var(--gold);
-      border-radius: 12px;
-      padding: 14px;
-      text-decoration: none;
-      color: var(--text-main);
-      min-height: 94px;
-    }
-
-    .quick-link:hover,
-    .quick-link:focus-visible {
-      outline: none;
-      border-color: #c3d2e5;
-      box-shadow: var(--focus-ring);
-      transform: translateY(-1px);
-    }
-
-    .quick-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--midnight-blue);
-      margin: 0;
-    }
-
-    .quick-text {
-      margin: 0;
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.35;
-    }
-
-    .analytics-wrap {
-      padding: 14px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .bar-row {
-      display: grid;
-      gap: 4px;
-    }
-
-    .bar-label {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 13px;
-      color: #334155;
-      font-weight: 600;
-    }
-
-    .bar-track {
-      border: 1px solid #d8e2f0;
-      border-radius: 999px;
-      background: #edf3fb;
-      height: 12px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--midnight-blue), #2f6aa8);
-      width: 0;
-      transition: width 0.5s ease;
-    }
-
-    .alert-list {
-      padding: 14px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .alert-item {
-      border: 1px solid #e3e9f2;
-      border-left: 4px solid transparent;
-      border-radius: 12px;
-      background: #fff;
-      padding: 12px;
-      display: grid;
-      gap: 6px;
-    }
-
-    .alert-item.warning { border-left-color: var(--gold); background: #fffbeb; }
-    .alert-item.blocked { border-left-color: #b42318; background: #fff1f2; }
-
-    .alert-item strong { color: var(--midnight-blue); font-size: 14px; }
-    .alert-item p { margin: 0; color: var(--text-muted); font-size: 13px; line-height: 1.4; }
-
-    footer {
-      background: var(--midnight-blue);
-      border-top: 3px solid var(--gold);
-      color: var(--white);
-      text-align: center;
-      padding: 12px;
-      font-size: 13px;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 1160px) {
-      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .two-col { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 720px) {
-      .top-bar { padding: 14px; }
-      main { padding: 0 14px; }
-      .session-strip { margin: 12px; }
-      .kpi-grid { grid-template-columns: 1fr; }
-      .quick-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+  <link rel="stylesheet" href="./ui.css">
 </head>
 <body>
-  <header class="top-bar">
-    <div class="top-inner">
-      <div class="brand">
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="nav-left">
         <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
-        <h1>PO Compliance Agent</h1>
+        <span class="nav-separator" aria-hidden="true">|</span>
+        <div class="nav-context">
+          <span class="nav-context-label">PO Compliance Agent</span>
+        </div>
       </div>
-      <nav class="main-nav" aria-label="Primary navigation">
-        <a href="./Dashboard.html" aria-current="page">Dashboard</a>
-        <a href="./Rule-Configuration.html">Compliance Rules</a>
-        <a href="./PO-Validation.html">PO Review</a>
-        <a href="./Audit-Trail.html">Audit Trail</a>
-      </nav>
+      <div></div>
+      <div class="nav-right">
+        <div class="nav-user" aria-label="User profile">
+          <span class="nav-avatar" aria-hidden="true">CO</span>
+          <div class="nav-user-meta">
+            <span class="nav-user-name">Compliance Officer</span>
+            <span class="nav-user-role">Policy Administrator</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <aside class="rail-container" id="railContainer">
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <div class="rail-header">
+            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
+            <button type="button" class="collapse-button" id="railToggle" aria-label="Collapse navigation" aria-expanded="true">
+              <span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span>
+            </button>
+          </div>
+
+          <div class="rail-group">
+            <div class="rail-group-title">
+              <span class="rail-group-icon" aria-hidden="true">&#128202;</span>
+              <span class="rail-group-text" id="railGroupText">PO Compliance</span>
+            </div>
+            <div class="rail-nav">
+              <a class="rail-item rail-item-active" href="./Dashboard.html" aria-current="page">
+                <span class="rail-item-icon" aria-hidden="true">&#9635;</span>
+                <span class="rail-item-label">Dashboard</span>
+              </a>
+              <a class="rail-item" href="./Compliance-Setup.html">
+                <span class="rail-item-icon" aria-hidden="true">&#9881;</span>
+                <span class="rail-item-label">Compliance Setup</span>
+              </a>
+              <a class="rail-item" href="./Vendor-Validation.html">
+                <span class="rail-item-icon" aria-hidden="true">&#10003;</span>
+                <span class="rail-item-label">Vendor Validation</span>
+              </a>
+              <a class="rail-item" href="./Approval-Workflow.html">
+                <span class="rail-item-icon" aria-hidden="true">&#128209;</span>
+                <span class="rail-item-label">Approval Workflow</span>
+              </a>
+              <a class="rail-item" href="./Audit-Evidence.html">
+                <span class="rail-item-icon" aria-hidden="true">&#128221;</span>
+                <span class="rail-item-label">Audit Evidence</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <section class="page-header" aria-label="Dashboard heading">
+          <div>
+            <h1 class="page-title">PO Compliance Dashboard</h1>
+            <p class="page-subtitle">Control center for policy setup, vendor validation, approval checks, and audit-ready evidence capture.</p>
+          </div>
+          <div class="page-tag">4 Active Agent Roles</div>
+        </section>
+
+        <div class="banner">
+          <strong>Compliance operations overview</strong>
+          <span>Track setup activity, vendor validation outcomes, approval blocks, and evidence readiness across the PO lifecycle.</span>
+        </div>
+
+        <section class="grid-4" aria-label="Compliance KPI summary">
+          <article class="card metric">
+            <div class="metric-label">Active Compliance Gates</div>
+            <div class="metric-value">12</div>
+            <div class="metric-footnote">Certification, vendor status, tax, and approval chain controls enabled.</div>
+          </article>
+          <article class="card metric">
+            <div class="metric-label">Blocked POs Today</div>
+            <div class="metric-value">07</div>
+            <div class="metric-footnote">Critical issues stopped before release to ERP.</div>
+          </article>
+          <article class="card metric">
+            <div class="metric-label">Open Exceptions</div>
+            <div class="metric-value">14</div>
+            <div class="metric-footnote">Awaiting Compliance Officer review or override justification.</div>
+          </article>
+          <article class="card metric">
+            <div class="metric-label">Audit Bundles Ready</div>
+            <div class="metric-value">28</div>
+            <div class="metric-footnote">Evidence packages staged for BC attachment repository.</div>
+          </article>
+        </section>
+
+        <section class="grid-2" style="margin-top: 20px;">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">What Users Can Do</h2>
+                <p class="card-subtitle">Mapped directly from the workflow you outlined.</p>
+              </div>
+              <span class="pill info">4 workflow lanes</span>
+            </div>
+            <div class="summary-list">
+              <div class="summary-item">
+                <h3>Initial Setup or Regulatory Change</h3>
+                <p>Define certification requirements, vendor status rules, GST and tax checks, escalation routing, and compliance gates.</p>
+              </div>
+              <div class="summary-item">
+                <h3>PO Creation or Vendor Selection</h3>
+                <p>Check vendor card eligibility, validate certification expiry, confirm GST status, and block high-risk orders.</p>
+              </div>
+              <div class="summary-item">
+                <h3>PO Approval Workflow</h3>
+                <p>Validate internal rules, purchaser authorization, item restrictions, approval chain alignment, and compliance reporting.</p>
+              </div>
+              <div class="summary-item">
+                <h3>Every Compliance Event</h3>
+                <p>Log rule results, capture overrides, archive support files, bundle evidence, and store audit artifacts in BC.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Agent Users</h2>
+                <p class="card-subtitle">Primary users and system actors in the compliance workflow.</p>
+              </div>
+            </div>
+            <div class="role-grid">
+              <div class="role-item">
+                <h3>Compliance Officer</h3>
+                <p>Owns configuration, handles escalations, approves exceptions, and reviews audit evidence.</p>
+              </div>
+              <div class="role-item">
+                <h3>PO Approval Engine</h3>
+                <p>Runs automated checks before approval and enforces blocking rules for critical violations.</p>
+              </div>
+              <div class="role-item">
+                <h3>Policy Engine</h3>
+                <p>Evaluates certification, vendor status, GST, tax, and purchaser authorization policies.</p>
+              </div>
+              <div class="role-item">
+                <h3>Audit Engine</h3>
+                <p>Captures event logs, override justification, support documents, and evidence bundles.</p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="grid-2" style="margin-top: 20px;">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Recent Compliance Queue</h2>
+                <p class="card-subtitle">Illustrative queue of PO outcomes.</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>PO</th>
+                    <th>Vendor</th>
+                    <th>Issue</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>PO-20841</td>
+                    <td>NorthStar Components</td>
+                    <td>Certification expired 4 days ago</td>
+                    <td><span class="pill danger">Blocked</span></td>
+                  </tr>
+                  <tr>
+                    <td>PO-20836</td>
+                    <td>Vista Industrial</td>
+                    <td>GST registration mismatch</td>
+                    <td><span class="pill warning">Escalated</span></td>
+                  </tr>
+                  <tr>
+                    <td>PO-20830</td>
+                    <td>Arden Packaging</td>
+                    <td>Item restriction check passed</td>
+                    <td><span class="pill success">Approved</span></td>
+                  </tr>
+                  <tr>
+                    <td>PO-20812</td>
+                    <td>Meridian Flow</td>
+                    <td>Override justification attached</td>
+                    <td><span class="pill info">Audited</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Control Posture</h2>
+                <p class="card-subtitle">Snapshot of the active compliance control posture.</p>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="split-stat">
+                <span class="split-stat-label">Certification rules active</span>
+                <span class="split-stat-value">6</span>
+              </div>
+              <div class="split-stat">
+                <span class="split-stat-label">Vendor status validations active</span>
+                <span class="split-stat-value">4</span>
+              </div>
+              <div class="split-stat">
+                <span class="split-stat-label">GST and tax checks active</span>
+                <span class="split-stat-value">5</span>
+              </div>
+              <div class="split-stat">
+                <span class="split-stat-label">Escalation levels configured</span>
+                <span class="split-stat-value">3</span>
+              </div>
+              <div class="split-stat">
+                <span class="split-stat-label">Compliance gates live in approval flow</span>
+                <span class="split-stat-value">Enabled</span>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
     </div>
-  </header>
-
-  <section id="sessionStrip" class="session-strip" aria-live="polite"></section>
-
-  <main>
-    <section class="kpi-grid" aria-label="Dashboard KPI summary">
-      <article class="card kpi">
-        <div class="kpi-label">Compliance Score</div>
-        <div id="kpiComplianceScore" class="kpi-value">0%</div>
-        <div class="kpi-meta">POs checked against mandate rules</div>
-      </article>
-      <article class="card kpi">
-        <div class="kpi-label">Open Exceptions</div>
-        <div id="kpiExceptions" class="kpi-value">0</div>
-        <div class="kpi-meta"><span class="pill pill-alert">Needs Review</span></div>
-      </article>
-      <article class="card kpi">
-        <div class="kpi-label">Blocked Orders</div>
-        <div id="kpiBlocked" class="kpi-value">0</div>
-        <div class="kpi-meta"><span class="pill pill-risk">Compliance Violation</span></div>
-      </article>
-      <article class="card kpi">
-        <div class="kpi-label">Active Rule Sets</div>
-        <div id="kpiRules" class="kpi-value">0</div>
-        <div class="kpi-meta">PO header and supplier compliance profiles</div>
-      </article>
-    </section>
-
-    <section class="two-col">
-      <article class="card">
-        <div class="panel-head">
-          <h2 class="panel-title">Overview: Active Compliance Rules</h2>
-          <p class="panel-note">Current PO checks protecting governance and supplier compliance</p>
-        </div>
-        <div class="table-wrap">
-          <table aria-label="Active compliance rule list">
-            <thead>
-              <tr>
-                <th>Rule Set</th>
-                <th>Feature</th>
-                <th>Scope</th>
-                <th>Match</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="rulesTableBody"></tbody>
-          </table>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="panel-head">
-          <h2 class="panel-title">Quick Navigation</h2>
-          <p class="panel-note">Jump into key PO compliance workflows</p>
-        </div>
-        <div class="quick-grid">
-          <a class="quick-link" href="./Rule-Configuration.html">
-            <h3 class="quick-title">Compliance Rules</h3>
-            <p class="quick-text">Manage header, supplier, and value controls for PO review.</p>
-          </a>
-          <a class="quick-link" href="./PO-Validation.html">
-            <h3 class="quick-title">PO Review</h3>
-            <p class="quick-text">Inspect flagged orders and resolve compliance exceptions.</p>
-          </a>
-          <a class="quick-link" href="./Audit-Trail.html">
-            <h3 class="quick-title">Audit Trail</h3>
-            <p class="quick-text">Trace every rule decision and approval action.</p>
-          </a>
-          <a class="quick-link" href="./Dashboard.html">
-            <h3 class="quick-title">Compliance Health</h3>
-            <p class="quick-text">Monitor exception volume, blocked orders, and rule coverage.</p>
-          </a>
-        </div>
-      </article>
-    </section>
-
-    <section class="two-col">
-      <article class="card">
-        <div class="panel-head">
-          <h2 class="panel-title">Recent Compliance Alerts</h2>
-          <p class="panel-note">POs requiring immediate validation or remediation</p>
-        </div>
-        <div id="alertsContainer" class="alert-list"></div>
-      </article>
-
-      <article class="card">
-        <div class="panel-head">
-          <h2 class="panel-title">Validation Summary</h2>
-          <p class="panel-note">PO compliance rate by feature area</p>
-        </div>
-        <div id="analyticsContainer" class="analytics-wrap"></div>
-      </article>
-    </section>
-  </main>
-
-  <footer>Copyright &copy; 2026 PO Compliance Agent</footer>
-
-  <script>
-    const sessionKey = "poc_session";
-    const sessionRaw = localStorage.getItem(sessionKey);
-    if (!sessionRaw) {
-      window.location.replace("./Login.html");
-    }
-    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
-
-    const rules = [
-      {
-        ruleSet: "Supplier Validation Rules",
-        feature: "PO Compliance",
-        scope: "Supplier Category: Tier 1 Vendors",
-        match: "Approved Supplier List",
-        status: "Active"
-      },
-      {
-        ruleSet: "PO Header & Approval",
-        feature: "PO Compliance",
-        scope: "Order Value > $50k",
-        match: "Required Approvals",
-        status: "Active"
-      },
-      {
-        ruleSet: "Contract Match",
-        feature: "PO Compliance",
-        scope: "Contracted Materials",
-        match: "PO vs Contract",
-        status: "Saved"
-      }
-    ];
-
-    const recentAlerts = [
-      {
-        type: "blocked",
-        po: "PO-084512",
-        message: "PO supplier is outside approved compliance list. Approval blocked.",
-        when: "Today, 15:04"
-      },
-      {
-        type: "warning",
-        po: "PO-084498",
-        message: "Required PO header fields are incomplete. Validation pending.",
-        when: "Today, 13:18"
-      },
-      {
-        type: "warning",
-        po: "PO-084475",
-        message: "Requested delivery terms do not match compliance policy.",
-        when: "Today, 10:56"
-      }
-    ];
-
-    const validationSummary = [
-      { feature: "Supplier Approval", value: 81 },
-      { feature: "Header Validation", value: 92 },
-      { feature: "Budget Check", value: 77 },
-      { feature: "Contract Match", value: 88 }
-    ];
-
-    function setSessionStrip() {
-      const strip = document.getElementById("sessionStrip");
-      strip.innerHTML =
-        "<strong>Signed In:</strong> " + (session.userName || "User") +
-        " (<strong>Role:</strong> " + (session.role || "Compliance Analyst") + ") | " +
-        "<strong>Email:</strong> " + (session.email || "-") + " | " +
-        "<strong>Company:</strong> " + (session.company || "ProcureCo") + " | " +
-        "<strong>Last Refresh:</strong> " + new Date().toLocaleString();
-    }
-
-    function setKPIs() {
-      document.getElementById("kpiComplianceScore").textContent = "89%";
-      document.getElementById("kpiExceptions").textContent = recentAlerts.length;
-      document.getElementById("kpiBlocked").textContent = recentAlerts.filter((a) => a.type === "blocked").length;
-      document.getElementById("kpiRules").textContent = rules.length;
-    }
-
-    function renderRules() {
-      const tbody = document.getElementById("rulesTableBody");
-      tbody.innerHTML = "";
-      rules.forEach((rule) => {
-        const row = document.createElement("tr");
-        row.innerHTML =
-          `<td>${rule.ruleSet}</td>` +
-          `<td>${rule.feature}</td>` +
-          `<td>${rule.scope}</td>` +
-          `<td>${rule.match}</td>` +
-          `<td><span class='pill ${rule.status === "Active" ? "pill-ok" : "pill-alert"}'>${rule.status}</span></td>`;
-        tbody.appendChild(row);
-      });
-    }
-
-    function renderAlerts() {
-      const container = document.getElementById("alertsContainer");
-      container.innerHTML = "";
-      recentAlerts.forEach((alert) => {
-        const node = document.createElement("article");
-        node.className = "alert-item " + alert.type;
-        node.innerHTML =
-          `<strong>${alert.po}</strong>` +
-          `<p>${alert.message}</p>` +
-          `<p><strong>Time:</strong> ${alert.when}</p>`;
-        container.appendChild(node);
-      });
-    }
-
-    function renderAnalytics() {
-      const container = document.getElementById("analyticsContainer");
-      container.innerHTML = "";
-      validationSummary.forEach((item) => {
-        const row = document.createElement("div");
-        row.className = "bar-row";
-        row.innerHTML =
-          `<div class='bar-label'><span>${item.feature}</span><span>${item.value}%</span></div>` +
-          `<div class='bar-track'><div class='bar-fill' style='width: ${Math.max(0, Math.min(100, item.value))}%;'></div></div>`;
-        container.appendChild(row);
-      });
-    }
-
-    setSessionStrip();
-    setKPIs();
-    renderRules();
-    renderAlerts();
-    renderAnalytics();
-  </script>
+  </div>
+  <script src="./ui.js"></script>
 </body>
 </html>

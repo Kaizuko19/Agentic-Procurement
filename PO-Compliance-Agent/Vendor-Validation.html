@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PO Compliance Agent | Vendor Validation</title>
+  <link rel="stylesheet" href="./ui.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="nav-left">
+        <div class="brand-logo">CLaaS<span class="accent">2</span>SaaS</div>
+        <span class="nav-separator" aria-hidden="true">|</span>
+        <div class="nav-context"><span class="nav-context-label">PO Compliance Agent</span></div>
+      </div>
+      <div></div>
+      <div class="nav-right">
+        <div class="nav-user" aria-label="User profile">
+          <span class="nav-avatar" aria-hidden="true">PE</span>
+          <div class="nav-user-meta">
+            <span class="nav-user-name">Policy Engine</span>
+            <span class="nav-user-role">Automated Validator</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <aside class="rail-container" id="railContainer">
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <div class="rail-header">
+            <span class="rail-header-label" id="railHeaderLabel">Procurement</span>
+            <button type="button" class="collapse-button" id="railToggle" aria-label="Collapse navigation" aria-expanded="true"><span class="collapse-icon" id="railToggleIcon" aria-hidden="true">&#10094;</span></button>
+          </div>
+          <div class="rail-group">
+            <div class="rail-group-title"><span class="rail-group-icon" aria-hidden="true">&#128202;</span><span class="rail-group-text" id="railGroupText">PO Compliance</span></div>
+            <div class="rail-nav">
+              <a class="rail-item" href="./Dashboard.html"><span class="rail-item-icon" aria-hidden="true">&#9635;</span><span class="rail-item-label">Dashboard</span></a>
+              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Compliance Setup</span></a>
+              <a class="rail-item rail-item-active" href="./Vendor-Validation.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">Vendor Validation</span></a>
+              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Approval Workflow</span></a>
+              <a class="rail-item" href="./Audit-Evidence.html"><span class="rail-item-icon" aria-hidden="true">&#128221;</span><span class="rail-item-label">Audit Evidence</span></a>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <section class="page-header">
+          <div>
+            <h1 class="page-title">Vendor Validation</h1>
+            <p class="page-subtitle">Operational screen for validating the selected vendor before a PO can move forward.</p>
+          </div>
+          <div class="toolbar">
+            <button class="btn btn-soft" type="button">Refresh Vendor Card</button>
+            <button class="btn btn-primary" type="button">Run Validation</button>
+          </div>
+        </section>
+
+        <section class="grid-2">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Validation Workbench</h2>
+                <p class="card-subtitle">Mock filter and rule execution surface.</p>
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field-block">
+                <label>Vendor</label>
+                <select><option>NorthStar Components</option></select>
+              </div>
+              <div class="field-block">
+                <label>PO Draft</label>
+                <select><option>PO-20841 / Electrical assemblies</option></select>
+              </div>
+              <div class="field-block">
+                <label>Validation Profile</label>
+                <select><option>Strategic Electronics Policy Pack</option></select>
+              </div>
+              <div class="field-block">
+                <label>Jurisdiction</label>
+                <select><option>Singapore GST / Export</option></select>
+              </div>
+            </div>
+            <div style="margin-top:16px;" class="segment-row">
+              <span class="segment active">Certification</span>
+              <span class="segment active">Vendor Status</span>
+              <span class="segment active">GST</span>
+              <span class="segment">Manual Documents</span>
+            </div>
+            <div style="margin-top:16px;" class="mini-kpi-grid">
+              <div class="mini-kpi">
+                <div class="mini-kpi-label">Rules Evaluated</div>
+                <div class="mini-kpi-value">14</div>
+              </div>
+              <div class="mini-kpi">
+                <div class="mini-kpi-label">Warnings</div>
+                <div class="mini-kpi-value">01</div>
+              </div>
+              <div class="mini-kpi">
+                <div class="mini-kpi-label">Critical Violations</div>
+                <div class="mini-kpi-value">01</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Vendor Card Snapshot</h2>
+                <p class="card-subtitle">What the engine is reading from the supplier profile.</p>
+              </div>
+            </div>
+            <div class="detail-panel">
+              <div class="detail-row"><div class="detail-label">Vendor Status</div><div class="detail-value">Approved for procurement, monitored by compliance</div></div>
+              <div class="detail-row"><div class="detail-label">Primary Certification</div><div class="detail-value">ISO 9001, expires in 4 days</div></div>
+              <div class="detail-row"><div class="detail-label">GST Registration</div><div class="detail-value">Registered, certificate attached, entity match confirmed</div></div>
+              <div class="detail-row"><div class="detail-label">Restricted Category Exposure</div><div class="detail-value">Electrical control modules require extra approval</div></div>
+              <div class="detail-row"><div class="detail-label">Last Audit Comment</div><div class="detail-value">Override permitted in March due to transit risk, now expired</div></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="grid-2" style="margin-top:20px;">
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Rule Evaluation Results</h2>
+                <p class="card-subtitle">Policy evaluation output for the selected vendor and PO.</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Rule</th>
+                    <th>Finding</th>
+                    <th>Evidence</th>
+                    <th>Decision</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>ISO-Active-Cert</td>
+                    <td>Certificate expires before expected receipt date</td>
+                    <td>Expiry 2026-05-01</td>
+                    <td><span class="pill danger">Block</span></td>
+                  </tr>
+                  <tr>
+                    <td>Vendor-Status-Approved</td>
+                    <td>Status is approved and not under suspension</td>
+                    <td>Vendor card synced 08:12</td>
+                    <td><span class="pill success">Pass</span></td>
+                  </tr>
+                  <tr>
+                    <td>GST-Registry-Match</td>
+                    <td>Registration valid, attachment on file</td>
+                    <td>GST doc linked</td>
+                    <td><span class="pill success">Pass</span></td>
+                  </tr>
+                  <tr>
+                    <td>Restricted-Item-Approval</td>
+                    <td>Commodity requires elevated approver chain</td>
+                    <td>Category ELEC-CONTROL</td>
+                    <td><span class="pill warning">Flag</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-title-row">
+              <div>
+                <h2 class="card-title">Decision Summary</h2>
+                <p class="card-subtitle">Mock final disposition for the selected vendor and PO draft.</p>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="toggle-row">
+                <div class="toggle-copy"><strong>PO Creation Status</strong><span>Critical certificate issue prevents release.</span></div>
+                <span class="pill danger">Blocked</span>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-copy"><strong>Exception Route</strong><span>Send to Compliance Officer for waiver review.</span></div>
+                <span class="pill warning">Escalate</span>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-copy"><strong>Next Required Action</strong><span>Upload renewed certificate or document temporary approval.</span></div>
+                <span class="pill info">Action Needed</span>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="./ui.js"></script>
+</body>
+</html>

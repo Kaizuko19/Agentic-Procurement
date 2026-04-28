@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Supplier Discovery Agent | Login</title>
+  <style>
+    :root {
+      --midnight-blue: #193e6b;
+      --midnight-blue-dark: #143356;
+      --green-gold: #b3a125;
+      --green-gold-dark: #96851f;
+      --white: #ffffff;
+      --border-gray: #e6ecf3;
+      --text-main: #1f2937;
+      --text-muted: #5b6678;
+      --focus-ring: 0 0 0 3px rgba(179, 161, 37, 0.35);
+      --shadow-card: 0 14px 35px rgba(17, 24, 39, 0.14);
+      --shadow-soft: 0 6px 20px rgba(25, 62, 107, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 8% 10%, rgba(179, 161, 37, 0.16) 0, rgba(179, 161, 37, 0) 35%),
+        radial-gradient(circle at 90% 90%, rgba(25, 62, 107, 0.18) 0, rgba(25, 62, 107, 0) 40%),
+        linear-gradient(160deg, #f2f6fc 0%, #ffffff 55%, #eef4fb 100%);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1120px, 100%);
+      min-height: min(760px, calc(100vh - 48px));
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 18px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .showcase {
+      background: linear-gradient(155deg, #193e6b 0%, #1f4e86 58%, #10263f 100%);
+      color: var(--white);
+      padding: clamp(24px, 3vw, 42px);
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      align-content: space-between;
+      gap: 24px;
+    }
+
+    .showcase::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
+        radial-gradient(circle at 20% 20%, rgba(179, 161, 37, 0.35), rgba(179, 161, 37, 0) 45%);
+      z-index: -1;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-pill {
+      padding: 9px 14px;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .logo-pill .accent {
+      color: var(--green-gold);
+      font-weight: 800;
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(24px, 2.1vw, 34px);
+      line-height: 1.2;
+      max-width: 18ch;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      max-width: 48ch;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .feature-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .feature strong {
+      color: #fff2b2;
+    }
+
+    .login-zone {
+      background: var(--white);
+      padding: clamp(22px, 3vw, 42px);
+      display: grid;
+      align-content: center;
+    }
+
+    .login-card {
+      border: 1px solid var(--border-gray);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      box-shadow: var(--shadow-soft);
+      padding: clamp(20px, 2.6vw, 30px);
+    }
+
+    .card-title {
+      margin: 0;
+      color: var(--midnight-blue);
+      font-size: clamp(24px, 1.8vw, 30px);
+      line-height: 1.2;
+    }
+
+    .card-caption {
+      margin: 8px 0 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 14px;
+      color: var(--midnight-blue);
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #c7d2e1;
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-size: 14px;
+      color: var(--text-main);
+      background: #fff;
+    }
+
+    input::placeholder {
+      color: #8a95a6;
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    button:focus-visible {
+      outline: none;
+      border-color: var(--green-gold);
+      box-shadow: var(--focus-ring);
+    }
+
+    .helper {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .btn-row {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--midnight-blue), #22558f);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(25, 62, 107, 0.22);
+    }
+
+    .divider {
+      margin: 24px 0 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .divider::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .divider-text {
+      position: relative;
+      background: #fff;
+      padding: 0 16px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .test-accounts {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 18px;
+    }
+
+    .test-accounts-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 12px;
+    }
+
+    .test-account {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .test-account:hover {
+      border-color: #193e6b;
+      background: #f0f7ff;
+    }
+
+    .test-account:last-child {
+      margin-bottom: 0;
+    }
+
+    .account-role {
+      font-size: 13px;
+      font-weight: 700;
+      color: #193e6b;
+    }
+
+    .account-creds {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .btn-use {
+      font-size: 12px;
+      padding: 4px 12px;
+      background: #193e6b;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .btn-use:hover {
+      background: #2c5282;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="showcase">
+      <div>
+        <div class="brand-row">
+          <div class="logo-pill">CLaaS<span class="accent">2</span>SaaS</div>
+        </div>
+        <h1 class="title">New Supplier Discovery Agent</h1>
+        <p class="subtitle">Access the NSD workflow for sourcing intake, supplier discovery, ranking decisions, and vendor onboarding coordination.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature"><strong>System Administrator</strong> manages full NSD access, workflow supervision, and operational controls.</div>
+        <div class="feature"><strong>Sourcing Request Owner</strong> captures demand details, evaluation weights, and intake constraints.</div>
+        <div class="feature"><strong>Supplier Discovery Analyst</strong> reviews candidate matches, traceability, and shortlist quality.</div>
+        <div class="feature"><strong>Vendor Onboarding Coordinator</strong> validates setup readiness and completes supplier activation steps.</div>
+      </div>
+    </section>
+
+    <section class="login-zone">
+      <div class="login-card">
+        <h2 class="card-title">Sign In</h2>
+        <p class="card-caption">Use one of the accounts below to enter the NSD workspace with the correct role.</p>
+
+        <form id="loginForm" class="form-grid" onsubmit="handleLogin(event)">
+          <div class="field">
+            <label for="userRole">User Role</label>
+            <select id="userRole" required>
+              <option value="">Select your role</option>
+              <option value="system_admin">System Administrator</option>
+              <option value="sourcing_request_owner">Sourcing Request Owner</option>
+              <option value="supplier_discovery_analyst">Supplier Discovery Analyst</option>
+              <option value="vendor_onboarding_coordinator">Vendor Onboarding Coordinator</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <div class="helper">Demo credentials below are included for prototype access and review.</div>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary">Sign In to NSD Agent</button>
+          </div>
+        </form>
+
+        <div class="divider">
+          <span class="divider-text">Demo Accounts</span>
+        </div>
+
+        <div class="test-accounts">
+          <div class="test-accounts-title">Quick Access Test Accounts</div>
+
+          <div class="test-account" onclick="useTestAccount('system_admin', 'john.owen', 'nsdadmin123')">
+            <div>
+              <div class="account-role">System Administrator</div>
+              <div class="account-creds">john.owen / nsdadmin123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+
+          <div class="test-account" onclick="useTestAccount('sourcing_request_owner', 'sourcing.owner', 'sourcing123')">
+            <div>
+              <div class="account-role">Sourcing Request Owner</div>
+              <div class="account-creds">sourcing.owner / sourcing123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+
+          <div class="test-account" onclick="useTestAccount('supplier_discovery_analyst', 'discovery.analyst', 'discovery123')">
+            <div>
+              <div class="account-role">Supplier Discovery Analyst</div>
+              <div class="account-creds">discovery.analyst / discovery123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+
+          <div class="test-account" onclick="useTestAccount('vendor_onboarding_coordinator', 'onboarding.coordinator', 'onboard123')">
+            <div>
+              <div class="account-role">Vendor Onboarding Coordinator</div>
+              <div class="account-creds">onboarding.coordinator / onboard123</div>
+            </div>
+            <button type="button" class="btn-use">Use</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const accounts = {
+      "john.owen": {
+        password: "nsdadmin123",
+        role: "system_admin",
+        displayName: "John Owen",
+        roleLabel: "System Administrator",
+        avatar: "JO",
+        redirect: "./NSD-Agent-Home.html"
+      },
+      "sourcing.owner": {
+        password: "sourcing123",
+        role: "sourcing_request_owner",
+        displayName: "Maya Chen",
+        roleLabel: "Sourcing Request Owner",
+        avatar: "MC",
+        redirect: "./NSD-Sourcing-Request.html"
+      },
+      "discovery.analyst": {
+        password: "discovery123",
+        role: "supplier_discovery_analyst",
+        displayName: "Ethan Brooks",
+        roleLabel: "Supplier Discovery Analyst",
+        avatar: "EB",
+        redirect: "./NSD-Supplier-Discovery.html"
+      },
+      "onboarding.coordinator": {
+        password: "onboard123",
+        role: "vendor_onboarding_coordinator",
+        displayName: "Sara Patel",
+        roleLabel: "Vendor Onboarding Coordinator",
+        avatar: "SP",
+        redirect: "./NSD-Vendor-Onboarding.html"
+      }
+    };
+
+    function useTestAccount(role, username, password) {
+      document.getElementById("userRole").value = role;
+      document.getElementById("username").value = username;
+      document.getElementById("password").value = password;
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const role = document.getElementById("userRole").value;
+      const username = document.getElementById("username").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      const account = accounts[username];
+
+      if (!account || account.password !== password || account.role !== role) {
+        alert("Invalid credentials. Please use one of the demo accounts listed on the page.");
+        return;
+      }
+
+      localStorage.setItem("nsdAgentSession", JSON.stringify({
+        role: account.role,
+        userName: account.displayName,
+        roleLabel: account.roleLabel,
+        avatar: account.avatar,
+        username: username
+      }));
+
+      window.location.href = account.redirect;
+    }
+  </script>
+</body>
+</html>

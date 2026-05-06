@@ -17,10 +17,10 @@
       <div></div>
       <div class="nav-right">
         <div class="nav-user" aria-label="User profile">
-          <span class="nav-avatar" aria-hidden="true">AE</span>
+          <span class="nav-avatar" aria-hidden="true">IA</span>
           <div class="nav-user-meta">
-            <span class="nav-user-name">Audit Engine</span>
-            <span class="nav-user-role">Evidence Recorder</span>
+            <span class="nav-user-name">Internal Auditor</span>
+            <span class="nav-user-role">Evidence Review</span>
           </div>
         </div>
       </div>
@@ -37,9 +37,9 @@
             <div class="rail-group-title"><span class="rail-group-icon" aria-hidden="true">&#128202;</span><span class="rail-group-text" id="railGroupText">PO Compliance</span></div>
             <div class="rail-nav">
               <a class="rail-item" href="./Dashboard.html"><span class="rail-item-icon" aria-hidden="true">&#9635;</span><span class="rail-item-label">Dashboard</span></a>
-              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Compliance Setup</span></a>
-              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">Vendor Validation</span></a>
-              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Approval Workflow</span></a>
+              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Criteria Setup</span></a>
+              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">PO Validation</span></a>
+              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Policy Reports</span></a>
               <a class="rail-item rail-item-active" href="./Audit-Evidence.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#128221;</span><span class="rail-item-label">Audit Evidence</span></a>
             </div>
           </div>
@@ -50,7 +50,7 @@
         <section class="page-header">
           <div>
             <h1 class="page-title">Audit Evidence</h1>
-            <p class="page-subtitle">Evidence management UI for logged rule results, overrides, supporting files, and BC repository storage.</p>
+            <p class="page-subtitle">Manage compliance logs, quotations, approvals, certifications, report exports, and BC attachment links.</p>
           </div>
           <div class="toolbar">
             <button class="btn btn-soft" type="button">Generate Bundle</button>
@@ -62,8 +62,8 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Evidence Bundle Composer</h2>
-                <p class="card-subtitle">Mock assembly view for a single compliance event.</p>
+                <h2 class="card-title">BC Evidence Bundle Composer</h2>
+                <p class="card-subtitle">Assemble artifacts auditors can access through standard BC pages and reports.</p>
               </div>
             </div>
             <div class="field-grid">
@@ -73,22 +73,22 @@
               </div>
               <div class="field-block">
                 <label>Bundle Type</label>
-                <select><option>Critical Violation Packet</option></select>
+                <select><option>Policy Violation Evidence Packet</option></select>
               </div>
             </div>
             <div style="margin-top:16px;" class="toggle-list">
-              <div class="toggle-row"><div class="toggle-copy"><strong>Rule evaluation log</strong><span>Include policy trace and timestamps.</span></div><div class="switch on"></div></div>
-              <div class="toggle-row"><div class="toggle-copy"><strong>Override justification</strong><span>Attach approver rationale and sign-off metadata.</span></div><div class="switch on"></div></div>
-              <div class="toggle-row"><div class="toggle-copy"><strong>Supporting documents</strong><span>Collect certificates, tax files, and screenshots.</span></div><div class="switch on"></div></div>
-              <div class="toggle-row"><div class="toggle-copy"><strong>BC attachment sync</strong><span>Mark ready for repository upload after review.</span></div><div class="switch on"></div></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Compliance check log</strong><span>Include pass/fail reasons, timestamps, user, and PO reference.</span></div><div class="switch on"></div></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Approvals and quotations</strong><span>Attach approval route, quotations, and policy decision records.</span></div><div class="switch on"></div></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Vendor certifications</strong><span>Collect required certificates, GST proof, and regulatory documents.</span></div><div class="switch on"></div></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>BC attachment sync</strong><span>Make evidence accessible from standard BC pages after review.</span></div><div class="switch on"></div></div>
             </div>
           </article>
 
           <article class="card doc-table">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Bundle File List</h2>
-                <p class="card-subtitle">Concrete evidence objects included in the packet.</p>
+                <h2 class="card-title">BC Attachment File List</h2>
+                <p class="card-subtitle">Evidence objects linked to the PO record.</p>
               </div>
             </div>
             <div class="table-wrap">
@@ -103,14 +103,14 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Evaluation Summary.pdf</td>
-                    <td>Policy Engine</td>
+                    <td>Compliance Report.pdf</td>
+                    <td>Policy Reports</td>
                     <td>v1.4</td>
                     <td><span class="pill success">Attached</span></td>
                   </tr>
                   <tr>
-                    <td>Override Justification.msg</td>
-                    <td>Compliance Officer</td>
+                    <td>Approval Route.xlsx</td>
+                    <td>BC Approval Entries</td>
                     <td>v1.0</td>
                     <td><span class="pill warning">Pending sign-off</span></td>
                   </tr>
@@ -121,8 +121,8 @@
                     <td><span class="pill success">Attached</span></td>
                   </tr>
                   <tr>
-                    <td>Certificate Snapshot.zip</td>
-                    <td>Document Repository</td>
+                    <td>Supplier Certification.zip</td>
+                    <td>BC Vendor Attachments</td>
                     <td>v2.2</td>
                     <td><span class="pill info">Staged</span></td>
                   </tr>
@@ -136,34 +136,34 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Event Log Timeline</h2>
-                <p class="card-subtitle">Chronological record of the compliance event.</p>
+                <h2 class="card-title">Auditable Event Timeline</h2>
+                <p class="card-subtitle">Chronological record linked to the PO for faster audit review.</p>
               </div>
             </div>
             <div class="timeline">
-              <div class="timeline-item"><div class="timeline-dot">08:11</div><div class="timeline-copy"><h3>Rule evaluation recorded</h3><p>Certificate expiry and restricted item checks written to the compliance log.</p></div></div>
-              <div class="timeline-item"><div class="timeline-dot">08:14</div><div class="timeline-copy"><h3>PO blocked</h3><p>Approval workflow received a hard-stop response from the Policy Engine.</p></div></div>
-              <div class="timeline-item"><div class="timeline-dot">08:27</div><div class="timeline-copy"><h3>Override note drafted</h3><p>Compliance Officer added temporary business justification pending documentation.</p></div></div>
-              <div class="timeline-item"><div class="timeline-dot">08:41</div><div class="timeline-copy"><h3>Bundle staged for BC</h3><p>Audit Engine assembled evidence packet and queued it for repository sync.</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot">08:11</div><div class="timeline-copy"><h3>Compliance check logged</h3><p>Certification expiry, GST, vendor status, and internal policy results written to the PO log.</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot">08:14</div><div class="timeline-copy"><h3>PO blocked and escalated</h3><p>Configured recipients received context for the failed certification and restricted item policy.</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot">08:27</div><div class="timeline-copy"><h3>Evidence linked</h3><p>Quotations, approvals, certifications, and vendor documents linked to BC attachments.</p></div></div>
+              <div class="timeline-item"><div class="timeline-dot">08:41</div><div class="timeline-copy"><h3>Report export staged</h3><p>PDF and Excel versions of the compliance report queued for external audit use.</p></div></div>
             </div>
           </article>
 
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Repository and Audit Status</h2>
-                <p class="card-subtitle">Operational view of evidence health.</p>
+                <h2 class="card-title">Report and Audit Status</h2>
+                <p class="card-subtitle">BC evidence health and export readiness across active audit bundles.</p>
               </div>
             </div>
             <div class="mini-kpi-grid">
               <div class="mini-kpi"><div class="mini-kpi-label">Bundles This Week</div><div class="mini-kpi-value">31</div></div>
-              <div class="mini-kpi"><div class="mini-kpi-label">Complete Justifications</div><div class="mini-kpi-value">96%</div></div>
+              <div class="mini-kpi"><div class="mini-kpi-label">Evidence Complete</div><div class="mini-kpi-value">96%</div></div>
               <div class="mini-kpi"><div class="mini-kpi-label">BC Sync Success</div><div class="mini-kpi-value">100%</div></div>
             </div>
             <div style="margin-top:16px;" class="toggle-list">
-              <div class="toggle-row"><div class="toggle-copy"><strong>Audit-ready evidence bundle</strong><span>All mandatory artifacts present except final override signature.</span></div><span class="pill warning">Review</span></div>
-              <div class="toggle-row"><div class="toggle-copy"><strong>BC attachment repository</strong><span>Connection healthy and ready for upload.</span></div><span class="pill success">In Sync</span></div>
-              <div class="toggle-row"><div class="toggle-copy"><strong>Retention policy</strong><span>Seven-year retention tag already applied.</span></div><span class="pill info">Tagged</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Audit-ready evidence bundle</strong><span>Mandatory quotations, approvals, and certifications are present.</span></div><span class="pill success">Ready</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Standard BC page access</strong><span>Auditors can open evidence from the PO and vendor attachment pages.</span></div><span class="pill success">Linked</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>External audit exports</strong><span>Excel and PDF report outputs are staged.</span></div><span class="pill info">Ready</span></div>
             </div>
           </article>
         </section>

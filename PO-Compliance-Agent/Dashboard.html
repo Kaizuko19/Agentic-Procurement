@@ -22,7 +22,7 @@
           <span class="nav-avatar" aria-hidden="true">CO</span>
           <div class="nav-user-meta">
             <span class="nav-user-name">Compliance Officer</span>
-            <span class="nav-user-role">Policy Administrator</span>
+            <span class="nav-user-role">Compliance Workspace</span>
           </div>
         </div>
       </div>
@@ -50,15 +50,15 @@
               </a>
               <a class="rail-item" href="./Compliance-Setup.html">
                 <span class="rail-item-icon" aria-hidden="true">&#9881;</span>
-                <span class="rail-item-label">Compliance Setup</span>
+                <span class="rail-item-label">Criteria Setup</span>
               </a>
               <a class="rail-item" href="./Vendor-Validation.html">
                 <span class="rail-item-icon" aria-hidden="true">&#10003;</span>
-                <span class="rail-item-label">Vendor Validation</span>
+                <span class="rail-item-label">PO Validation</span>
               </a>
               <a class="rail-item" href="./Approval-Workflow.html">
                 <span class="rail-item-icon" aria-hidden="true">&#128209;</span>
-                <span class="rail-item-label">Approval Workflow</span>
+                <span class="rail-item-label">Policy Reports</span>
               </a>
               <a class="rail-item" href="./Audit-Evidence.html">
                 <span class="rail-item-icon" aria-hidden="true">&#128221;</span>
@@ -73,36 +73,36 @@
         <section class="page-header" aria-label="Dashboard heading">
           <div>
             <h1 class="page-title">PO Compliance Dashboard</h1>
-            <p class="page-subtitle">Control center for policy setup, vendor validation, approval checks, and audit-ready evidence capture.</p>
+            <p class="page-subtitle">Control center for criteria configuration, PO validation, policy adherence reporting, and BC-linked audit evidence.</p>
           </div>
-          <div class="page-tag">4 Active Agent Roles</div>
+          <div class="page-tag">Control Center</div>
         </section>
 
         <div class="banner">
           <strong>Compliance operations overview</strong>
-          <span>Track setup activity, vendor validation outcomes, approval blocks, and evidence readiness across the PO lifecycle.</span>
+          <span>Monitor criteria setup, PO validation, policy reporting, exceptions, and audit evidence across the purchasing lifecycle.</span>
         </div>
 
         <section class="grid-4" aria-label="Compliance KPI summary">
           <article class="card metric">
-            <div class="metric-label">Active Compliance Gates</div>
+            <div class="metric-label">Active Criteria Sets</div>
             <div class="metric-value">12</div>
-            <div class="metric-footnote">Certification, vendor status, tax, and approval chain controls enabled.</div>
+            <div class="metric-footnote">Certification, vendor status, GST, spend threshold, and approval-level rules enabled.</div>
           </article>
           <article class="card metric">
-            <div class="metric-label">Blocked POs Today</div>
+            <div class="metric-label">POs Blocked Today</div>
             <div class="metric-value">07</div>
-            <div class="metric-footnote">Critical issues stopped before release to ERP.</div>
+            <div class="metric-footnote">Non-compliant POs stopped before release or final approval in BC.</div>
           </article>
           <article class="card metric">
-            <div class="metric-label">Open Exceptions</div>
+            <div class="metric-label">Exception Routes Open</div>
             <div class="metric-value">14</div>
-            <div class="metric-footnote">Awaiting Compliance Officer review or override justification.</div>
+            <div class="metric-footnote">Awaiting configured recipients, waiver review, or remediation evidence.</div>
           </article>
           <article class="card metric">
-            <div class="metric-label">Audit Bundles Ready</div>
+            <div class="metric-label">Reports Export Ready</div>
             <div class="metric-value">28</div>
-            <div class="metric-footnote">Evidence packages staged for BC attachment repository.</div>
+            <div class="metric-footnote">Compliance reports and evidence packages staged for Excel/PDF export.</div>
           </article>
         </section>
 
@@ -110,27 +110,23 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">What Users Can Do</h2>
-                <p class="card-subtitle">Mapped directly from the workflow you outlined.</p>
+                <h2 class="card-title">PO Compliance Workflows</h2>
+                <p class="card-subtitle">Operational lanes for criteria configuration, PO checks, and audit reporting.</p>
               </div>
-              <span class="pill info">4 workflow lanes</span>
+              <span class="pill info">Active</span>
             </div>
             <div class="summary-list">
               <div class="summary-item">
-                <h3>Initial Setup or Regulatory Change</h3>
-                <p>Define certification requirements, vendor status rules, GST and tax checks, escalation routing, and compliance gates.</p>
+                <h3>Compliance Criteria Configuration</h3>
+                <p>Administrators define required certifications, vendor status rules, purchasing policies, alerts, blocking behavior, recipients, and active criteria versions.</p>
               </div>
               <div class="summary-item">
-                <h3>PO Creation or Vendor Selection</h3>
-                <p>Check vendor card eligibility, validate certification expiry, confirm GST status, and block high-risk orders.</p>
+                <h3>PO Compliance Validation</h3>
+                <p>Compliance Officers check each PO against vendor certifications, regulations, GST rules, expiry dates, and configuration-driven exception handling.</p>
               </div>
               <div class="summary-item">
-                <h3>PO Approval Workflow</h3>
-                <p>Validate internal rules, purchaser authorization, item restrictions, approval chain alignment, and compliance reporting.</p>
-              </div>
-              <div class="summary-item">
-                <h3>Every Compliance Event</h3>
-                <p>Log rule results, capture overrides, archive support files, bundle evidence, and store audit artifacts in BC.</p>
+                <h3>Policy Adherence Review</h3>
+                <p>Internal Auditors review pass/fail reports, auto-escalations, supporting evidence, BC attachments, and exportable audit packages.</p>
               </div>
             </div>
           </article>
@@ -138,26 +134,22 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Agent Users</h2>
-                <p class="card-subtitle">Primary users and system actors in the compliance workflow.</p>
+                <h2 class="card-title">Operations Roles</h2>
+                <p class="card-subtitle">Responsibilities across configuration, validation, and audit review.</p>
               </div>
             </div>
             <div class="role-grid">
               <div class="role-item">
+                <h3>Administrator</h3>
+                <p>Creates, versions, activates, and deactivates certification, vendor status, GST, spend, approval, alert, and blocking criteria.</p>
+              </div>
+              <div class="role-item">
                 <h3>Compliance Officer</h3>
-                <p>Owns configuration, handles escalations, approves exceptions, and reviews audit evidence.</p>
+                <p>Reviews failed PO checks, sees the exact failed rule, sends notifications, and resolves or routes exception handling.</p>
               </div>
               <div class="role-item">
-                <h3>PO Approval Engine</h3>
-                <p>Runs automated checks before approval and enforces blocking rules for critical violations.</p>
-              </div>
-              <div class="role-item">
-                <h3>Policy Engine</h3>
-                <p>Evaluates certification, vendor status, GST, tax, and purchaser authorization policies.</p>
-              </div>
-              <div class="role-item">
-                <h3>Audit Engine</h3>
-                <p>Captures event logs, override justification, support documents, and evidence bundles.</p>
+                <h3>Internal Auditor</h3>
+                <p>Uses structured reports and BC evidence links to confirm policy adherence and export audit-ready results.</p>
               </div>
             </div>
           </article>
@@ -168,7 +160,7 @@
             <div class="card-title-row">
               <div>
                 <h2 class="card-title">Recent Compliance Queue</h2>
-                <p class="card-subtitle">Illustrative queue of PO outcomes.</p>
+                <p class="card-subtitle">Latest PO compliance outcomes requiring attention or audit follow-up.</p>
               </div>
             </div>
             <div class="table-wrap">
@@ -177,7 +169,7 @@
                   <tr>
                     <th>PO</th>
                     <th>Vendor</th>
-                    <th>Issue</th>
+                    <th>Failed Rule or Outcome</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -185,25 +177,25 @@
                   <tr>
                     <td>PO-20841</td>
                     <td>NorthStar Components</td>
-                    <td>Certification expired 4 days ago</td>
+                    <td>ISO certificate expires before PO receipt date</td>
                     <td><span class="pill danger">Blocked</span></td>
                   </tr>
                   <tr>
                     <td>PO-20836</td>
                     <td>Vista Industrial</td>
-                    <td>GST registration mismatch</td>
+                    <td>GST registration does not match vendor legal entity</td>
                     <td><span class="pill warning">Escalated</span></td>
                   </tr>
                   <tr>
                     <td>PO-20830</td>
                     <td>Arden Packaging</td>
-                    <td>Item restriction check passed</td>
+                    <td>Purchasing policy checks passed</td>
                     <td><span class="pill success">Approved</span></td>
                   </tr>
                   <tr>
                     <td>PO-20812</td>
                     <td>Meridian Flow</td>
-                    <td>Override justification attached</td>
+                    <td>Evidence stored in BC attachment repository</td>
                     <td><span class="pill info">Audited</span></td>
                   </tr>
                 </tbody>
@@ -214,30 +206,30 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Control Posture</h2>
-                <p class="card-subtitle">Snapshot of the active compliance control posture.</p>
+                <h2 class="card-title">Compliance Operations Health</h2>
+                <p class="card-subtitle">Current status of core PO compliance controls and evidence readiness.</p>
               </div>
             </div>
             <div class="stack">
               <div class="split-stat">
-                <span class="split-stat-label">Certification rules active</span>
-                <span class="split-stat-value">6</span>
+                <span class="split-stat-label">Criteria saved, versioned, and activated</span>
+                <span class="split-stat-value">Active</span>
               </div>
               <div class="split-stat">
-                <span class="split-stat-label">Vendor status validations active</span>
-                <span class="split-stat-value">4</span>
+                <span class="split-stat-label">PO checks run during creation and approval</span>
+                <span class="split-stat-value">Active</span>
               </div>
               <div class="split-stat">
-                <span class="split-stat-label">GST and tax checks active</span>
-                <span class="split-stat-value">5</span>
+                <span class="split-stat-label">Clear failed-rule messages and remediation hints</span>
+                <span class="split-stat-value">Active</span>
               </div>
               <div class="split-stat">
-                <span class="split-stat-label">Escalation levels configured</span>
-                <span class="split-stat-value">3</span>
-              </div>
-              <div class="split-stat">
-                <span class="split-stat-label">Compliance gates live in approval flow</span>
+                <span class="split-stat-label">Auto-escalation to configured users or roles</span>
                 <span class="split-stat-value">Enabled</span>
+              </div>
+              <div class="split-stat">
+                <span class="split-stat-label">BC-linked evidence and exportable reports</span>
+                <span class="split-stat-value">Ready</span>
               </div>
             </div>
           </article>

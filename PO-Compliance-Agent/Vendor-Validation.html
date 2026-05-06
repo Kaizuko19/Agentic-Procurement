@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PO Compliance Agent | Vendor Validation</title>
+  <title>PO Compliance Agent | PO Validation</title>
   <link rel="stylesheet" href="./ui.css">
 </head>
 <body>
@@ -17,10 +17,10 @@
       <div></div>
       <div class="nav-right">
         <div class="nav-user" aria-label="User profile">
-          <span class="nav-avatar" aria-hidden="true">PE</span>
+          <span class="nav-avatar" aria-hidden="true">CO</span>
           <div class="nav-user-meta">
-            <span class="nav-user-name">Policy Engine</span>
-            <span class="nav-user-role">Automated Validator</span>
+            <span class="nav-user-name">Compliance Officer</span>
+            <span class="nav-user-role">PO Compliance Review</span>
           </div>
         </div>
       </div>
@@ -37,9 +37,9 @@
             <div class="rail-group-title"><span class="rail-group-icon" aria-hidden="true">&#128202;</span><span class="rail-group-text" id="railGroupText">PO Compliance</span></div>
             <div class="rail-nav">
               <a class="rail-item" href="./Dashboard.html"><span class="rail-item-icon" aria-hidden="true">&#9635;</span><span class="rail-item-label">Dashboard</span></a>
-              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Compliance Setup</span></a>
-              <a class="rail-item rail-item-active" href="./Vendor-Validation.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">Vendor Validation</span></a>
-              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Approval Workflow</span></a>
+              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Criteria Setup</span></a>
+              <a class="rail-item rail-item-active" href="./Vendor-Validation.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">PO Validation</span></a>
+              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Policy Reports</span></a>
               <a class="rail-item" href="./Audit-Evidence.html"><span class="rail-item-icon" aria-hidden="true">&#128221;</span><span class="rail-item-label">Audit Evidence</span></a>
             </div>
           </div>
@@ -49,12 +49,12 @@
       <main class="app-main">
         <section class="page-header">
           <div>
-            <h1 class="page-title">Vendor Validation</h1>
-            <p class="page-subtitle">Operational screen for validating the selected vendor before a PO can move forward.</p>
+            <h1 class="page-title">PO Compliance Validation</h1>
+            <p class="page-subtitle">Compliance Officer workspace for checking each PO against certifications, regulations, GST, expiry dates, and configured exception handling.</p>
           </div>
           <div class="toolbar">
-            <button class="btn btn-soft" type="button">Refresh Vendor Card</button>
-            <button class="btn btn-primary" type="button">Run Validation</button>
+            <button class="btn btn-soft" type="button">Refresh BC Data</button>
+            <button class="btn btn-primary" type="button">Check PO Compliance</button>
           </div>
         </section>
 
@@ -62,33 +62,34 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Validation Workbench</h2>
-                <p class="card-subtitle">Mock filter and rule execution surface.</p>
+                <h2 class="card-title">PO Validation Workbench</h2>
+                <p class="card-subtitle">Runs automatically during PO creation or approval using BC vendor and PO data.</p>
               </div>
             </div>
             <div class="field-grid">
               <div class="field-block">
-                <label>Vendor</label>
+                  <label>BC Vendor</label>
                 <select><option>NorthStar Components</option></select>
               </div>
               <div class="field-block">
-                <label>PO Draft</label>
+                  <label>PO Record</label>
                 <select><option>PO-20841 / Electrical assemblies</option></select>
               </div>
               <div class="field-block">
-                <label>Validation Profile</label>
-                <select><option>Strategic Electronics Policy Pack</option></select>
+                  <label>Active Criteria Set</label>
+                  <select><option>Strategic Supplier Compliance Criteria v3.2</option></select>
               </div>
               <div class="field-block">
-                <label>Jurisdiction</label>
-                <select><option>Singapore GST / Export</option></select>
+                  <label>PO Trigger</label>
+                  <select><option>Approval request submitted in BC</option></select>
               </div>
             </div>
             <div style="margin-top:16px;" class="segment-row">
-              <span class="segment active">Certification</span>
+              <span class="segment active">Certifications</span>
               <span class="segment active">Vendor Status</span>
-              <span class="segment active">GST</span>
-              <span class="segment">Manual Documents</span>
+              <span class="segment active">GST Compliance</span>
+              <span class="segment active">Expiry Monitoring</span>
+              <span class="segment">Regulatory Documents</span>
             </div>
             <div style="margin-top:16px;" class="mini-kpi-grid">
               <div class="mini-kpi">
@@ -109,16 +110,16 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Vendor Card Snapshot</h2>
-                <p class="card-subtitle">What the engine is reading from the supplier profile.</p>
+                <h2 class="card-title">BC Vendor and PO Snapshot</h2>
+                <p class="card-subtitle">The data used to decide whether the PO can proceed.</p>
               </div>
             </div>
             <div class="detail-panel">
               <div class="detail-row"><div class="detail-label">Vendor Status</div><div class="detail-value">Approved for procurement, monitored by compliance</div></div>
-              <div class="detail-row"><div class="detail-label">Primary Certification</div><div class="detail-value">ISO 9001, expires in 4 days</div></div>
+              <div class="detail-row"><div class="detail-label">Required Certification</div><div class="detail-value">ISO 9001, expires before expected receipt date</div></div>
               <div class="detail-row"><div class="detail-label">GST Registration</div><div class="detail-value">Registered, certificate attached, entity match confirmed</div></div>
-              <div class="detail-row"><div class="detail-label">Restricted Category Exposure</div><div class="detail-value">Electrical control modules require extra approval</div></div>
-              <div class="detail-row"><div class="detail-label">Last Audit Comment</div><div class="detail-value">Override permitted in March due to transit risk, now expired</div></div>
+              <div class="detail-row"><div class="detail-label">Regulatory Requirement</div><div class="detail-value">Electrical control modules require additional compliance review</div></div>
+              <div class="detail-row"><div class="detail-label">Active PO Link</div><div class="detail-value">PO-20841 is linked to vendor evidence and compliance log in BC</div></div>
             </div>
           </article>
         </section>
@@ -127,8 +128,8 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Rule Evaluation Results</h2>
-                <p class="card-subtitle">Policy evaluation output for the selected vendor and PO.</p>
+                <h2 class="card-title">Compliance Check Results</h2>
+                <p class="card-subtitle">Clear messages show which rule failed and what must be fixed.</p>
               </div>
             </div>
             <div class="table-wrap">
@@ -137,33 +138,33 @@
                   <tr>
                     <th>Rule</th>
                     <th>Finding</th>
-                    <th>Evidence</th>
+                    <th>Fix Needed</th>
                     <th>Decision</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>ISO-Active-Cert</td>
+                    <td>CERT-ISO-Active</td>
                     <td>Certificate expires before expected receipt date</td>
-                    <td>Expiry 2026-05-01</td>
+                    <td>Upload renewed ISO certificate or request exception</td>
                     <td><span class="pill danger">Block</span></td>
                   </tr>
                   <tr>
-                    <td>Vendor-Status-Approved</td>
+                    <td>VEND-Status-Risk</td>
                     <td>Status is approved and not under suspension</td>
-                    <td>Vendor card synced 08:12</td>
+                    <td>No action required</td>
                     <td><span class="pill success">Pass</span></td>
                   </tr>
                   <tr>
-                    <td>GST-Registry-Match</td>
+                    <td>POL-GST-Registry</td>
                     <td>Registration valid, attachment on file</td>
-                    <td>GST doc linked</td>
+                    <td>No action required</td>
                     <td><span class="pill success">Pass</span></td>
                   </tr>
                   <tr>
-                    <td>Restricted-Item-Approval</td>
-                    <td>Commodity requires elevated approver chain</td>
-                    <td>Category ELEC-CONTROL</td>
+                    <td>REG-ELEC-Control</td>
+                    <td>Regulated commodity requires compliance review</td>
+                    <td>Route to Compliance Officer queue</td>
                     <td><span class="pill warning">Flag</span></td>
                   </tr>
                 </tbody>
@@ -174,21 +175,21 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Decision Summary</h2>
-                <p class="card-subtitle">Mock final disposition for the selected vendor and PO draft.</p>
+                <h2 class="card-title">Notification and Exception Summary</h2>
+                <p class="card-subtitle">Disposition follows the active alert and blocking configuration.</p>
               </div>
             </div>
             <div class="stack">
               <div class="toggle-row">
-                <div class="toggle-copy"><strong>PO Creation Status</strong><span>Critical certificate issue prevents release.</span></div>
+                <div class="toggle-copy"><strong>PO Approval Status</strong><span>Critical certificate issue prevents final approval and release.</span></div>
                 <span class="pill danger">Blocked</span>
               </div>
               <div class="toggle-row">
-                <div class="toggle-copy"><strong>Exception Route</strong><span>Send to Compliance Officer for waiver review.</span></div>
+                <div class="toggle-copy"><strong>Exception Route</strong><span>Send notification to configured Compliance Officer recipients.</span></div>
                 <span class="pill warning">Escalate</span>
               </div>
               <div class="toggle-row">
-                <div class="toggle-copy"><strong>Next Required Action</strong><span>Upload renewed certificate or document temporary approval.</span></div>
+                <div class="toggle-copy"><strong>Audit Trail</strong><span>Log check outcomes, notification, PO reference, timestamp, and user context in BC.</span></div>
                 <span class="pill info">Action Needed</span>
               </div>
             </div>

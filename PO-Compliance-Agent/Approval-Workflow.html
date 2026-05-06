@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PO Compliance Agent | Approval Workflow</title>
+  <title>PO Compliance Agent | Policy Reports</title>
   <link rel="stylesheet" href="./ui.css">
 </head>
 <body>
@@ -17,10 +17,10 @@
       <div></div>
       <div class="nav-right">
         <div class="nav-user" aria-label="User profile">
-          <span class="nav-avatar" aria-hidden="true">PA</span>
+          <span class="nav-avatar" aria-hidden="true">IA</span>
           <div class="nav-user-meta">
-            <span class="nav-user-name">PO Approval Engine</span>
-            <span class="nav-user-role">Workflow Enforcer</span>
+            <span class="nav-user-name">Internal Auditor</span>
+            <span class="nav-user-role">Policy Adherence Review</span>
           </div>
         </div>
       </div>
@@ -37,9 +37,9 @@
             <div class="rail-group-title"><span class="rail-group-icon" aria-hidden="true">&#128202;</span><span class="rail-group-text" id="railGroupText">PO Compliance</span></div>
             <div class="rail-nav">
               <a class="rail-item" href="./Dashboard.html"><span class="rail-item-icon" aria-hidden="true">&#9635;</span><span class="rail-item-label">Dashboard</span></a>
-              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Compliance Setup</span></a>
-              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">Vendor Validation</span></a>
-              <a class="rail-item rail-item-active" href="./Approval-Workflow.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Approval Workflow</span></a>
+              <a class="rail-item" href="./Compliance-Setup.html"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Criteria Setup</span></a>
+              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">PO Validation</span></a>
+              <a class="rail-item rail-item-active" href="./Approval-Workflow.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Policy Reports</span></a>
               <a class="rail-item" href="./Audit-Evidence.html"><span class="rail-item-icon" aria-hidden="true">&#128221;</span><span class="rail-item-label">Audit Evidence</span></a>
             </div>
           </div>
@@ -49,12 +49,12 @@
       <main class="app-main">
         <section class="page-header">
           <div>
-            <h1 class="page-title">Approval Workflow</h1>
-            <p class="page-subtitle">Approval validation UI with authorization checks, restriction handling, chain alignment, and report output.</p>
+            <h1 class="page-title">Policy Adherence Reports</h1>
+            <p class="page-subtitle">Internal Auditor workspace for validating POs against procurement rules, reviewing pass/fail reasons, and exporting compliance reports.</p>
           </div>
           <div class="toolbar">
-            <button class="btn btn-soft" type="button">Export Report</button>
-            <button class="btn btn-primary" type="button">Re-run Approval Logic</button>
+            <button class="btn btn-soft" type="button">Export Excel</button>
+            <button class="btn btn-primary" type="button">Export PDF</button>
           </div>
         </section>
 
@@ -62,16 +62,16 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">PO Approval Packet</h2>
-                <p class="card-subtitle">Mock decision surface for a live purchase order.</p>
+                <h2 class="card-title">PO Policy Packet</h2>
+                <p class="card-subtitle">Validation against internal procurement rules before final approval.</p>
               </div>
             </div>
             <div class="detail-panel">
               <div class="detail-row"><div class="detail-label">PO Reference</div><div class="detail-value">PO-20841 / Electrical assemblies / SGD 148,200</div></div>
               <div class="detail-row"><div class="detail-label">Requester</div><div class="detail-value">Mila Chen, Operations Procurement</div></div>
               <div class="detail-row"><div class="detail-label">Current Approver</div><div class="detail-value">Regional Purchasing Manager</div></div>
-              <div class="detail-row"><div class="detail-label">Authority Check</div><div class="detail-value">Within limit for approver, but restricted commodity rule adds secondary sign-off</div></div>
-              <div class="detail-row"><div class="detail-label">Restriction Match</div><div class="detail-value">Controlled item family detected: ELEC-CONTROL</div></div>
+              <div class="detail-row"><div class="detail-label">Budget Limit Check</div><div class="detail-value">Within approved project budget, but spend threshold requires regional sign-off</div></div>
+              <div class="detail-row"><div class="detail-label">Policy Adherence</div><div class="detail-value">Controlled item family detected and secondary compliance approval is missing</div></div>
             </div>
           </article>
 
@@ -79,7 +79,7 @@
             <div class="card-title-row">
               <div>
                 <h2 class="card-title">Compliance Report Snapshot</h2>
-                <p class="card-subtitle">What the generated report would summarize.</p>
+                <p class="card-subtitle">Report lists POs with pass/fail status and clear reasons.</p>
               </div>
             </div>
             <div class="mini-kpi-grid">
@@ -88,9 +88,9 @@
               <div class="mini-kpi"><div class="mini-kpi-label">Hard Stops</div><div class="mini-kpi-value">01</div></div>
             </div>
             <div style="margin-top:16px;" class="toggle-list">
-              <div class="toggle-row"><div class="toggle-copy"><strong>Purchaser authorization</strong><span>Validated against spend threshold and cost center.</span></div><span class="pill success">Verified</span></div>
-              <div class="toggle-row"><div class="toggle-copy"><strong>Approval chain alignment</strong><span>Secondary approver missing for restricted commodity.</span></div><span class="pill warning">Mismatch</span></div>
-              <div class="toggle-row"><div class="toggle-copy"><strong>Final compliance decision</strong><span>PO cannot proceed until secondary restricted-item approver is inserted.</span></div><span class="pill danger">Blocked</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Proper approvals</strong><span>Validated against spend threshold, cost center, and approval level rules.</span></div><span class="pill success">Verified</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>Policy violation</strong><span>Secondary approver missing for restricted commodity.</span></div><span class="pill warning">Escalated</span></div>
+              <div class="toggle-row"><div class="toggle-copy"><strong>BC evidence link</strong><span>Supporting quotations, approvals, and certifications are linked in BC attachments.</span></div><span class="pill info">Linked</span></div>
             </div>
           </article>
         </section>
@@ -99,40 +99,40 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Approval Chain Matrix</h2>
-                <p class="card-subtitle">Mock alignment between required and actual route.</p>
+                <h2 class="card-title">Procurement Rule Matrix</h2>
+                <p class="card-subtitle">Defined rules evaluated before final PO approval.</p>
               </div>
             </div>
             <div class="matrix">
-              <div class="matrix-row header"><div>Approval Stage</div><div>Required</div><div>Actual</div><div>Status</div></div>
-              <div class="matrix-row"><div>Requester validation</div><div>Requester + cost center owner</div><div>Matched</div><div><span class="pill success">Pass</span></div></div>
-              <div class="matrix-row"><div>Spend authority</div><div>Regional Purchasing Manager</div><div>Matched</div><div><span class="pill success">Pass</span></div></div>
-              <div class="matrix-row"><div>Restricted item review</div><div>Compliance Co-approver</div><div>Missing</div><div><span class="pill danger">Gap</span></div></div>
-              <div class="matrix-row"><div>Final release</div><div>Finance control node</div><div>Pending</div><div><span class="pill info">Waiting</span></div></div>
+              <div class="matrix-row header"><div>Rule</div><div>Required</div><div>Observed</div><div>Status</div></div>
+              <div class="matrix-row"><div>Budget limit</div><div>PO value inside approved budget</div><div>Matched</div><div><span class="pill success">Pass</span></div></div>
+              <div class="matrix-row"><div>Spend approval level</div><div>Regional Purchasing Manager</div><div>Matched</div><div><span class="pill success">Pass</span></div></div>
+              <div class="matrix-row"><div>Restricted item review</div><div>Compliance co-approver</div><div>Missing</div><div><span class="pill danger">Fail</span></div></div>
+              <div class="matrix-row"><div>Evidence attachment</div><div>Quotations and approvals linked in BC</div><div>Partial</div><div><span class="pill warning">Review</span></div></div>
             </div>
           </article>
 
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Decision Queue</h2>
-                <p class="card-subtitle">Concrete queue of approval exceptions and ready items.</p>
+                <h2 class="card-title">Report and Escalation Queue</h2>
+                <p class="card-subtitle">Policy violations trigger auto-escalation with context for specified users or roles.</p>
               </div>
             </div>
             <div class="kanban">
               <div class="kanban-col">
-                <h3>Needs Review</h3>
-                <div class="kanban-card"><strong>PO-20841</strong><span>Restricted item path incomplete. Secondary approver required.</span></div>
-                <div class="kanban-card"><strong>PO-20838</strong><span>Authority matrix changed after revision, revalidation needed.</span></div>
+                <h3>Failed Policy</h3>
+                <div class="kanban-card"><strong>PO-20841</strong><span>Restricted item rule failed. Secondary compliance approver required.</span></div>
+                <div class="kanban-card"><strong>PO-20838</strong><span>Spend threshold changed after PO revision. Revalidation needed.</span></div>
               </div>
               <div class="kanban-col">
-                <h3>Escalated</h3>
-                <div class="kanban-card"><strong>PO-20836</strong><span>GST discrepancy plus approval reroute to Compliance Officer.</span></div>
+                <h3>Auto-Escalated</h3>
+                <div class="kanban-card"><strong>PO-20836</strong><span>GST discrepancy routed to Compliance Officer with vendor and PO context.</span></div>
               </div>
               <div class="kanban-col">
-                <h3>Ready to Release</h3>
-                <div class="kanban-card"><strong>PO-20827</strong><span>All approvals aligned and compliance report generated.</span></div>
-                <div class="kanban-card"><strong>PO-20819</strong><span>Low-risk MRO order cleared for BC posting.</span></div>
+                <h3>Report Ready</h3>
+                <div class="kanban-card"><strong>PO-20827</strong><span>Pass/fail report generated with evidence links for BC pages.</span></div>
+                <div class="kanban-card"><strong>PO-20819</strong><span>Low-risk MRO order cleared and available for external audit export.</span></div>
               </div>
             </div>
           </article>

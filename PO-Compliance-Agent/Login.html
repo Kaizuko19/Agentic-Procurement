@@ -217,94 +217,6 @@
       box-shadow: 0 8px 18px rgba(25, 62, 107, 0.22);
     }
 
-    .divider {
-      margin: 24px 0 16px;
-      text-align: center;
-      position: relative;
-    }
-
-    .divider::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 100%;
-      height: 1px;
-      background: #e5e7eb;
-    }
-
-    .divider-text {
-      position: relative;
-      background: #fff;
-      padding: 0 16px;
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .test-accounts {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 18px;
-    }
-
-    .test-accounts-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #374151;
-      margin-bottom: 12px;
-    }
-
-    .test-account {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all .2s;
-    }
-
-    .test-account:hover {
-      border-color: #193e6b;
-      background: #f0f7ff;
-    }
-
-    .test-account:last-child {
-      margin-bottom: 0;
-    }
-
-    .account-role {
-      font-size: 13px;
-      font-weight: 700;
-      color: #193e6b;
-    }
-
-    .account-creds {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-
-    .btn-use {
-      font-size: 12px;
-      padding: 4px 12px;
-      background: #193e6b;
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-    }
-
-    .btn-use:hover {
-      background: #2c5282;
-    }
-
     @media (max-width: 900px) {
       .shell {
         grid-template-columns: 1fr;
@@ -320,31 +232,29 @@
           <div class="logo-pill">CLaaS<span class="accent">2</span>SaaS</div>
         </div>
         <h1 class="title">PO Compliance Agent</h1>
-        <p class="subtitle">Access the compliance workflow for setup, vendor checks, approval validation, and audit evidence capture.</p>
+        <p class="subtitle">Access the PO Compliance workflow for criteria setup, PO validation, policy adherence reports, and BC-linked audit evidence.</p>
       </div>
 
       <div class="feature-grid">
-        <div class="feature"><strong>Compliance Officer</strong> manages policy setup, escalations, and exceptions.</div>
-        <div class="feature"><strong>PO Approval Engine</strong> enforces approval rules and blocking logic.</div>
-        <div class="feature"><strong>Policy Engine</strong> runs certification, vendor status, GST, and tax validation.</div>
-        <div class="feature"><strong>Audit Engine</strong> stores logs, overrides, and evidence bundles for BC repository processing.</div>
+        <div class="feature"><strong>Administrator</strong> configures required certifications, vendor status rules, purchasing policies, alerts, and blocking behavior.</div>
+        <div class="feature"><strong>Compliance Officer</strong> reviews PO checks, failed-rule messages, notifications, and exception handling.</div>
+        <div class="feature"><strong>Internal Auditor</strong> validates policy adherence, reviews BC evidence links, and exports compliance reports.</div>
       </div>
     </section>
 
     <section class="login-zone">
       <div class="login-card">
         <h2 class="card-title">Sign In</h2>
-        <p class="card-caption">Use one of the accounts below to enter the PO Compliance Agent.</p>
+        <p class="card-caption">Enter your account details to access the PO Compliance Agent.</p>
 
         <form id="loginForm" class="form-grid" onsubmit="handleLogin(event)">
           <div class="field">
             <label for="userRole">User Role</label>
             <select id="userRole" required>
               <option value="">Select your role</option>
+              <option value="administrator">Administrator</option>
               <option value="compliance_officer">Compliance Officer</option>
-              <option value="po_approval_engine">PO Approval Engine</option>
-              <option value="policy_engine">Policy Engine</option>
-              <option value="audit_engine">Audit Engine</option>
+              <option value="internal_auditor">Internal Auditor</option>
             </select>
           </div>
 
@@ -356,7 +266,7 @@
           <div class="field">
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Enter your password" required>
-            <div class="helper">Credentials below are provided for quick access during review.</div>
+            <div class="helper">Use your assigned procurement compliance credentials.</div>
           </div>
 
           <div class="btn-row">
@@ -364,104 +274,46 @@
           </div>
         </form>
 
-        <div class="divider">
-          <span class="divider-text">Demo Accounts</span>
-        </div>
-
-        <div class="test-accounts">
-          <div class="test-accounts-title">Quick Access Test Accounts</div>
-
-          <div class="test-account" onclick="useTestAccount('Compliance Officer', 'compliance_officer', 'compliance.officer', 'compliance123')">
-            <div>
-              <div class="account-role">Compliance Officer</div>
-              <div class="account-creds">compliance.officer / compliance123</div>
-            </div>
-            <button type="button" class="btn-use">Use</button>
-          </div>
-
-          <div class="test-account" onclick="useTestAccount('PO Approval Engine', 'po_approval_engine', 'po.approval', 'approval123')">
-            <div>
-              <div class="account-role">PO Approval Engine</div>
-              <div class="account-creds">po.approval / approval123</div>
-            </div>
-            <button type="button" class="btn-use">Use</button>
-          </div>
-
-          <div class="test-account" onclick="useTestAccount('Policy Engine', 'policy_engine', 'policy.engine', 'policy123')">
-            <div>
-              <div class="account-role">Policy Engine</div>
-              <div class="account-creds">policy.engine / policy123</div>
-            </div>
-            <button type="button" class="btn-use">Use</button>
-          </div>
-
-          <div class="test-account" onclick="useTestAccount('Audit Engine', 'audit_engine', 'audit.engine', 'audit123')">
-            <div>
-              <div class="account-role">Audit Engine</div>
-              <div class="account-creds">audit.engine / audit123</div>
-            </div>
-            <button type="button" class="btn-use">Use</button>
-          </div>
-        </div>
       </div>
     </section>
   </div>
 
   <script>
-    const accounts = {
-      "compliance.officer": {
-        password: "compliance123",
-        role: "compliance_officer",
+    const roleProfiles = {
+      administrator: {
+        displayName: "Administrator",
+        roleLabel: "Criteria Configuration",
+        avatar: "AD"
+      },
+      compliance_officer: {
         displayName: "Compliance Officer",
-        roleLabel: "Policy Administrator",
+        roleLabel: "PO Compliance Review",
         avatar: "CO"
       },
-      "po.approval": {
-        password: "approval123",
-        role: "po_approval_engine",
-        displayName: "PO Approval Engine",
-        roleLabel: "Workflow Enforcer",
-        avatar: "PA"
-      },
-      "policy.engine": {
-        password: "policy123",
-        role: "policy_engine",
-        displayName: "Policy Engine",
-        roleLabel: "Automated Validator",
-        avatar: "PE"
-      },
-      "audit.engine": {
-        password: "audit123",
-        role: "audit_engine",
-        displayName: "Audit Engine",
-        roleLabel: "Evidence Recorder",
-        avatar: "AE"
+      internal_auditor: {
+        displayName: "Internal Auditor",
+        roleLabel: "Policy Adherence Review",
+        avatar: "IA"
       }
     };
-
-    function useTestAccount(displayName, role, username, password) {
-      document.getElementById("userRole").value = role;
-      document.getElementById("username").value = username;
-      document.getElementById("password").value = password;
-    }
 
     function handleLogin(event) {
       event.preventDefault();
       const role = document.getElementById("userRole").value;
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
-      const account = accounts[username];
+      const profile = roleProfiles[role];
 
-      if (!account || account.password !== password || account.role !== role) {
-        alert("Invalid credentials. Please use one of the demo accounts listed on the page.");
+      if (!profile || !username || !password) {
+        alert("Invalid credentials. Please verify your username, password, and role.");
         return;
       }
 
       localStorage.setItem("poComplianceSession", JSON.stringify({
-        role: account.role,
-        userName: account.displayName,
-        roleLabel: account.roleLabel,
-        avatar: account.avatar,
+        role,
+        userName: profile.displayName,
+        roleLabel: profile.roleLabel,
+        avatar: profile.avatar,
         username
       }));
 

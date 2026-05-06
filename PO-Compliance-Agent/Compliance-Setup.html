@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PO Compliance Agent | Compliance Setup</title>
+  <title>PO Compliance Agent | Criteria Setup</title>
   <link rel="stylesheet" href="./ui.css">
 </head>
 <body>
@@ -17,10 +17,10 @@
       <div></div>
       <div class="nav-right">
         <div class="nav-user" aria-label="User profile">
-          <span class="nav-avatar" aria-hidden="true">CO</span>
+          <span class="nav-avatar" aria-hidden="true">AD</span>
           <div class="nav-user-meta">
-            <span class="nav-user-name">Compliance Officer</span>
-            <span class="nav-user-role">Policy Administrator</span>
+            <span class="nav-user-name">Administrator</span>
+            <span class="nav-user-role">Criteria Configuration</span>
           </div>
         </div>
       </div>
@@ -42,9 +42,9 @@
             </div>
             <div class="rail-nav">
               <a class="rail-item" href="./Dashboard.html"><span class="rail-item-icon" aria-hidden="true">&#9635;</span><span class="rail-item-label">Dashboard</span></a>
-              <a class="rail-item rail-item-active" href="./Compliance-Setup.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Compliance Setup</span></a>
-              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">Vendor Validation</span></a>
-              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Approval Workflow</span></a>
+              <a class="rail-item rail-item-active" href="./Compliance-Setup.html" aria-current="page"><span class="rail-item-icon" aria-hidden="true">&#9881;</span><span class="rail-item-label">Criteria Setup</span></a>
+              <a class="rail-item" href="./Vendor-Validation.html"><span class="rail-item-icon" aria-hidden="true">&#10003;</span><span class="rail-item-label">PO Validation</span></a>
+              <a class="rail-item" href="./Approval-Workflow.html"><span class="rail-item-icon" aria-hidden="true">&#128209;</span><span class="rail-item-label">Policy Reports</span></a>
               <a class="rail-item" href="./Audit-Evidence.html"><span class="rail-item-icon" aria-hidden="true">&#128221;</span><span class="rail-item-label">Audit Evidence</span></a>
             </div>
           </div>
@@ -54,12 +54,12 @@
       <main class="app-main">
         <section class="page-header">
           <div>
-            <h1 class="page-title">Compliance Setup</h1>
-            <p class="page-subtitle">Configure certification policies, vendor status rules, tax controls, escalation routes, and release gates.</p>
+            <h1 class="page-title">Criteria Setup</h1>
+            <p class="page-subtitle">Administrator workspace for required certifications, vendor status, purchasing policies, alerts, blocking behavior, and active criteria versions.</p>
           </div>
           <div class="toolbar">
             <button class="btn btn-soft" type="button">Save Draft</button>
-            <button class="btn btn-primary" type="button">Activate Gate Set</button>
+            <button class="btn btn-primary" type="button">Activate Criteria Set</button>
           </div>
         </section>
 
@@ -67,51 +67,51 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Certification Requirement Builder</h2>
-                <p class="card-subtitle">Mock form for defining vendor certification gates.</p>
+                <h2 class="card-title">Certification Criteria Builder</h2>
+                <p class="card-subtitle">Define required documents by vendor type, category, or region.</p>
               </div>
             </div>
             <div class="form-layout">
               <div class="field-grid">
                 <div class="field-block">
-                  <label>Policy Name</label>
-                  <input type="text" value="Strategic Supplier Certification Gate">
+                  <label>Criteria Set Name</label>
+                  <input type="text" value="Strategic Supplier Compliance Criteria">
                 </div>
                 <div class="field-block">
-                  <label>Applies To</label>
+                  <label>Vendor Type</label>
                   <select>
                     <option>Strategic Vendors</option>
                   </select>
                 </div>
                 <div class="field-block">
-                  <label>Required Certificate</label>
+                  <label>Required Certification</label>
                   <select>
                     <option>ISO 9001</option>
                   </select>
                 </div>
                 <div class="field-block">
-                  <label>Expiry Tolerance</label>
+                  <label>Region or Category</label>
                   <select>
-                    <option>30 days before PO date</option>
+                    <option>APAC / Electrical Assemblies</option>
                   </select>
                 </div>
               </div>
               <div class="field-block">
-                <label>Covered Commodities</label>
+                <label>Required Document Types</label>
                 <div class="chip-row">
-                  <span class="chip active">Electronics</span>
-                  <span class="chip active">Packaging</span>
-                  <span class="chip">Indirect Spend</span>
-                  <span class="chip">Services</span>
+                  <span class="chip active">ISO</span>
+                  <span class="chip active">Sustainability</span>
+                  <span class="chip active">Regulatory</span>
+                  <span class="chip">Insurance</span>
                 </div>
               </div>
               <div class="toggle-list">
                 <div class="toggle-row">
-                  <div class="toggle-copy"><strong>Block expired certificates</strong><span>Hard stop when expiry falls before requested ship date.</span></div>
+                  <div class="toggle-copy"><strong>Block expired certifications</strong><span>Hard stop when expiry falls before PO creation, receipt, or approval date.</span></div>
                   <div class="switch on"></div>
                 </div>
                 <div class="toggle-row">
-                  <div class="toggle-copy"><strong>Allow grace period override</strong><span>Requires Compliance Officer justification and audit capture.</span></div>
+                  <div class="toggle-copy"><strong>Flag upcoming expiries</strong><span>Warn Compliance Officer before required documents lapse on active POs.</span></div>
                   <div class="switch on"></div>
                 </div>
               </div>
@@ -121,44 +121,44 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Active Rule Overview</h2>
-                <p class="card-subtitle">Live-style view of the active compliance catalog.</p>
+                <h2 class="card-title">Versioned Criteria Catalog</h2>
+                <p class="card-subtitle">Saved sets can be activated, deactivated, and applied automatically to BC POs.</p>
               </div>
             </div>
             <div class="table-wrap">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Rule ID</th>
+                    <th>Criteria ID</th>
                     <th>Scope</th>
-                    <th>Severity</th>
+                    <th>Version</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>ISO-Active-Cert</td>
+                    <td>CERT-ISO-Active</td>
                     <td>Strategic vendors</td>
-                    <td><span class="pill danger">Critical</span></td>
+                    <td>v3.2</td>
                     <td><span class="pill success">Active</span></td>
                   </tr>
                   <tr>
-                    <td>Vendor-Status-Approved</td>
+                    <td>VEND-Status-Risk</td>
                     <td>All PO vendors</td>
-                    <td><span class="pill warning">Medium</span></td>
+                    <td>v2.1</td>
                     <td><span class="pill success">Active</span></td>
                   </tr>
                   <tr>
-                    <td>GST-Registry-Match</td>
-                    <td>Cross-border entities</td>
-                    <td><span class="pill danger">Critical</span></td>
+                    <td>POL-GST-Registry</td>
+                    <td>GST-applicable vendors</td>
+                    <td>v1.8</td>
                     <td><span class="pill success">Active</span></td>
                   </tr>
                   <tr>
-                    <td>Restricted-Item-Approval</td>
-                    <td>Controlled categories</td>
-                    <td><span class="pill warning">High</span></td>
-                    <td><span class="pill info">Pilot</span></td>
+                    <td>POL-Spend-Approval</td>
+                    <td>High-value POs</td>
+                    <td>v4.0</td>
+                    <td><span class="pill success">Active</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -170,32 +170,32 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Vendor Status and GST Controls</h2>
-                <p class="card-subtitle">Mock switches and policy thresholds.</p>
+                <h2 class="card-title">Vendor Status and Purchasing Policies</h2>
+                <p class="card-subtitle">Encode active/inactive status, risk flags, GST, spend thresholds, and approval levels.</p>
               </div>
             </div>
             <div class="toggle-list">
               <div class="toggle-row">
-                <div class="toggle-copy"><strong>Block suspended vendors</strong><span>Prevents PO creation for vendors under sanctions or review.</span></div>
+                <div class="toggle-copy"><strong>Block inactive or suspended vendors</strong><span>Prevents PO creation for inactive vendors or vendors under risk review.</span></div>
                 <div class="switch on"></div>
               </div>
               <div class="toggle-row">
-                <div class="toggle-copy"><strong>Require GST registration validation</strong><span>Cross-check legal entity, country code, and tax profile.</span></div>
+                <div class="toggle-copy"><strong>Require GST compliance validation</strong><span>Cross-check legal entity, country code, and BC tax profile.</span></div>
                 <div class="switch on"></div>
               </div>
               <div class="toggle-row">
-                <div class="toggle-copy"><strong>Escalate missing tax attachment</strong><span>Creates a warning when registration proof is absent.</span></div>
+                <div class="toggle-copy"><strong>Enforce spend threshold approval levels</strong><span>Raises approval-level violations before final PO approval.</span></div>
                 <div class="switch on"></div>
               </div>
             </div>
             <div style="margin-top:16px;" class="field-grid">
               <div class="field-block">
-                <label>Default Escalation SLA</label>
-                <select><option>4 business hours</option></select>
+                <label>Alert Recipients</label>
+                <select><option>Compliance Officer + Procurement Manager</option></select>
               </div>
               <div class="field-block">
-                <label>Critical Block Threshold</label>
-                <select><option>Immediate stop</option></select>
+                <label>Blocking Behavior</label>
+                <select><option>Block approval and send alert</option></select>
               </div>
             </div>
           </article>
@@ -203,25 +203,25 @@
           <article class="card">
             <div class="card-title-row">
               <div>
-                <h2 class="card-title">Escalation Matrix</h2>
-                <p class="card-subtitle">Role-based routing preview for non-compliance events.</p>
+                <h2 class="card-title">Alert and Blocking Matrix</h2>
+                <p class="card-subtitle">Configured recipients and outcomes for non-compliance alerts.</p>
               </div>
             </div>
             <div class="matrix">
               <div class="matrix-row header">
-                <div>Condition</div><div>Primary Owner</div><div>SLA</div><div>Outcome</div>
+                <div>Condition</div><div>Recipients</div><div>Timing</div><div>Outcome</div>
               </div>
               <div class="matrix-row">
-                <div>Expired certification</div><div>Compliance Officer</div><div>2 hrs</div><div>Block</div>
+                <div>Expired certification</div><div>Compliance Officer</div><div>Immediate</div><div>Block</div>
               </div>
               <div class="matrix-row">
-                <div>GST mismatch</div><div>Policy Engine</div><div>4 hrs</div><div>Escalate</div>
+                <div>GST mismatch</div><div>Compliance Officer</div><div>Immediate</div><div>Escalate</div>
               </div>
               <div class="matrix-row">
-                <div>Purchaser authority gap</div><div>PO Approval Engine</div><div>1 hr</div><div>Reroute</div>
+                <div>Spend threshold gap</div><div>Procurement Manager</div><div>1 hr</div><div>Reroute</div>
               </div>
               <div class="matrix-row">
-                <div>Override without note</div><div>Audit Engine</div><div>Immediate</div><div>Hold</div>
+                <div>Inactive vendor</div><div>Administrator</div><div>Immediate</div><div>Hold</div>
               </div>
             </div>
           </article>
@@ -230,23 +230,23 @@
         <section class="card" style="margin-top:20px;">
           <div class="card-title-row">
             <div>
-              <h2 class="card-title">Compliance Gate Activation</h2>
-              <p class="card-subtitle">Mock deployment progress of gate sets across the purchasing lifecycle.</p>
+            <h2 class="card-title">Automatic Application in BC</h2>
+            <p class="card-subtitle">Activated criteria are applied without manual intervention during PO creation and approval.</p>
             </div>
           </div>
           <div class="mini-kpi-grid">
             <div class="mini-kpi">
-              <div class="mini-kpi-label">PO Intake</div>
+              <div class="mini-kpi-label">PO Creation</div>
               <div class="mini-kpi-value">100%</div>
               <div class="status-bar"><div class="status-fill" style="width:100%"></div></div>
             </div>
             <div class="mini-kpi">
-              <div class="mini-kpi-label">Vendor Selection</div>
+              <div class="mini-kpi-label">Vendor and PO Data Linkage</div>
               <div class="mini-kpi-value">86%</div>
               <div class="status-bar"><div class="status-fill" style="width:86%"></div></div>
             </div>
             <div class="mini-kpi">
-              <div class="mini-kpi-label">Approval Release</div>
+              <div class="mini-kpi-label">PO Approval</div>
               <div class="mini-kpi-value">92%</div>
               <div class="status-bar"><div class="status-fill" style="width:92%"></div></div>
             </div>
